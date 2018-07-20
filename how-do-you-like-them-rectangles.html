@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="theme/css/main.css">
+    
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+	
+    <!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+    
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+  <div class="container">
+
+  <a class="navbar-brand" href="/index.html">Jason Ash</a>
+
+  <div class="collapse navbar-collapse"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index.html">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume.html" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume.html">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  
+  </div>
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>How do you like them rectangles?</h1>
+          <label class="text-muted">Sep 22, 2017</label>
+        </div>
+        <div class="mb-5">
+          <p><p>I love sudoku puzzles, and I remember how excited I was to discover <a href="https://en.wikipedia.org/wiki/Kakuro" target="_blank">kakuro puzzles</a>. They combined the sudoku experience with math! This week, <a href="https://fivethirtyeight.com/features/how-do-you-like-these-rectangles/" target="_blank">fivethirtyeight's riddler</a> introduces what I think of as "geometric sudoku", because it combines the variable-finding elements of math puzzles with some good old fashioned geometry.</p>
+<blockquote>
+<p>This week, we’ve got two puzzles from the forthcoming puzzle book “<a href="https://theexperimentpublishing.com/catalogs/fall-2017/the-original-area-mazes/" target="_blank">The Original Area Mazes</a>,” by Alex Bellos, Naoki Inaba and Ryoichi Murakami. The goal of these puzzles, which are also known by the Japanese term “menseki meiro,” is to figure out what the “?” equals. The only math you’ll need to know is that length times width equals area. Keep in mind that the diagrams aren’t necessarily to scale — this is about logic, not measuring.</p>
+</blockquote>
+<p>Importantly, the figures may not be to scale, but I have it on <a href="https://twitter.com/ollie/status/911240547951693824" target="_blank">good authority</a> that we can trust the lines and edges.</p>
+<h3>Riddler Express</h3>
+<p><img class="img-fluid mx-auto d-block" alt="Riddler Express" src="../images/20170922-riddler1.png"></p>
+<p>This puzzle was almost frustratingly simple, and I didn't trust my answer at first. But it is easy to show that $ ? = 4 $. </p>
+<p>$$ 4x = 24 $$</p>
+<p>$$ \therefore\  x = 6 $$</p>
+<p>$$ (6 + 3 + 2)? = 44 $$</p>
+<p>$$ \therefore\  ? = 4 $$</p>
+<h3>Riddler Classic</h3>
+<p><img class="img-fluid mx-auto d-block" alt="Riddler Classic" src="../images/20170922-riddler2.png"></p>
+<p>This puzzle took a bit more effort, but it can be solved in several unique ways. At first, I solved for the size of the "missing" rectangle in the upper right in order to calculate the area of the entire rectangle. Later, I simplified this solution by writing two equations in terms of $x$ and $y$, which are the bottom and left edges of $?$, respectively. From there, with two equations and two missing variables, we can solve for our missing piece.</p>
+<p>$$ ? = xy $$</p>
+<p>$$ x(11-y) = 32 $$</p>
+<p>$$ y(14-x) = 45 $$</p>
+<p>Rearranging these equations, we can plot them as functions of x, set them equal to one another, and solve for the answer(s).</p>
+<p>$$ y = 11 - \frac{32}{x} $$</p>
+<p>$$ y = \frac{45}{14-x} $$</p>
+<p>This yields two pairs of solutions, courtesy of <a href="http://www.wolframalpha.com/input/?i=x(11-y)%3D32,+(14-x)y+%3D45" target="_blank">wolframalpha</a> and verified by Python for good measure.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">y1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="mi">11</span> <span class="o">-</span> <span class="mi">32</span><span class="o">/</span><span class="n">x</span>
+<span class="k">def</span> <span class="nf">y2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="mi">45</span> <span class="o">/</span> <span class="p">(</span><span class="mi">14</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">10.01</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">line1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">line2</span> <span class="o">=</span> <span class="n">y2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img class="img-fluid mx-auto d-block" alt="Intersection" src="../images/20170922-riddler.png"></p>
+<p>$$ x = \frac{64}{11},\ y = \frac{11}{2},\ xy = 32 $$ </p>
+<p>$$ x = 7,\ y = \frac{45}{7},\ xy = 45 $$</p>
+<p>Which one is correct? We know the total area of the rectangle must be $14\times{11} = 154$, which means the $?$ must be less than $154 - 45 - 34 - 32 = 43$. Only one solution meets this criteria, so we conclude that $? = 32$.</p>
+<p>Looks like “<a href="https://theexperimentpublishing.com/catalogs/fall-2017/the-original-area-mazes/" target="_blank">The Original Area Mazes</a>” could be a great source of future puzzles (and posts...)!</p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="http://docs.getpelican.com/en/stable/" target="_blank">Pelican</a> and <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2018 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>

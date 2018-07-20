@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="theme/css/main.css">
+    
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+	
+    <!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+    
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+  <div class="container">
+
+  <a class="navbar-brand" href="/index.html">Jason Ash</a>
+
+  <div class="collapse navbar-collapse"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index.html">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume.html" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume.html">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  
+  </div>
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>National Squishyball League</h1>
+          <label class="text-muted">Jul 14, 2017</label>
+        </div>
+        <div class="mb-5">
+          <p><p>This week's <a href="https://fivethirtyeight.com/features/can-you-eat-more-pizza-than-your-siblings/" target="_blank">Riddler Classic</a> challenges you to find a strategy that maximizes your team's winnings (though perhaps minimizes peoples' tolerance to sit through an absurdly long playoff season...)</p>
+<blockquote>
+<p>Congratulations! The Acme Axegrinders, which you own, are the regular season champions of the National Squishyball League (NSL). Your team will now play a championship series against the Boondocks Barbarians, which had the second-best regular season record. You feel good about Acme’s chances in the series because Acme won exactly 60 percent of the hundreds of games it played against Boondocks this season. (The NSL has an incredibly long regular season.) The NSL has two special rules for the playoffs:</p>
+<ol>
+<li>The owner of the top-seeded team (i.e., you) gets to select the length of the championship series in advance of the first game, so you could decide to play a single game, a best two out of three series, a three out of five series, etc., all the way up to a 50 out of 99 series.</li>
+<li>The owner of the winning team gets 1 million minus 10,000 for each of the victories required to win the series, regardless of how many games the series lasts in total. Thus, if the top-seeded team’s owner selects a single-game championship, the winning owner will collect 990,000. If he or she selects a 4 out of 7 series, the winning team’s owner will collect 960,000. The owner of the losing team gets nothing.</li>
+</ol>
+<p>Since Acme has a 60 percent chance of winning any individual game against Boondocks, Rule 1 encourages you to opt for a very long series to improve Acme’s chances of winning the series. But Rule 2 means that a long series will mean less winnings for you if Acme does take the series.</p>
+<p>How long a series should you select in order to maximize your expected winnings? And how much money do you expect to win?</p>
+</blockquote>
+<p>Let's go for an easy win right away: it's trivial to calculate the prize pool for a given series length: $ prize = 1,000,000 - 10,000n$, where $n$ is the number of wins required to win the series. A series of length 7, for example, requires 4 wins, and in general, a series of $z$ requires $\lfloor{z/2}\rfloor+1$ wins, which we can implement in python as <code>n = z//2+1</code>. </p>
+<p>However, the more difficult part of the problem requires us to calculate the probability of winning a series of length 1, 3, 5, ..., 99. Let's start with simple cases and work our way up from there.</p>
+<p>The probability of winning a "series" of 1 game is simply the probability of winning that single game, $p=0.6$. The probability of winning a series of 3 games is the probability of winning two games before our opponent wins two games. There are a few ways this can happen. We can win the first two games with probability $p^2$, or we can win one of the first two games plus the third game, with probability $\binom{2}{1}qp^2$. Therefore the probability of winning the series is $p^2 + \binom{2}{1}qp^2$.</p>
+<p>Now we can derive a pattern for the probability of winning a series of length $z$. Let's take a series of 5: 
+$$\binom{2}{0}q^0p^3+\binom{3}{1}q^1p^3+\binom{4}{2}q^2p^3$$ </p>
+<p>and a series of 7: 
+$$\binom{3}{0}q^0p^4+\binom{4}{1}q^1p^4+\binom{5}{2}q^2p^4+\binom{6}{3}q^3p^4$$.</p>
+<p>The pattern consists of four elements:</p>
+<ol>
+<li>Each term in the pattern is multiplied by $p^n$, where n is the number of games required to win the series, e.g. 4 for a best-of-seven</li>
+<li>Each term in the pattern is multiplied by $q$ raised to an increasing power, e.g. 0, 1, 2, ..., for the possible number of games the opponent can win without winning the series</li>
+<li>The top term of the binomial sequence starts at one-minus the number of games required to win the series, e.g. 3 for a best-of-seven, and continues until one-minus the total number of games in the series, e.g. 6 for a best-of-seven</li>
+<li>The bottom term of the binomial sequence starts at zero and continues to one-minus the number number of games required to win the series</li>
+</ol>
+<p>Therefore, we can write a function that expresses the probability of winning a series for a given series length by calculating each of the four elements. For example, the probability of winning a series of 17:
+$$\binom{8}{0}q^0p^9+\binom{9}{1}q^1p^9+\binom{10}{2}q^2p^9+\binom{11}{3}q^3p^9+\ ...\ +\binom{16}{8}q^8p^9$$.</p>
+<p>This isn't the most elegant way of solving it, but it <em>is</em> a fun application of arrays in python:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">win_pct</span><span class="p">(</span><span class="n">series_length</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Probability of winning a series of series_length, </span>
+<span class="sd">    given a win percent, p, for any single game</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    series_length : int, the max length of the series</span>
+<span class="sd">    p : float, between 0 and 1, the probability of </span>
+<span class="sd">        winning any single game</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    win_pct : float, between 0 and 1, the probability</span>
+<span class="sd">        of winning the overall series    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">series_length</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="n">series_length</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">series_length</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">comb</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="n">b</span> <span class="o">*</span> <span class="n">p</span><span class="o">**</span><span class="p">(</span><span class="n">series_length</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Once we calculate the probability of winning series with lengths 1 through 99, we simply multiply by the prize amount for that series. We then select the series length that maximizes the expected winnings. In this case, a series of length 25, which requires 13 wins, will earn $870,000. The Acme Axegrinders will win a 25 game series 84.6% of the time, which translates to an expected value of <strong>$736,222</strong>.</p>
+<p><img class="img-fluid mx-auto d-block" alt="chart" src="../images/20170714-riddler.png"></p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="http://docs.getpelican.com/en/stable/" target="_blank">Pelican</a> and <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2018 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
