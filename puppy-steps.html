@@ -83,8 +83,8 @@
 </pre></div>
 
 
-<p>You can find the complete data - all 119 days of it - <a href="step-data.txt" target="_blank">here</a>. Please feel free to replicate or expand this analysis as you wish, but I'd love to hear about what you do. <a href="mailto:jason@ashanalytics.com">Email me</a> your results!</p>
 <p><img class="img-fluid mx-auto d-block" title="Daily Step Count" alt="step count" src="../images/20181205-steps1.png" style="height:400px;"></p>
+<p>You can find the complete data - all 119 days of it - <a href="step-data.txt" target="_blank">here</a>. Please feel free to replicate or expand this analysis as you wish, but I'd love to hear about what you do. <a href="mailto:jason@ashanalytics.com">Email me</a> your results!</p>
 <h5>The priors:</h5>
 <p>I start by assuming my steps are normally distributed. From the sample data, I calculated $mu=8637$ and $sd=2559$. Technically speaking a normal distribution allows for the possibility of a negative daily step count at the extreme left tail, but the probability of this is roughly 0.04%. I'm willing to accept this for the ease of using the normal distribution (as opposed to a strictly-positive distriution like the lognormal) for modeling. </p>
 <p>I suspect that my step activity increased after the puppy arrived, so I'll set up two normal distributions, $N_1$ and $N_2$, to represent models for my steps before and after that point. If my hypothesis is correct, then the mean of $N_2$ will be greater than the mean of $N_1$. A third variable, tau, will identify the point at which my steps shift from being modeled by $N_1$ to being modeled by $N_2$.</p>
