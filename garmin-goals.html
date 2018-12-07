@@ -122,8 +122,8 @@
 
 
 <p><img class="img-fluid mx-auto d-block" title="Daily Step Count" alt="step count" src="../images/20181206-steps2.png" style="height:400px;"></p>
-<p>This is an ugly chart, but this helped me visualize how close I was getting to the real algorithm. What was most interesting in this chart was that virtually all my errors were positive: I was overshooting the step goal consistently. This suggested to me that there might be some kind of flooring function or rounding that I wasn't incorporating. </p>
-<p>At first I thought I might just be calculating things too accurately. After all, my goal guesses had fractions of steps in them, like 7263.2. I appreciate Garmin's attention to detaill, but I hardly think they'll want me to take fractions of steps to reach my goal. I also noticed that all my Garmin goals were multiples of 10. </p>
+<p>This is an ugly chart, but it helped me visualize how close I was getting to the real algorithm. What was most interesting in this chart was that virtually all my errors were positive: I was overshooting the step goal consistently. This suggested to me that there might be some kind of flooring function or rounding that I wasn't incorporating. </p>
+<p>At first I thought I was calculating things too accurately. After all, my goal guesses had fractions of steps in them, like 7263.2. I appreciate Garmin's attention to detail, but I hardly think they'll bother to track fractions of steps. I also noticed that all my Garmin goals were multiples of 10, like 7150 or 7230.</p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">goal</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="bp">True</span>
 </pre></div>
@@ -139,7 +139,7 @@
 
 
 <p><img class="img-fluid mx-auto d-block" title="Daily Step Count" alt="step count" src="../images/20181206-steps3.png" style="height:400px;"></p>
-<p>Note the new floor function on line 2. While this doesn't appear to make a huge difference, it turns out this is a key part of the algorithm. The chart looks similar to earlier, but the few negative values I had seen earlier are now "solved". <strong>Now all my errors are stricly between 0 and 10, which is a great result!</strong> That gave me a clue that a ceiling function could be involved, and indeed scanning through the sample values suggests that all I need to do is round up to the nearest 10!</p>
+<p>Note the new floor function on line 2. While this doesn't appear to make a huge difference, it turns out this is a key part of the algorithm. The chart looks similar to earlier, but the few negative values I had seen earlier are now "solved". Now all my errors were stricly between 0 and 10, which was a great result! That gave me a clue that a ceiling function could be involved, and indeed scanning through the sample values suggested that all I needed to do was round up to the nearest 10!</p>
 <div class="highlight"><pre><span></span><span class="c1"># this looks like rounding up to the nearest 10</span>
               <span class="n">goal</span>  <span class="n">goal_guess</span>
 <span class="mi">2018</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mo">01</span>  <span class="mf">7120.0</span>      <span class="mf">7119.0</span>
@@ -157,7 +157,7 @@
 
 
 <p><img class="img-fluid mx-auto d-block" title="Daily Step Count" alt="step count" src="../images/20181206-steps4.png" style="height:400px;"></p>
-<p>There we have it! Perfect predictions of my new daily step goal for every day in the time period. Let's summarize the whole thing from the beginning, in math and code:</p>
+<p>There we have it: perfect predictions of my new daily step goal for every day in the time period. Let's summarize the whole thing from the beginning, in math and code:</p>
 <p>$$
 goal_t = ceil_{10}(goal_{t-1} + floor(factor_{t-1}*(actual_{t-1} - goal_{t-1})))
 $$
@@ -165,7 +165,7 @@ where</p>
 <p>$$
 factor_t = 
   \begin{cases}
-    10\% &amp; \text{if streak = 1}\
+    10\% &amp; \text{if streak = 1} \
     20\% &amp; \text{if streak &gt; 1}
   \end{cases}
 $$</p>
