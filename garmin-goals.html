@@ -64,12 +64,15 @@
         </div>
         <div class="mb-5">
           <p><p><a href="puppy-steps.html">Yesterday</a> I wrote about using my Garmin Fenix 5 watch data to identify changes in my activity after getting a puppy. As part of that analysis I gathered several months of data, including my actual steps and a variable goal set by my watch each day. I've always been curious how this goal is calculated, but online searches haven't turned up any results. Now that I have the data, I'd like to try to reverse engineer Garmin's goal algorithm.</p>
-<p>I know from observating that if I exceed my goal on a given day, the goal will go up the next day. Similarly, if I fail to meet the goal, it goes down. Seems straightforward. The first step toward unraveling more of the mystery was to plot my data. I imported the data using <code>pandas</code> and added a few columns:</p>
+<p>I know from simple observation that if I exceed my goal on a given day, the goal will go up the day after. Similarly, if I fail to meet the goal, it will go down. Seems straightforward. But beyond this, I wasn't sure exactly how my steps each day were used to update my new goal. The first step toward unraveling more of the mystery was to plot my data. I imported the data using <code>pandas</code> and added a few columns:</p>
 <ol>
 <li>"difference" - the actual steps minus goal steps for each day</li>
 <li>"goal delta" - how much the goal changed from one day to the next</li>
 </ol>
-<p>Note that throughout this analysis it can be difficult to keep track of which data fields correspond to a given day vs. the prior day. For example, the actual recorded steps belong to the day they were recorded. On the other hand, by convention, I assign most variables that track changes to the second day. This includes fields like "goal delta", "difference", etc., where the difference for today is defined as "today minus yesterday".</p>
+<p><hr></hr></p>
+<p class="font-italic">Note that throughout this analysis it can sometimes be difficult to keep track of which data fields correspond to a given day vs. the prior day. For example, the actual recorded steps belong to the day they were recorded. On the other hand, by convention, I assign most variables that track changes to the second day. This includes fields like "goal delta", "difference", etc., where the difference for a given day is defined as "today minus yesterday".</p>
+
+<p><hr></hr></p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
