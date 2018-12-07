@@ -63,10 +63,12 @@
           <label class="text-muted">Dec 6, 2018</label>
         </div>
         <div class="mb-5">
-          <p><p><a href="puppy-steps.html" target="_blank">Yesterday</a> I wrote about using my Garmin step data to identify changes in my activity after getting a puppy. As part of that analysis I gathered several months of data, including my actual steps and a variable goal set by my watch each day. I've always been curious how this goal is calculated, but online searches haven't turned up any results. Now that I have the data, I'd like to try to reverse engineer Garmin's goal algorithm.</p>
-<p>I know from observating that if I exceed my goal on a given day, the goal will go up the next day. Similarly, if I fail to meet the goal, it goes down. Seems straightforward. The first step toward unraveling more of the mystery was to plot my data. I imported the data using <code>pandas</code> and added a few columns:
-1. "difference" - the actual steps minus goal steps for each day
-2. "goal delta" - how much the goal changed from one day to the next</p>
+          <p><p><a href="puppy-steps.html">Yesterday</a> I wrote about using my Garmin step data to identify changes in my activity after getting a puppy. As part of that analysis I gathered several months of data, including my actual steps and a variable goal set by my watch each day. I've always been curious how this goal is calculated, but online searches haven't turned up any results. Now that I have the data, I'd like to try to reverse engineer Garmin's goal algorithm.</p>
+<p>I know from observating that if I exceed my goal on a given day, the goal will go up the next day. Similarly, if I fail to meet the goal, it goes down. Seems straightforward. The first step toward unraveling more of the mystery was to plot my data. I imported the data using <code>pandas</code> and added a few columns:</p>
+<ol>
+<li>"difference" - the actual steps minus goal steps for each day</li>
+<li>"goal delta" - how much the goal changed from one day to the next</li>
+</ol>
 <p>Note that throughout this analysis it can be difficult to keep track of which data fields correspond to a given day vs. the prior day. For example, the actual recorded steps belong to the day they were recorded. On the other hand, by convention, I assign most variables that track changes to the second day. This includes fields like "goal delta", "difference", etc., where the difference for today is defined as "today minus yesterday".</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
@@ -83,19 +85,8 @@
 
 
 <p><img class="img-fluid mx-auto d-block" title="Daily Step Count" alt="step count" src="../images/20181206-steps1.png" style="height:400px;"></p>
-<p>Two trend lines were apparent in the data. It looked as if the new goal was based on some fraction of the prior day's difference in a very specific way: it was roughly 10% or 20% of the prior day's difference. My next step was to try to figure out the pattern behind the multiplicative factor for each day. Admittedly this was not a very scientific approach, but I calculated a new column that would approximate this 10% or 20% factor and then tried to find trends with the naked eye. Luckily, another pattern revealed itself.</p>
-<div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">goal_delta</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">difference</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">factor</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-
-<span class="mi">2018</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">29</span>     <span class="n">NaN</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">30</span>    <span class="mf">0.10</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">31</span>    <span class="mf">0.09</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mo">01</span>    <span class="mf">0.20</span>
-<span class="mi">2018</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mo">02</span>    <span class="mf">0.10</span>
-</pre></div>
-
-
-<p>It looked like the Garmin wasn't just paying attention to yesterday, but also the day before yesterday. On days where I had met (or failed) my goal the last two days, the factor tended to be 20%, otherwise it was 10%. To confirm this I added a column called "streak", which tracked how many consecutive days I had met or failed to meet the step goal. </p>
+<p>Two trend lines were apparent in the data. It looked as if the new goal was based on some fraction of the prior day's difference in a very specific way: it was roughly 10% or 20% of the prior day's difference. My next step was to try to figure out the pattern behind the multiplicative factor for each day. The easiest way to start was to look through the data with the naked eye. While it's not the most scientific approach, in this case, the quick scan was enough to discern a pattern.</p>
+<p>The Garmin wasn't paying attention just to yesterday, but also the day before yesterday. On days where I had met (or failed) my goal the last <em>two</em> days, the factor was 20%, otherwise it was 10%. To confirm this I added a column called "streak", which tracked how many consecutive days I had met or failed to meet the step goal. Then I grouped the data by the streak count and confirmed that the factors were determined the way I suspected.</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">itertools</span> 
 
 <span class="n">group</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">actual</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">goal</span><span class="p">)]</span>
@@ -108,11 +99,8 @@
 <span class="mi">2018</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">31</span>    <span class="mi">2</span>
 <span class="mi">2018</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mo">01</span>    <span class="mi">1</span>
 <span class="mi">2018</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mo">02</span>    <span class="mi">1</span>
-</pre></div>
 
-
-<p>Then I grouped my data by the streak count (rolling it by one again so it was consistent with the goal_delta column), and confirmed that the factors were determined the way I suspected.</p>
-<div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">streak</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">factor</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">streak</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">factor</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 <span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 
 <span class="mi">1</span>    <span class="mf">0.102687</span>
@@ -124,7 +112,7 @@
 </pre></div>
 
 
-<p>It wasn't perfect, however. Looking at minimums and maximums within each category revealed that it wasn't as simple as multiplying the prior day's difference times a factor. In fact, this is when I started turning to a simple visualization to refine my assumptions about how the algorithm worked. I plotted my "best guess" against the true change in goal amount, shown below.</p>
+<p>It wasn't perfect, however. For example, how could I have gotten a factor like 0.248 if I only expected 10% or 20%? Furthermore, the minimums and maximums within the streak categories were fairly widely dispersed. I suspected it wasn't as simple as multiplying the prior day's difference times a factor. I thought small values might be impacting this. For example, what if I beat the goal by something small, like 8 steps? Would that throw off the math? In any case, I calculated a first version of my best guess to start. I also used a simple visualization to gauge how accurate my predictions were. I plotted my "best guess" against the true change in goal amount, shown below.</p>
 <div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;factor_guess&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">streak</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span>
 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;goal_guess&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">difference</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">factor_guess</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;goal_guess&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">goal</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -134,8 +122,8 @@
 
 
 <p><img class="img-fluid mx-auto d-block" title="Daily Step Count" alt="step count" src="../images/20181206-steps2.png" style="height:400px;"></p>
-<p>This is an ugly chart. Of course, there's no need for the lines to be connected, because I don't believe I should have any trends in my errors from one day to the next, but this helped me visualize how close I was getting to the real algorithm. What was most interesting in this chart was that virtually all my errors were positive: I was overshooting the step goal consistently. This suggested to me that there might be some kind of flooring function or rounding that I wasn't incorporating. </p>
-<p>At first I thought I might just be calculating things too accurately. After all, my goal guesses had fractions of steps in them, like 7263.2. I appreciate Garmin's attention to detial, but I hardly think they'll want me to take fractions of steps to reach my goal. I also noticed that all my Garmin goals were multiples of 10. </p>
+<p>This is an ugly chart, but this helped me visualize how close I was getting to the real algorithm. What was most interesting in this chart was that virtually all my errors were positive: I was overshooting the step goal consistently. This suggested to me that there might be some kind of flooring function or rounding that I wasn't incorporating. </p>
+<p>At first I thought I might just be calculating things too accurately. After all, my goal guesses had fractions of steps in them, like 7263.2. I appreciate Garmin's attention to detaill, but I hardly think they'll want me to take fractions of steps to reach my goal. I also noticed that all my Garmin goals were multiples of 10. </p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">goal</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="bp">True</span>
 </pre></div>
@@ -151,8 +139,9 @@
 
 
 <p><img class="img-fluid mx-auto d-block" title="Daily Step Count" alt="step count" src="../images/20181206-steps3.png" style="height:400px;"></p>
-<p>Note the new floor function on line 2. While this doesn't appear to make a huge difference, it turns out this is part of the key to solving the problem. The chart also looks similar to earlier, but the few negative values I had seen earlier are now "solved". Now all my errors are stricly between 0 and 10, which is a great result! That gave me a clue that a ceiling function could be involved, and indeed scanning through the sample values suggests that all I need to do is round up to the nearest 10!</p>
-<div class="highlight"><pre><span></span>              <span class="n">goal</span>  <span class="n">goal_guess</span>
+<p>Note the new floor function on line 2. While this doesn't appear to make a huge difference, it turns out this is a key part of the algorithm. The chart looks similar to earlier, but the few negative values I had seen earlier are now "solved". <strong>Now all my errors are stricly between 0 and 10, which is a great result!</strong> That gave me a clue that a ceiling function could be involved, and indeed scanning through the sample values suggests that all I need to do is round up to the nearest 10!</p>
+<div class="highlight"><pre><span></span><span class="c1"># this looks like rounding up to the nearest 10</span>
+              <span class="n">goal</span>  <span class="n">goal_guess</span>
 <span class="mi">2018</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mo">01</span>  <span class="mf">7120.0</span>      <span class="mf">7119.0</span>
 <span class="mi">2018</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mo">02</span>  <span class="mf">7570.0</span>      <span class="mf">7568.0</span>
 <span class="mi">2018</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mo">03</span>  <span class="mf">7130.0</span>      <span class="mf">7125.0</span>
@@ -168,7 +157,7 @@
 
 
 <p><img class="img-fluid mx-auto d-block" title="Daily Step Count" alt="step count" src="../images/20181206-steps4.png" style="height:400px;"></p>
-<p>There we have it! Perfect predictions of my new daily step goal for every day in the time period. Let's summarize from the whole thing from the beginning, in math and code:</p>
+<p>There we have it! Perfect predictions of my new daily step goal for every day in the time period. Let's summarize the whole thing from the beginning, in math and code:</p>
 <p>$$
 goal_t = ceil_{10}(goal_{t-1} + floor(factor_{t-1}*(actual_{t-1} - goal_{t-1})))
 $$
@@ -201,7 +190,7 @@ $$</p>
 </pre></div>
 
 
-<p>Ceiling and floor nuance aside, I think this algorithm makes sense. It seeks to adjust quickly up or down if you have consistent performance relative to your step goal. I suppose the benefit of the extra steps is that the final result each day is a nice, round number. It also didn't take too much effort to try to reverse engineer Garmin's algorithm (thankfully). In a future post, I'll attempt to feed this data into a machine learning model and see if it's possible to extract good predictions. Stay tuned!</p></p>
+<p>Ceiling and floor nuance aside, I think this algorithm makes sense. It seeks to adjust quickly up or down if you have consistent performance relative to your step goal. I suppose the benefit of the extra steps is that the final result each day is a nice, round number. It also didn't take too much effort to try to reverse engineer Garmin's algorithm (thankfully). In a future post, I'll attempt to feed this data into a machine learning model to see if it can tease out the logic as well. Stay tuned!</p></p>
         </div>
       </div>
     </div>
