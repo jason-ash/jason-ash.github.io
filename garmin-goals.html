@@ -63,7 +63,7 @@
           <label class="text-muted">Dec 6, 2018</label>
         </div>
         <div class="mb-5">
-          <p><p><a href="puppy-steps.html">Yesterday</a> I wrote about using my Garmin step data to identify changes in my activity after getting a puppy. As part of that analysis I gathered several months of data, including my actual steps and a variable goal set by my watch each day. I've always been curious how this goal is calculated, but online searches haven't turned up any results. Now that I have the data, I'd like to try to reverse engineer Garmin's goal algorithm.</p>
+          <p><p><a href="puppy-steps.html">Yesterday</a> I wrote about using my Garmin Fenix 5 watch data to identify changes in my activity after getting a puppy. As part of that analysis I gathered several months of data, including my actual steps and a variable goal set by my watch each day. I've always been curious how this goal is calculated, but online searches haven't turned up any results. Now that I have the data, I'd like to try to reverse engineer Garmin's goal algorithm.</p>
 <p>I know from observating that if I exceed my goal on a given day, the goal will go up the next day. Similarly, if I fail to meet the goal, it goes down. Seems straightforward. The first step toward unraveling more of the mystery was to plot my data. I imported the data using <code>pandas</code> and added a few columns:</p>
 <ol>
 <li>"difference" - the actual steps minus goal steps for each day</li>
@@ -160,13 +160,13 @@
 <p>There we have it: perfect predictions of my new daily step goal for every day in the time period. Let's summarize the whole thing from the beginning, in math and code:</p>
 <p>$$
 goal_t = ceil_{10}(goal_{t-1} + floor(factor_{t-1}*(actual_{t-1} - goal_{t-1})))
-$$
-where</p>
+$$</p>
+<p>where</p>
 <p>$$
 factor_t = 
   \begin{cases}
-    10\% &amp; \text{if streak = 1} \
-    20\% &amp; \text{if streak &gt; 1}
+    10\% &amp; \text{if streak = 1}. \
+    20\% &amp; \text{if streak &gt; 1}. \
   \end{cases}
 $$</p>
 <div class="highlight"><pre><span></span><span class="c1"># read data</span>
