@@ -74,17 +74,15 @@
 <ol>
 <li>Use the Black-Scholes formula and the closed-form equations for option greeks.</li>
 <li>Use the Black-Scholes formula and calculate option greeks using the "finite difference" method.</li>
-<li>Use the Black-Scholes formulas for option value and use PyTorch to automatically differentiate it and calculate the option greeks.</li>
+<li>Use the Black-Scholes formulas for option value and use PyTorch to automatically differentiate the output and calculate the option greeks.</li>
 <li>Use a monte carlo simulation of option values in PyTorch. Then use automatic differentiation to calculate option greeks.</li>
 </ol>
 <h5>A brief primer on European stock options:</h5>
 <p>A European stock option is a financial instrument that gives the owner the right, but not the obligation, to buy or sell an underlying security for a pre-determined price at a specific future date. It goes without saying that the future values of financial securities are uncertain. Therefore, options on those securities can be difficult to price. </p>
 <p>There are plenty of resources available to learn about options, from the basics all the way through stochastic calculus and exotic option varieties. In fact, many of the techniques that I'm going to demonstrate become much more relevant and powerful for more complex options. However, for the purposes of this article I'm going to focus exclusively on a simple European put option. Fortunately, if we make certain simplifying assumptions, the European put option can be valued in closed-form using the famous Black-Scholes formula.</p>
-<p>In addition to knowing the value of the option, it is also useful to understand how the value will change if certain assumptions change. In other words, it is useful to understand the partial derivatives of option value with respect to the inputs to the Black-Scholes formula. These sensitivities are typically called "the greeks".</p>
+<p>In addition to knowing the value of the option, it is also useful to understand how the value will change if certain assumptions change. In other words, it is useful to understand the partial derivatives of option value with respect to the inputs to the Black-Scholes formula. These sensitivities are typically called "the greeks". We'll use closed-form equations as well as PyTorch's automatic differentation to calculate the greeks.</p>
 <h5>The Black-Scholes Formula</h5>
-<p>This is the formula we'll use to calculate the value of the European put option. There are formulas for each of the greeks: delta, rho, vega, theta, epsilon, etc., but I'll spare the math in this post. All of the examples will use the input values shown below so that we can compare the accuracy of different methods.</p>
-<!-- Call = Se^{-\delta t} \phi(d_1) - Ke^{-\mu t} \phi(d_2) \\\\\\ -->
-
+<p>This is the formula we'll use to calculate the price of the European put option. There are formulas for each of the greeks too: delta, rho, vega, theta, epsilon, etc., but I'll spare the math for now. </p>
 <p>$$
 P = Ke^{-\mu t} \phi(d_2) - Se^{-\delta t} \phi(d_1)\\\
 d_1 = \frac{\ln({\frac{S}{K})} + (\mu -\delta + \frac{\sigma^2}{2})t}{\sigma\sqrt{t}}\\\
@@ -102,8 +100,8 @@ $$ </p>
 <li>$\phi(x)$ is the standard normal CDF evaluated at $x$</li>
 </ul>
 <h5>PyTorch setup</h5>
-<p>Like many deep learning frameowrks available today, PyTorch provides high-performance numerical computation, automatic differentiation, and the ability to run on distributed grids of hardware accelerators, like GPUs. PyTorch computational graphs are created on the fly, as opposed to the Tensorflow model of static, predefined graphs. But both libraries provide automatic differentiation out of the box.</p>
-<p>To enable automatic differentiation, we must identify the inputs to our formulas as tensors and enable gradient tracking for those inputs. PyTorch will keep track of the operations on those inputs from the beginning to the end. Once we're finished with our computation and we have our output, we can run reverse mode automatic differentiation to calculate the gradient of the output with respect to each input.</p>
+<p>Like many deep learning frameowrks available today, PyTorch provides high-performance numerical computation, automatic differentiation, and the ability to run on distributed grids of hardware accelerators, like GPUs. PyTorch computational graphs are created on the fly, as opposed to the static graphs you build in a language like Tensorflow. But both libraries provide automatic differentiation out of the box.</p>
+<p>To enable automatic differentiation, we must identify the inputs to our formulas as tensors and start gradient tracking for those inputs. PyTorch will keep track of the operations on those inputs from the beginning to the end. Once we're finished with our computation and we have our output, we can run reverse mode automatic differentiation to calculate the gradient of the output with respect to each input.</p>
 <p>Throughout this article, I'll use the following six input tensors and their defined values for the Black-Scholes formula. I'll also create two utility functions that we'll use as we go along.</p>
 <div class="highlight"><pre><span></span><span class="c1"># black-scholes inputs</span>
 <span class="n">stock</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -234,8 +232,10 @@ $$</p>
 <h5>Method 4: Monte Carlo simulation of stock prices with Automatic Differentiation</h5>
 <p>The fourth method is unlike the first three in that it doesn't use the Black-Scholes formula at all. Instead, it uses the principle upon which the formula is based, called Geometric Brownian Motion (GBM). GBM is a model for simulating future distributions of stock returns. It is a stochastic method, which means we'll draw thousands of samples from a normal distribution of stock returns in order to understand the potential future values of the stock on the exercise date.</p>
 <p>Once we have several thousand randomly drawn future stock values, we simply calculate the option payoff under each scenario. We then discount the future payoffs to today and take the average value of all the scenarios we ran. If we run enough scenarios, then the average should converge to the Black-Scholes price of the option.</p>
+<p><img class="img-fluid mx-auto d-block" title="Monte Carlo" alt="monte carlo" src="../images/20181209-pytorch1.png"></p>
 <div class="highlight"><pre><span></span><span class="c1"># geometric brownian motion (single time step)</span>
-<span class="n">scenarios</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">scenarios</span> <span class="o">=</span> <span class="mi">1000000</span>
 <span class="n">dW</span> <span class="o">=</span> <span class="n">vol</span> <span class="o">*</span> <span class="n">time</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">scenarios</span><span class="p">,))</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">rate</span> <span class="o">-</span> <span class="n">dividend</span> <span class="o">-</span> <span class="n">vol</span><span class="o">*</span><span class="n">vol</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">time</span> <span class="o">+</span> <span class="n">dW</span><span class="p">)</span>
 
