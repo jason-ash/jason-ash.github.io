@@ -63,7 +63,7 @@
     <div class="row mt-5">
       <div class="col">
         <div class="d-flex justify-content-between align-items-baseline mb-4">
-          <h1>Black-Scholes in Pytorch</h1>
+          <h1>Black-Scholes in PyTorch</h1>
           <label class="text-muted">Dec 9, 2018</label>
         </div>
         <div class="mb-5">
@@ -90,15 +90,17 @@ P = Ke^{-\mu t} \phi(d_2) - Se^{-\delta t} \phi(d_1)\\\
 d_1 = \frac{\ln({\frac{S}{K})} + (\mu -\delta + \frac{\sigma^2}{2})t}{\sigma\sqrt{t}}\\\
 d_2 = \frac{\ln({\frac{S}{K})} + (\mu -\delta - \frac{\sigma^2}{2})t}{\sigma\sqrt{t}}
 $$ </p>
-<p>where 
-- $P$ is the put option price
-- $S$ is the stock price
-- $K$ is the strike (exercise) price
-- $\mu$ is the annual continuously compounded risk free interest rate
-- $\sigma$ is the annual volatility of the underlying security
-- $t$ is the time to expiry in years
-- $\delta$ is the annual continous dividend rate
-- $\phi(x)$ is the standard normal CDF evaluated at $x$</p>
+<p>where </p>
+<ul>
+<li>$P$ is the put option price</li>
+<li>$S$ is the stock price</li>
+<li>$K$ is the strike (exercise) price</li>
+<li>$\mu$ is the annual continuously compounded risk free interest rate</li>
+<li>$\sigma$ is the annual volatility of the underlying security</li>
+<li>$t$ is the time to expiry in years</li>
+<li>$\delta$ is the annual continous dividend rate</li>
+<li>$\phi(x)$ is the standard normal CDF evaluated at $x$</li>
+</ul>
 <h5>PyTorch setup</h5>
 <p>Like many deep learning frameowrks available today, PyTorch provides high-performance numerical computation, automatic differentiation, and the ability to run on distributed grids of hardware accelerators, like GPUs. PyTorch computational graphs are created on the fly, as opposed to the Tensorflow model of static, predefined graphs. But both libraries provide automatic differentiation out of the box.</p>
 <p>To enable automatic differentiation, we must identify the inputs to our formulas as tensors and enable gradient tracking for those inputs. PyTorch will keep track of the operations on those inputs from the beginning to the end. Once we're finished with our computation and we have our output, we can run reverse mode automatic differentiation to calculate the gradient of the output with respect to each input.</p>
