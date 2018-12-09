@@ -28,10 +28,14 @@
   </head>
   <body>
     
-<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top container">
+  
   <div class="container">
-
   <a class="navbar-brand" href="/index.html">Jason Ash</a>
+  
+  
+
+  
 
   <div class="collapse navbar-collapse"> 
     <ul class="navbar-nav ml-auto">
@@ -49,8 +53,8 @@
       </li>
     </ul>
   </div>  
-  
   </div>
+  
 </nav>    
     <div class="container" style="min-height:88vh">
 <div class="row justify-content-center">
@@ -86,17 +90,15 @@ P = Ke^{-\mu t} \phi(d_2) - Se^{-\delta t} \phi(d_1)\\\
 d_1 = \frac{\ln({\frac{S}{K})} + (\mu -\delta + \frac{\sigma^2}{2})t}{\sigma\sqrt{t}}\\\
 d_2 = \frac{\ln({\frac{S}{K})} + (\mu -\delta - \frac{\sigma^2}{2})t}{\sigma\sqrt{t}}
 $$ </p>
-<p>where</p>
-<p>$$
-P = \text{European Put Option value today, e.g. 5.35}\\\
-S = \text{Stock price, e.g. 100.0} \\\
-K = \text{Strike (exercise) price, e.g. 100.0} \\\
-\mu = \text{Annual continously compounded risk free interest rate, e.g. 3.5\%} \\\
-\sigma = \text{Annual volatility of the underlying security, e.g. 16.0\%} \\\
-t = \text{Time from now until option exercise date in years, e.g. 1.0} \\\
-\delta = \text{Annual continously compounded dividend rate, e.g. 1.0\%} \\\
-\phi(x) = \text{Standard normal cumulative distribution function evaluated at }x
-$$</p>
+<p>where 
+- $P$ is the put option price
+- $S$ is the stock price
+- $K$ is the strike (exercise) price
+- $\mu$ is the annual continuously compounded risk free interest rate
+- $\sigma$ is the annual volatility of the underlying security
+- $t$ is the time to expiry in years
+- $\delta$ is the annual continous dividend rate
+- $\phi(x)$ is the standard normal CDF evaluated at $x$</p>
 <h5>PyTorch setup</h5>
 <p>Like many deep learning frameowrks available today, PyTorch provides high-performance numerical computation, automatic differentiation, and the ability to run on distributed grids of hardware accelerators, like GPUs. PyTorch computational graphs are created on the fly, as opposed to the Tensorflow model of static, predefined graphs. But both libraries provide automatic differentiation out of the box.</p>
 <p>To enable automatic differentiation, we must identify the inputs to our formulas as tensors and enable gradient tracking for those inputs. PyTorch will keep track of the operations on those inputs from the beginning to the end. Once we're finished with our computation and we have our output, we can run reverse mode automatic differentiation to calculate the gradient of the output with respect to each input.</p>
