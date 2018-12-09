@@ -136,7 +136,7 @@ $$</p>
 </pre></div>
 
 
-<p>When we run this code with our inputs from above, we get the following table of outputs. This put option price is <span>$</span>5.09. Plus, we can estimate how the price will change if any of our model inputs changes. For example, a Delta of -0.4026 implies that if the underlying security increases in value by <span>$</span>1 (from <span>$</span>100 to <span>$</span>101), the option price should decrease by roughly <span>$</span>0.40. Similarly, if we were to decrease the time-to-expiry of this option from 1.0 years to 0.9 years, we would expect option price to decrease by roughly $-(0.1)(1.8883)=0.18883$</p>
+<p>When we run this code with our inputs from above, we get the following table of outputs. This option price is <span>$</span>5.09. Plus, we can estimate how the price will change if any of our model inputs changes. For example, a Delta of -0.4026 implies that if the underlying security increases in value by <span>$</span>1 (from <span>$</span>100 to <span>$</span>101), the option price should decrease by roughly <span>$</span>0.40. Similarly, if we were to decrease the time-to-expiry of this option from 1.0 years to 0.9 years, we would expect option price to decrease by roughly 10% of the option theta, or 0.18883.</p>
 <div class="highlight"><pre><span></span><span class="n">Option</span> <span class="n">Value</span><span class="p">:</span>     <span class="mf">5.0885</span>   <span class="c1"># sensitivity of option price to:</span>
 <span class="o">------------------------</span>   <span class="o">---------------------------------</span>
        <span class="n">Delta</span><span class="p">:</span>    <span class="o">-</span><span class="mf">0.4026</span>   <span class="c1"># underlying price</span>
@@ -252,7 +252,7 @@ $$</p>
 
 <p>Did you notice that we were able to use automatic differentiation in our stochastic simulation? This means we can potentially develop extremely complex simulation models and use automatic differentiation to understand the effects of every single model input. In this case, our simulation is fairly simple, but the prospects for this technique are exciting! We also see that our results are close to the values from our prior methods.</p>
 <div class="highlight"><pre><span></span><span class="n">Option</span> <span class="n">Value</span><span class="p">:</span>     <span class="mf">5.0926</span>   <span class="c1"># sensitivity of option price to:</span>
-<span class="o">------------------------</span>   <span class="o">----------------------------------------------</span>
+<span class="o">------------------------</span>   <span class="o">---------------------------------</span>
        <span class="n">Delta</span><span class="p">:</span>    <span class="o">-</span><span class="mf">0.4025</span>   <span class="c1"># underlying price</span>
          <span class="n">Rho</span><span class="p">:</span>   <span class="o">-</span><span class="mf">45.3420</span>   <span class="c1"># interest rates</span>
         <span class="n">Vega</span><span class="p">:</span>    <span class="mf">38.4292</span>   <span class="c1"># volatility</span>
@@ -274,7 +274,7 @@ $$</p>
      <span class="n">Epsilon</span><span class="p">:</span>        <span class="mf">40.2573</span>        <span class="mf">40.2069</span>        <span class="mf">40.2573</span>        <span class="mf">40.2495</span>  
  <span class="n">Strike</span> <span class="n">Sens</span><span class="p">:</span>         <span class="mf">0.4535</span>         <span class="mf">0.4654</span>         <span class="mf">0.4535</span>         <span class="mf">0.4534</span> 
 <span class="o">---------------------------------------------------------------------</span>
-    <span class="n">Run</span> <span class="n">Time</span><span class="p">:</span>         <span class="mi">535</span> <span class="err">µ</span><span class="n">s</span>        <span class="mf">1.14</span> <span class="n">ms</span>         <span class="mi">489</span> <span class="err">µ</span><span class="n">s</span>        <span class="mf">5.16</span> <span class="n">ms</span>
+    <span class="n">Run</span> <span class="n">Time</span><span class="p">:</span>       <span class="mf">0.535</span> <span class="n">ms</span>       <span class="mf">1.140</span> <span class="n">ms</span>       <span class="mf">0.489</span> <span class="n">ms</span>       <span class="mf">5.160</span> <span class="n">ms</span>
 <span class="o">*</span> <span class="mi">100</span><span class="p">,</span><span class="mo">000</span> <span class="n">scenarios</span>
 </pre></div>
 
