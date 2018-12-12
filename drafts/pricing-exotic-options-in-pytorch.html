@@ -76,46 +76,29 @@
 <p>The traditional approach to valuing these options is to generate thousands of scenarios of underlying prices and calculate the option payoff under each scenario. This is the essence of the monte carlo simulation. Often, to calculate option greeks, we re-run the monte carlo simulation several times with small differences in model inputs. This process can be time-consuming when the number of inputs is large. Automatic differentiation may be able to provide more accurate sensitivities in less time than traditional methods.</p>
 <p>In this article, I'll price five different exotic options contracts and use automatic differentiation to calculate the option greeks. I'll illustrate a few interesting scenarios from the thousands of monte carlo paths, and compare the behavior of the options contracts.</p>
 <h5>Creative financial engineering</h5>
-<p>Exotic options are amazing. Chances are if you can imagine a bet on a stock there is a derivative contract for it. Here are six examples of </p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>name</th>
-<th>payoff</th>
-<th>exercise</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>Asian option</td>
-<td>strike minus daily arithmetic average price</td>
-<td>asdf</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Bermuda option</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p>Exotic options are amazing. Chances are if you can imagine a bet you want to take on a stock there is a derivative contract for it. </p>
 <ol>
-<li>Asian optionpayoff is strike price minus the <em>daily arithmetic average</em> underlying price over the entire time period, rather than the final price of the underlying at expiry.</li>
-<li>Cliquet option</li>
-<li>Knock-in barrier option - payoff is strike price minus underlying price</li>
-<li>Knock-out barrier option - </li>
-<li>Bermuda option:</li>
-<li>Lookback option</li>
+<li>Asian option</li>
 </ol>
+<p>payoff is strike price minus the <em>daily arithmetic average</em> underlying price over the entire time period, rather than the final price of the underlying at expiry.
+2. Cliquet option
+3. Knock-in barrier option - payoff is strike price minus underlying price
+4. Knock-out barrier option - 
+5. Bermuda option:
+6. Lookback option</p>
 <p>Let's </p>
 <h5>Monte Carlo Scenarios</h5>
 <p>I'll use the same set of 1 million scenarios for each option valuation to reduce the impact of random noise. Each scenario will be comprised of 252 time steps (the approximate number of trading days in a given year.) As a result, we'll have a PyTorch tensor representing daily market returns for a single stock over a one-year period with size <code>(1000000, 252)</code>.</p>
 <div class="highlight"><pre><span></span><span class="c1"># input tensors</span>
+<span class="n">stock</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">strike</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">vol</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.16</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">rate</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.035</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">dividend</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># discount rate per step</span>
+<span class="n">discount</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">rate</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">step</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span>
+<span class="n">discount</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">discount</span><span class="p">)</span>
 
 <span class="c1"># geometric brownian motion</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
@@ -124,8 +107,12 @@
 
 <span class="n">dW</span> <span class="o">=</span> <span class="n">vol</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">scenarios</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span> <span class="o">/</span> <span class="n">step</span><span class="o">**</span><span class="mf">0.5</span>
 <span class="n">paths</span> <span class="o">=</span> <span class="p">(</span><span class="n">rate</span> <span class="o">-</span> <span class="n">dividend</span> <span class="o">-</span> <span class="n">vol</span><span class="o">*</span><span class="n">vol</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span> <span class="o">+</span> <span class="n">dW</span>
-<span class="n">paths</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-</pre></div></p>
+<span class="n">paths</span> <span class="o">=</span> <span class="n">stock</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+
+<h5>Asian option</h5>
+<p>An asian option payoff is based on the daily arithmetic average of underlying price over the time period. The option may be exercised at the end of the time period. </p></p>
         </div>
       </div>
     </div>

@@ -105,7 +105,7 @@ $$ </p>
 <li>$\phi(x)$ is the standard normal CDF evaluated at $x$</li>
 </ul>
 <h5>PyTorch setup</h5>
-<p>Like many deep learning frameowrks available today, PyTorch provides high-performance numerical computation, automatic differentiation, and the ability to run on distributed grids of hardware accelerators, like GPUs. PyTorch computational graphs are created on the fly, as opposed to the static graphs you build in a language like Tensorflow. But both libraries provide automatic differentiation out of the box.</p>
+<p>Like many deep learning frameworks available today, PyTorch provides high-performance numerical computation, automatic differentiation, and the ability to run on distributed grids of hardware accelerators, like GPUs. PyTorch computational graphs are created on the fly, as opposed to the static graphs you build in a language like Tensorflow. But both libraries provide automatic differentiation out of the box.</p>
 <p>To enable automatic differentiation, we must identify the inputs to our formulas as tensors and start gradient tracking for those inputs. PyTorch will keep track of the operations on those inputs from the beginning to the end. Once we're finished with our computation and we have our output, we can run reverse mode automatic differentiation to calculate the gradient of the output with respect to each input.</p>
 <p>Throughout this article, I'll use the following six input tensors and their defined values for the Black-Scholes formula. I'll also create two utility functions that we'll use as we go along.</p>
 <div class="highlight"><pre><span></span><span class="c1"># black-scholes inputs</span>
