@@ -72,7 +72,7 @@
           <label class="text-muted">Dec 6, 2018</label>
         </div>
         <div class="mb-5">
-          <p><p><a href="puppy-steps.html">Yesterday</a> I wrote about using my Garmin Fenix 5 watch data to identify changes in my activity after getting a puppy. As part of that analysis I gathered several months of data, including my actual steps and a variable goal set by my watch each day. I've always been curious how this goal is calculated, but online searches haven't turned up any results. Now that I have the data, I'd like to try to reverse engineer Garmin's goal algorithm.</p>
+          <p><p><a href="puppy-steps">Yesterday</a> I wrote about using my Garmin Fenix 5 watch data to identify changes in my activity after getting a puppy. As part of that analysis I gathered several months of data, including my actual steps and a variable goal set by my watch each day. I've always been curious how this goal is calculated, but online searches haven't turned up any results. Now that I have the data, I'd like to try to reverse engineer Garmin's goal algorithm.</p>
 <p>I know from simple observation that if I exceed my goal on a given day, the goal will go up the day after. Similarly, if I fail to meet the goal, it will go down. Seems straightforward. But beyond this, I wasn't sure exactly how my steps each day were used to update my new goal. The first step toward unraveling more of the mystery was to plot my data. I imported the data using <code>pandas</code> and added a few columns:</p>
 <ol>
 <li>"difference" - the actual steps minus goal steps for each day</li>

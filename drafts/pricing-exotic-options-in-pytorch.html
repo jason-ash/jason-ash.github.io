@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+	
+    
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+	
+    <!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+    
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Pricing exotic options in PyTorch</h1>
+          <label class="text-muted">Dec 14, 2018</label>
+        </div>
+        <div class="mb-5">
+          <p><p>As a follow up to my <a href="black-scholes-in-pytorch">prior article on Black-Scholes in PyTorch</a>, I explore more complex applications of automatic differentiation. As I showed before, automatic differentiation can be used to calculate the sensitivities, or "greeks", of option price, even if we use monte carlo techniques to calculate option price. As it turns out, many exotic options can only be priced using monte carlo methods. Many exotic options are "path dependent", meaning their payoff depends not only on the final price of the underlying but also the behavior of the underlying throughout the time period. This often makes it impossible to use closed-form equations to calculate their price.</p>
+<p>The traditional approach to valuing these options is to generate thousands of scenarios of underlying prices and calculate the option payoff under each scenario. This is the essence of the monte carlo simulation. Often, to calculate option greeks, we re-run the monte carlo simulation several times with small differences in model inputs. This process can be time-consuming when the number of inputs is large. Automatic differentiation may be able to provide more accurate sensitivities in less time than traditional methods.</p>
+<p>In this article, I'll price five different exotic options contracts and use automatic differentiation to calculate the option greeks. I'll illustrate a few interesting scenarios from the thousands of monte carlo paths, and compare the behavior of the options contracts.</p>
+<h5>Creative financial engineering</h5>
+<p>Exotic options are amazing. Chances are if you can imagine a bet on a stock there is a derivative contract for it. Here are six examples of </p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>name</th>
+<th>payoff</th>
+<th>exercise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Asian option</td>
+<td>strike minus daily arithmetic average price</td>
+<td>asdf</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bermuda option</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Asian optionpayoff is strike price minus the <em>daily arithmetic average</em> underlying price over the entire time period, rather than the final price of the underlying at expiry.</li>
+<li>Cliquet option</li>
+<li>Knock-in barrier option - payoff is strike price minus underlying price</li>
+<li>Knock-out barrier option - </li>
+<li>Bermuda option:</li>
+<li>Lookback option</li>
+</ol>
+<p>Let's </p>
+<h5>Monte Carlo Scenarios</h5>
+<p>I'll use the same set of 1 million scenarios for each option valuation to reduce the impact of random noise. Each scenario will be comprised of 252 time steps (the approximate number of trading days in a given year.) As a result, we'll have a PyTorch tensor representing daily market returns for a single stock over a one-year period with size <code>(1000000, 252)</code>.</p>
+<div class="highlight"><pre><span></span><span class="c1"># input tensors</span>
+<span class="n">vol</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.16</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">rate</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.035</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dividend</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># geometric brownian motion</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">scenarios</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="n">step</span> <span class="o">=</span> <span class="mi">252</span>
+
+<span class="n">dW</span> <span class="o">=</span> <span class="n">vol</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">scenarios</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span> <span class="o">/</span> <span class="n">step</span><span class="o">**</span><span class="mf">0.5</span>
+<span class="n">paths</span> <span class="o">=</span> <span class="p">(</span><span class="n">rate</span> <span class="o">-</span> <span class="n">dividend</span> <span class="o">-</span> <span class="n">vol</span><span class="o">*</span><span class="n">vol</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span> <span class="o">+</span> <span class="n">dW</span>
+<span class="n">paths</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="http://docs.getpelican.com/en/stable/" target="_blank">Pelican</a> and <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2018 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>

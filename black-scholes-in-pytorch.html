@@ -89,7 +89,7 @@
 <h5>The Black-Scholes Formula</h5>
 <p>This is the formula we'll use to calculate the price of the European put option. There are formulas for each of the greeks too: delta, rho, vega, theta, epsilon, etc., but I'll spare the math for now. </p>
 <p>$$
-P = Ke^{-\mu t} \phi(d_2) - Se^{-\delta t} \phi(d_1)\\\
+P = Ke^{-\mu t} \phi(-d_2) - Se^{-\delta t} \phi(-d_1)\\\
 d_1 = \frac{\ln({\frac{S}{K})} + (\mu -\delta + \frac{\sigma^2}{2})t}{\sigma\sqrt{t}}\\\
 d_2 = \frac{\ln({\frac{S}{K})} + (\mu -\delta - \frac{\sigma^2}{2})t}{\sigma\sqrt{t}}
 $$ </p>
