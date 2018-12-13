@@ -10,23 +10,16 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="theme/css/main.css">
-	
-    
+
 	<!-- Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
 	  function gtag(){dataLayer.push(arguments);}
 	  gtag('js', new Date());
-
 	  gtag('config', 'UA-122705782-1');
 	</script>
 
-	
-    <!-- mathjax -->
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
-    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
-    
   </head>
   <body>
     
@@ -76,13 +69,12 @@
 <p>The traditional approach to valuing these options is to generate thousands of scenarios of underlying prices and calculate the option payoff under each scenario. This is the essence of the monte carlo simulation. Often, to calculate option greeks, we re-run the monte carlo simulation several times with small differences in model inputs. This process can be time-consuming when the number of inputs is large. Automatic differentiation may be able to provide more accurate sensitivities in less time than traditional methods.</p>
 <p>In this article, I'll price five different exotic options contracts and use automatic differentiation to calculate the option greeks. I'll illustrate a few interesting scenarios from the thousands of monte carlo paths, and compare the behavior of the options contracts.</p>
 <h5>Creative financial engineering</h5>
-<p>Exotic options are amazing. Chances are if you can imagine a bet you want to take on a stock there is a derivative contract for it. This is a short list of five interesting contract that we will price using the monte carlo scenarios.</p>
+<p>Exotic options are amazing. Chances are if you can imagine a bet you want to take on a stock there is a derivative contract for it. This is a short list of five interesting contracts that we will price using the monte carlo scenarios.</p>
 <ol>
 <li>Asian option - payoff is based on the daily arithmetic average underlying price over the entire time period, rather than the price on the expiration date.</li>
-<li>Lookback option - payoff is based on the most optimal opportunity one might have had to exercise the option during the time period. For example, a lookback put option lets the owner compare the strike price against the lowest price the underlying achieved during the time period.</li>
-<li>Knock-out option - the payoff of this option is equal to a normal European option, but there is a second clause in the contract: if the underlying price ever reaches a certain threshold, called the barrier, then the option pays nothing upon expiry.</li>
-<li>Knock-in option - the opposite of a knockout option, this contract <em>only</em> pays upon expiry if the underlying achieved the barrier during the time period.</li>
-<li>Cliquet option - this is a basket of forward-starting options that periodically settle and then reset over the time period. For example, a monthly cliquet option over a one year time period is a portfolio of 12 fowrard-starting options - one for each month of the year. At the end of each month, the prior option payoff is calculated and a new option is issued with a strike set equal to the current underlying price.</li>
+<li>Lookback option - payoff is based on the most optimal opportunity one might have had to exercise the option during the time period.</li>
+<li>Barrier options - the payoff of this option is conditioned on the underlying security reaching (or failing to reach) a predefined threshold, called the barrier.</li>
+<li>Cliquet option - this is a basket of forward-starting options that periodically settle and then reset over the time period. </li>
 </ol>
 <h5>Monte Carlo Scenarios</h5>
 <p>I'll use the same set of 1 million scenarios for each option valuation to reduce the impact of random noise. Each scenario will be comprised of 252 time steps (the approximate number of trading days in a given year.) As a result, we'll have a PyTorch tensor representing daily market returns for a single stock over a one-year period with size <code>(1000000, 252)</code>.</p>
@@ -133,9 +125,8 @@
 
 
 <h5>Lookback option</h5>
-<blockquote>
-<p>content needed</p>
-</blockquote>
+<p>A lookback option payoff is equal to the optimal exercise value achieved at any point during the time period. In other words, the option owner is allowed to "look back" at the underlying price and choose the value that results in the highest payoff. </p>
+<p>For a lookback put option with a fixed strike of <span>$</span>100, the option holder will choose the minimum underlying price over the time period as the exercise price. In cases where the minimum is still higher than the strike, the option payoff will be zero, otherwise it will be the strike price minus the minimum value. Because the lookback put option is so advantageous, it often costs considerably more than a plain vanilla put option.</p>
 <div class="highlight"><pre><span></span><span class="c1"># lookback put option payoff</span>
 <span class="n">payoff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">strike</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">scenarios</span><span class="p">,)))</span>
 <span class="n">ov</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">discount</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">payoff</span><span class="p">)</span>
@@ -145,10 +136,8 @@
 </pre></div>
 
 
-<h5>Knock-out option</h5>
-<blockquote>
-<p>content needed</p>
-</blockquote>
+<h5>Barrier options</h5>
+<p>Barrier options, also called "knock-out" or "knock-in" options, have a secondary condition for exercise. In the case of a knock-out put option, if the underlying price falls below a certain barrier, then the option is invalidated and the payoff is zero. In the case of a knock-in put option, the underlying security must reach the barrier, or else the payoff is zero.</p>
 <div class="highlight"><pre><span></span><span class="c1"># input the knockout price</span>
 <span class="n">knockout</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">80.0</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
@@ -187,6 +176,7 @@
 <blockquote>
 <p>content needed</p>
 </blockquote>
+<p>For example, a monthly cliquet option over a one year time period is a portfolio of 12 fowrard-starting options - one for each month of the year. At the end of each month, the prior option payoff is calculated and a new option is issued with a strike set equal to the current underlying price.</p>
 <div class="highlight"><pre><span></span><span class="c1"># determine the indices and values on the reset dates: every 21 days</span>
 <span class="n">strike_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span> 
 <span class="n">strike_val</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[:,</span> <span class="n">strike_idx</span><span class="p">]</span>
@@ -234,7 +224,11 @@
       &copy; 2018 Jason Ash. All rights reserved.
     </p>
   </div>
-</footer>  
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+  
     <!-- optional scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
