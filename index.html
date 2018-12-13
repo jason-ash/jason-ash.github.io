@@ -11,6 +11,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="theme/css/main.css">
 
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
 	<!-- Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
 	<script>
@@ -59,7 +62,7 @@
   <div class="col-md-8">
   
 <div class="mt-5 mb-5">
-  <h1 class="display-4">Hello! I'm Jason.</h1>
+  <h1 class="display-4" style="font-size:3.25rem;">Hello! I'm Jason.</h1>
   <p class="lead"><strong>
     I created this site to write about things that I find interesting: probability & Bayesian inference, data visualization, puzzles & games, finance, and books.
   </strong></p>
@@ -67,6 +70,18 @@
     
     <hr></hr>
 
+    <div class="row mt-5 mb-5 justify-content-between align-items-baseline">
+      
+        <div class="col-sm-9 col-offset-1">
+          <h2><a href="/pricing-exotic-options-in-pytorch">Pricing exotic options in PyTorch</a></h2>
+        </div>
+        <div class="col-sm-2">
+          <label class="text-muted">Dec 13, 2018</label>
+        </div>
+        <div class="col-sm-12">
+          <p>As a follow up to my prior article on Black-Scholes in PyTorch, I wanted to explore more complex applications of automatic differentiation. As I showed before, automatic differentiation can be used to calculate the sensitivities, or "greeks", of a stock option, even if we use monte carlo techniques to calculate option price. Many exotic options can only be priced using monte carlo techniques, so automatic differentiation may be able to provide more accurate sensitivities in less time than traditional methods.</p>
+        </div>
+    </div>
     <div class="row mt-5 mb-5 justify-content-between align-items-baseline">
       
         <div class="col-sm-9 col-offset-1">
@@ -115,18 +130,6 @@
           <p>I will be presenting along with my former colleague, Zachary Brown at the Valuation Actuary Symposium later this month in Washington, D.C. Our topic is "Improving Actuarial Communication". My portion of the talk is focused on improving visual communication and the benefits that new tools like Python and Jupyter Notebooks can bring to traditional actuarial work. My full slides, presented in an interactive format using <code>reveal.js</code>, can be found within.</p>
         </div>
     </div>
-    <div class="row mt-5 mb-5 justify-content-between align-items-baseline">
-      
-        <div class="col-sm-9 col-offset-1">
-          <h2><a href="/creative-landscape">Creative Landscape</a></h2>
-        </div>
-        <div class="col-sm-2">
-          <label class="text-muted">Nov 1, 2017</label>
-        </div>
-        <div class="col-sm-12">
-          <p>I transitioned from a role as an actuarial consultant into the world of fintech a few years ago. The actuarial profession is relatively small and extremely specialized, but I believe actuarial methods and insights can play a significant role in the burgeoning fintech field. I wrote an article for <u>The Actuary</u> magazine summarizing the fintech landscape and the role that actuaries should be playing in it.</p>
-        </div>
-    </div>
   
     <hr></hr>
     
@@ -135,7 +138,7 @@
   
       <li class="nav-item"><p class="nav-link disabled" href="#">Newer</p></li>
     
-    <li class="nav-item"><p class="nav-link disabled">1 of 2</p></li>
+    <li class="nav-item"><p class="nav-link disabled">1 of 3</p></li>
   
       <li class="nav-item"><a class="nav-link" href="/index2.html">Older</a></li>
     
@@ -155,7 +158,7 @@
 </footer>	
 	<!-- mathjax -->
     <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
-    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
   
     <!-- optional scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
