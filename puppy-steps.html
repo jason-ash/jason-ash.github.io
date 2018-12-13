@@ -74,7 +74,7 @@
         <div class="mb-5">
           <p><p>One of my recent favorite purchases was a <a href="https://www.amazon.com/Garmin-Fenix-Slate-Gray-Black/dp/B01N7J9APR" target="_blank">Garmin Fenix 5</a> watch. I bought it primarily to track a European cycling trip from <a href="https://www.strava.com/activities/1785505507" target="_blank">Regensburg, Germany</a> to <a href="https://www.strava.com/activities/1785507923" target="_blank">Vienna, Austria</a>. But I've also enjoyed keeping track of the steps I take each day. In particular, I wondered what inferences I could make about my life using the step data from the past few months.</p>
 <p><img class="img-fluid mx-auto d-block" title="Follow Darcy on Instagram: @prideandprejudog" alt="Darcy" src="../images/darcy.jpg" style="height:300px;"></p>
-<p>My wife and I recently got a puppy, Darcy. She's an energetic five-month-old, and to say our daily routines have changed as a result would be an understatement. My intuition was that I walked much more each day since Darcy arrived, and I wondered if the data, plus some Bayesian inference, would support my hypothesis. I was inspired by an example from <a href="http://nbviewer.jupyter.org/github/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/blob/master/Chapter1_Introduction/Ch1_Introduction_PyMC3.ipynb" target="_blank">Bayesian Methods for Hackers</a>, by Cam Davidson-Pilon, where he examined text message patterns over a period of time.</p>
+<p>My wife and I recently got a puppy, Darcy. She's an energetic five-month-old, and to say our daily routines have changed as a result would be an understatement. My intuition was that I walked much more each day since Darcy arrived, and I wondered if the data, plus some Bayesian inference, would support my hypothesis. I was inspired by an example from <a href="https://nbviewer.jupyter.org/github/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/blob/master/Chapter1_Introduction/Ch1_Introduction_PyMC3.ipynb" target="_blank">Bayesian Methods for Hackers</a>, by Cam Davidson-Pilon, where he examined text message patterns over a period of time.</p>
 <h5>The question:</h5>
 <p>Concretely, I want to determine if my step behavior changed over time. Was there a specific day or range of days where my activity increased or decreased? How much did my steps change? If I observed a change, what could I attribute it to?</p>
 <p>I'll use the excellent <a href="https://docs.pymc.io/" target="_blank"><code>pymc3</code></a> library to construct a model to answer my question. The model consists of prior assumptions about the distribution of my steps as well as an inference engine to fit my data and estimate a posterior distribution. The posterior distribution will be used to estimate the likelihood that my behavior changed.</p>
@@ -155,7 +155,7 @@
 <footer class="footer text-muted">
   <div class="container">    
     <p>
-      Built with <a href="http://docs.getpelican.com/en/stable/" target="_blank">Pelican</a> and <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>.
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
       <br>
       &copy; 2018 Jason Ash. All rights reserved.
     </p>
