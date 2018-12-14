@@ -106,7 +106,7 @@
 
 
 <p><img class="img-fluid mx-auto d-block" title="Monte Carlo" alt="monte carlo" src="../images/20181213-pytorch1.png"></p>
-<h5>The standard European option (baseline)</h5>
+<h5>The Vanilla European option</h5>
 <p>For the sake of comparison, we'll calculate the value of a standard European put option. This should be very close to <a href="black-scholes-in-pytorch">the Black-Scholes value we calculated in the prior article</a>. (Note that the prior article used 100,000 scenarios instead of 1 million, so the option prices are slightly different.) We'll also illustrate a single scenario to show how the option payoff is calculated.</p>
 <div class="highlight"><pre><span></span><span class="c1"># european put option payoff</span>
 <span class="n">payoff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">strike</span> <span class="o">-</span> <span class="n">paths</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">scenarios</span><span class="p">,)))</span>
