@@ -112,8 +112,8 @@
 <span class="n">payoff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">strike</span> <span class="o">-</span> <span class="n">paths</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">scenarios</span><span class="p">,)))</span>
 <span class="n">ov</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">discount</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">payoff</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">ov</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mf">5.0827</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">ov</span><span class="p">)</span>
+<span class="mf">5.0827</span>
 </pre></div>
 
 
@@ -124,8 +124,8 @@
 <span class="n">payoff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">strike</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">scenarios</span><span class="p">,)))</span>
 <span class="n">ov</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">discount</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">payoff</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">ov</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mf">3.0117</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">ov</span><span class="p">)</span>
+<span class="mf">3.0117</span>
 </pre></div>
 
 
@@ -137,8 +137,8 @@
 <span class="n">payoff</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">strike</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">scenarios</span><span class="p">,)))</span>
 <span class="n">ov</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">discount</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">payoff</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">ov</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mf">10.2009</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">ov</span><span class="p">)</span>
+<span class="mf">10.2009</span>
 </pre></div>
 
 
@@ -158,11 +158,11 @@
 <span class="n">knockout</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">discount</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">payoff</span> <span class="o">*</span> <span class="n">knockout</span><span class="p">)</span>
 <span class="n">knockin</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">discount</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">payoff</span> <span class="o">*</span> <span class="n">knockin</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">knockout</span><span class="p">,</span> <span class="n">knockin</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mf">2.4708</span><span class="p">,</span> <span class="mf">2.6118</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">knockout</span><span class="p">,</span> <span class="n">knockin</span><span class="p">)</span>
+<span class="mf">2.4708</span><span class="p">,</span> <span class="mf">2.6118</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">knockout</span> <span class="o">+</span> <span class="n">knockin</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mf">5.0827</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">knockout</span> <span class="o">+</span> <span class="n">knockin</span><span class="p">)</span>
+<span class="mf">5.0827</span>
 </pre></div>
 
 
@@ -180,8 +180,8 @@
 <span class="n">ov</span> <span class="o">=</span> <span class="n">discount</span><span class="p">[</span><span class="n">strike_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">payoff</span>
 <span class="n">ov</span> <span class="o">=</span> <span class="n">ov</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">ov</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mf">20.7419</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">ov</span><span class="p">)</span>
+<span class="mf">20.7419</span>
 </pre></div>
 
 

@@ -133,7 +133,7 @@
 <p>This is an ugly chart, but it helped me visualize how close I was getting to the real algorithm. What was most interesting in this chart was that virtually all my errors were positive: I was overshooting the step goal consistently. This suggested to me that there might be some kind of flooring function or rounding that I wasn't incorporating. </p>
 <p>At first I thought I was calculating things too accurately. After all, my goal guesses had fractions of steps in them, like 7263.2. I appreciate Garmin's attention to detail, but I hardly think they'll bother to track fractions of steps. I also noticed that all my Garmin goals were multiples of 10, like 7150 or 7230.</p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">goal</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="bp">True</span>
+<span class="bp">True</span>
 </pre></div>
 
 
@@ -193,8 +193,8 @@ $$</p>
 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;guess&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
 <span class="c1"># check accuracy</span>
-<span class="k">print</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">guess</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">goal</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="mf">0.0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">guess</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">goal</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="mf">0.0</span>
 </pre></div>
 
 
