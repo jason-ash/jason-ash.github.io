@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Autograd and Taylor Series</h1>
+          <label class="text-muted">Jan 13, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><p>I've learned that there are many automatic differentiation libraries in the Python ecosystem. Often these libraries are also machine learning libraries, where automatic differentiation serves as a means to an end - for example in optimizing model parameters in a neural network. However, the <a href="https://github.com/HIPS/autograd" target="_blank"><code>autograd</code> library</a> might be one of the purest, "simplest" (relatively speaking) options out there. Its goal is to efficiently compute deriviatives of numpy code, and its API is as close to numpy as possible. This means it's easy to get started right away if you're comfortable using numpy. In particular <code>autograd</code> claims to be able to differentiate as many times as one likes, and I thought a great way to test this would be to apply the Taylor Series approximation to some interesting functions.</p>
+<h5>Implementing Taylor Series using autograd</h5>
+<p>The Taylor Series is a way of approximating smooth curves using polynomials. Often, evaluating polynomials is much simpler than evaluating the smooth curves themselves. Technically speaking, the Taylor Series is an infinite sum of polynomial terms, but we typically gather a finite number of terms based on the desired accuracy of our approximation. The more terms we use, the better our approximation becomes. Here is the formula for the infinite series:</p>
+<p>$$f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n$$</p>
+<p>In python, using the <code>autograd</code> library, it is fairly straightforward to implement the Taylor Series up to a given degree. The subtle trick is to import <code>autograd</code>'s numpy package, which has differentiable versions of most numpy functions. From there, we can use <code>elementwise_grad</code> to differentiate a function with respect to an array.</p>
+<p>The <code>taylor_expansion</code> function below defines a sub-function, <code>t</code>, which represents the nth term of the Taylor Series expansion. By adding terms from degree 0 to the desired degree, eventually we end up with the Taylor Series curve we want.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">autograd</span> <span class="kn">import</span> <span class="n">elementwise_grad</span> <span class="k">as</span> <span class="n">egrad</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">factorial</span>
+
+
+<span class="k">def</span> <span class="nf">taylor_expansion</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">degree</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the taylor expansion of the function &quot;f&quot; with a given degree at point &quot;a&quot;</span>
+<span class="sd">    f(x) = f(a) + f&#39;(a)*(x - a)**1/1! + f&#39;(a)*(x - a)**2/2! + f&#39;&#39;&#39;(a)*(x - a)**3/3! + ...</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; f, a, x, degree = np.tanh, 0.5, np.linspace(-3, 3, 10000), 5</span>
+<span class="sd">    &gt;&gt;&gt; taylor_expansion(f, a, x, degree)</span>
+<span class="sd">    array([36.30578455, 36.27651122, 36.24725546, ...,  2.45649329,</span>
+<span class="sd">        2.45779953,  2.45910638])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span><span class="o">**</span><span class="n">d</span> <span class="o">/</span> <span class="n">factorial</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">t</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">egrad</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+
+
+<h5>Examples</h5>
+<p>For example, suppose we have some function, $f$. We know the function's value at a point, $x$, and we know the derivative of $f$ at $x$, which gives us the tangent line. We might approximate the value of $f(x + dx)$ using the tangent line, which is a Taylor Series with degree one. However, this approximation usually worsens as we move farther and farther from our original point. The Taylor Series incorporates derivatives upon derivatives of the original function, $f$, in order to improve the approximation at points far from our original $x$. This can be useful if our original function is costly to evaluate.</p>
+<p>Here's another example. As an actuary, I'm often interested in testing the sensitivity of financial projections with respect to model inputs. Interest rates, lapse rates, mortality rates, and other inputs all play a role in determining the premium that should be charged for a given insurance product. Sometimes these models can be complex and time consuming to run. But if I can evaluate the function once to get $f(x)$, and compute several derivatives, $f'(x)$, $f''(x)$, $f'''(x)$, ..., then I can create a Taylor Series approximation of my model, which I could use to estimate how premium would change if my inputs changed.</p>
+<h5>Hyperbolic tangent function</h5>
+<p>The hyperbolic tangent function is sometimes used in neural networks to classify a training example between two options, say, "dog" vs. "cat". Its value falls between -1 and 1. We know the formula for this function, so we could easily calculate its true value at any point, but lets use a couple different Taylor Series approximations to see how well they perform.</p>
+<p>This first example shows a fourth degree function, meaning we use up to the fourth derivative of our original function. We evaluate the Taylor Series at the point $f(0.5)$, and it looks like we could use our new function to estimate points from roughly zero to 1.5. This is the section of the chart where both lines are nearly on top of one another. Note that I intentionally hid most axis ticks and lines in an effort to emphasize the function lines themselves.</p>
+<p><img class="img-fluid mx-auto d-block" title="Taylor Series" alt="taylor series" src="../images/20190113-taylor1.png"></p>
+<p>On the other hand, perhaps we can increase our accuracy if we use a Taylor Series with degree 6. This time we'll evaluate at a different point, $f(-1.0)$. Here it looks as if our results are pretty good from -2 through 0, which is perhaps a slightly larger range than we had for our polynomial of degree 4.</p>
+<p><img class="img-fluid mx-auto d-block" title="Taylor Series" alt="taylor series" src="../images/20190113-taylor2.png"></p>
+<p>I thnk it is interesting to see how the Taylor Series polynomial changes as we change the degree and incorporate more and more derivatives of our original function. The table below shows the same original function with Taylor Series polynomials of increasing degree from 0 through 7.</p>
+<p>Note that with degree 0 our guess for any point on the function is equal to $f(a)$, which is hardly reasonable. When we use the tangent line our guesses are good for regions close to $a$, but we quickly improve our approximation by using Series with degree 4 or higher.</p>
+<p><img class="img-fluid mx-auto d-block" title="Taylor Series" alt="taylor series" src="../images/20190113-taylor3.png"></p>
+<h5>Other functions</h5>
+<p>Here is the same set of charts for a few other functions: $sin(x)$, $e^x$, and $\sqrt{x}$. Note how the Taylor Series polynomial flips up the down repeatedly as it struggles to converge for $\sqrt{x}$.</p>
+<p><img class="img-fluid mx-auto d-block" title="Taylor Series" alt="taylor series" src="../images/20190113-taylor4.png"></p>
+<p><img class="img-fluid mx-auto d-block" title="Taylor Series" alt="taylor series" src="../images/20190113-taylor5.png"></p>
+<p><img class="img-fluid mx-auto d-block" title="Taylor Series" alt="taylor series" src="../images/20190113-taylor6.png"></p>
+<h5>Conclusion</h5>
+<p>I'm looking forward to using <code>autograd</code> for more complicated models. As I mentioned before, I'm particularly interested in applying automatic differentiation to actuarial work, where I think it could have a big impact on understanding complex insurance products. Feel free to contact me if this is something that interests you too - I'd love to connect.</p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
