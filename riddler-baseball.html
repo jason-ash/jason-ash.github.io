@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Baseball</h1>
+          <label class="text-muted">Mar 22, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This week's riddler asks us to simulate a game of baseball using rolls of a dice. To solve this problem, we're going to treat the game of Baseball like a markov chain. To borrow an analogy from one of my favorite professors (Hi, Dr. Popescu!), a markov chain is like a frog hopping among lily pads. The frog has what's called a "current state" - that is, the lily pad it is currently occupying. The frog also has a random probability of hopping to any of the lily pads around it, including some probability of staying where it is. Once the frog hops to a new lily pad, it might have different probabilities of hopping to other lily pads, and this process continues for as long as we like. However, a key property of this system is that we only need to know the current state of the frog in order to estimate where it will go next. It doesn't matter how the frog got to its current state. It may have taken hundreds of hops or just a single hop to arrive in its current state, but that doesn't affect the frog's likelihood of moving to other lily pads. This simplifies the modeling process because we don't need to keep track of the history of events over time - we just need to know where we are and the probabilities of moving to new states.</p>
+<p>Here's the problem we're given. Next, we'll outline the steps to solve it.</p>
+<blockquote>
+<p>Over the years, people have invented many games that simulate baseball using two standard dice. In these games, each dice roll corresponds with a baseball event. Two players take turns rolling dice and tracking what happens on the field. Suppose you happen to be an ardent devotee of one of these simulated games from the late 19th century, called Our National Ball Game, which assigns rolls to baseball outcomes like so:
+<br>1, 1: double
+<br>1, 2: single
+<br>1, 3: single
+<br> ... <em>other rolls... we'll examine the full list later</em>
+<br>5, 6: triple
+<br>6, 6: home run
+<br>Given those rules, what’s the average number of runs that would be scored in nine innings of this dice game? What’s the distribution of the number of runs scored? (Histograms welcome.) You can assume some standard baseball things, like runners scoring from second on singles and runners scoring from third on fly outs.</p>
+</blockquote>
+<h5>Markov Chain Baseball</h5>
+<p>Under the simplified dice framework, we can treat the game of baseball like a markov chain that has a current state, a set of transition probabilities to subsequent states, and associated payoffs (runs scored) when certain states are reached. Using this paradigm, we can simulate innings probabilistically, count the runs scored by each team, and determine the winner. Let's walk through exactly how we turn the game of baseball into a markov chain by describing the different components we'll need.</p>
+<ol>
+<li><strong>Current state</strong> - describes the strike count for the current batter, the number of outs, and the position of any runners on base. A small quirk of this game: we can only roll for strikes (not balls), so we only need to keep track of the current strikes for our batter. For example, each of these is a valid state of the game.<ul>
+<li>0 strikes, 0 outs, bases empty (starting state each inning)</li>
+<li>1 strike, 1 out, runner on first</li>
+<li>2 strikes, 2 outs, bases loaded ... (bottom of the ninth, game seven... just kidding!)</li>
+<li>Additionally, we define the end of the inning as "0 strikes, 3 outs, bases empty". Eventually, every inning will end up here because the probability of staying in this state once we arrive is 100%. In markov chains this is called an "absorbing state" because we can never leave once we arrive.</li>
+</ul>
+</li>
+<li><strong>Transition probabilities</strong> - we simulate game events by rolling dice. For example, rolling a 1 and a 3 (the order doesn't matter) results in a base hit. If we are currently in a state of "0 strikes, 0 outs, bases empty", then we will transition to a new state "0 strikes, 0 outs, runner on first". We know that rolling a (1,3) with two dice will occur with probability $\frac{1}{21}\approx{4.8}\%$. On the other hand, there are four ways to roll a "strike", so the probability of moving from "0 strikes, 0 outs, bases empty" to "1 strike, 0 outs, bases empty" is $\frac{4}{21}\approx{19.0}\%$. It is impossible to move from "0 strikes, 0 outs, bases empty" to "2 strikes, 0 outs, bases empty" in a single move, so the probability is zero. In fact, most of the transition probabilities will be zero, because each game state may only transition to at most 11 other states. Here are several other examples:<ul>
+<li>Dice roll (3,1): move from "0 strikes, 0 outs, bases empty" to "0 strikes, 0 outs, runner on first"</li>
+<li>Dice roll (1,3): move from "2 strikes, 2 outs, runner on first" to "0 strikes, 2 outs, runners on first and third" (because the runner on first is typically able to make it to third on a base hit.)</li>
+<li>Dice roll (1,3): move from "1 strike, 1 out, runner on second" to "0 strikes, 1 out, bases empty" (and we increase the run tally by one, because the runner scored from second on the base hit.)</li>
+</ul>
+</li>
+<li><strong>Rewards</strong> - certain game events score runs for the batting team. We track these runs (typically called "rewards" in the markov chain world), and add them up as we go from state to state. For example, if we move from a state of "0 strikes, 0 outs, bases empty" to "0 strikes, 0 outs, bases empty", it means we rolled a (6,6), and hit a home run. (In fact this is one of the rare cases where we stay in the same state, even though we increase the run count by one. Most other actions move us from one state to a different state.) Therefore, the reward for rolling a (6,6) from the initial state is +1. Here are some other examples:<ul>
+<li>Dice roll (1,3): move from "2 strikes, 2 outs, runner on first" to "0 strikes, 2 outs, runners on first and third", no increase in runs.</li>
+<li>Dice roll (1,3): move from "1 strike, 1 out, runner on second" to "0 strikes, 1 out, bases empty". Reward of +1 for the single runner that scored.</li>
+<li>Dice roll (6,6): move from "0 strikes, 2 outs, bases loaded" to "0 strikes, 2 outs, bases empty". Reward of +4 because this was a grand slam.</li>
+</ul>
+</li>
+</ol>
+<p>Now that we have the tools to describe our game, we need to specificy all possible states, all possible transitions between states, and the rewards associated with each move. We'll use python to do the heavy lifting. The full code can be found at the bottom of this article or as a <a href="https://gist.github.com/ashanalytics/7ec1ffccea90ca58c9d1613736eb5a81" target="_blank">github gist</a>.</p>
+<h5>Creating States</h5>
+<p>We can simplify the task of creating all states by taking advantage of independence among state components. For example, runners on base is independent from the number of strikes and the number of outs. Therefore, we can generate the possibilities separately and combine them for the overall list. There are three possibilities for strikes on an active batter: 0, 1, or 2. (We don't need the number 3 because if a batter has three strikes, then the next batter is up and we instantly reset to 0.) We also have three possibilities for the number of outs in an active inning: 0, 1, or 2, for the same reason as before. However, we do create a special state with 3 outs to signal the end of the inning. Next, we identify all the possibilities of bases that could be occupied: single runners on first, second, or third, runners on first and second, first and third, second and third, and bases loaded. We can express the runners as a tuple of three integers, where 1 means a base is occupied and 0 means it is empty. For example (0,0,0) is bases empty, (0,1,0) means a runner on second, and (1,1,1) means bases loaded. Once we generate each set of possibilities for strikes, outs, and runners, we can use python to assemble all the unique combinates, which results in a list of length $3\times8\times3+1=73$.</p>
+<p>To represent the current state, we need a data structure that has an attribute for strikes, outs, and runners. We can use the <code>namedtuple</code> data structure as an easy way to store this data. The code snipped below creates this class and instantiates a single instance representing 0 strikes, 1 out, and runners on first and third.</p>
+<div class="highlight"><pre><span></span><span class="c1"># create the &quot;Inning&quot; class and instantiate a single instance</span>
+<span class="n">Inning</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Inning&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;strikes&#39;</span><span class="p">,</span> <span class="s1">&#39;outs&#39;</span><span class="p">,</span> <span class="s1">&#39;runners&#39;</span><span class="p">])</span>
+<span class="n">sample_state</span> <span class="o">=</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+
+<h5>Calculating Transition Probabilities</h5>
+<p>This next part involves some manual work and a bit of baseball assumption-making. The objective is to identify all the ways that we can move from one state to another. If each state could transition to each other state, we would need to calculate $72\times72=5184$ probabilities, which would be a tedious task. Instead, we can simplify this number substantially. For example, we know that it's impossible to go directly from 0 strikes to 2 strikes, or from bases empty to bases loaded in a single step. Therefore, many of the transition probabilities between states will be zero, which simplifies our task. </p>
+<p>Another benefit of our dice game is that we don't have to deal with complicated probabilties. There are 21 unique combinations of two dice, and each combination is equally likely. Furthermore, several of the outcomes from unique dice rolls are the same ("strike", "out at first", etc.) As a result, each state has at most 11 potential moves to another state. Let's write them out with their effect on the game and the probabilty (out of 21).</p>
+<table>
+<thead>
+<tr>
+<th align="right">Game Action</th>
+<th align="center">Prob. ($\frac{x}{21}$)</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">Strike</td>
+<td align="center">4</td>
+<td>Increase strike count (also handle strikeouts and outs when necessary)</td>
+</tr>
+<tr>
+<td align="right">Out at first</td>
+<td align="center">4</td>
+<td>Runners advance by one; runner on third scores (unless it's the third out); <code>out+=1</code></td>
+</tr>
+<tr>
+<td align="right">Fly out</td>
+<td align="center">3</td>
+<td>Runner on third scores (unless it's the third out); <code>out+=1</code></td>
+</tr>
+<tr>
+<td align="right">Single</td>
+<td align="center">3</td>
+<td>Runners on base advance by two; batter moves to first</td>
+</tr>
+<tr>
+<td align="right">Foul out</td>
+<td align="center">1</td>
+<td>Runners stay where they are; <code>out+=1</code></td>
+</tr>
+<tr>
+<td align="right">Double play</td>
+<td align="center">1</td>
+<td>If nobody is on base, treat as a single out; otherwise tag out the most advanced two runners</td>
+</tr>
+<tr>
+<td align="right">Base on error</td>
+<td align="center">1</td>
+<td>All runners advance a single base only</td>
+</tr>
+<tr>
+<td align="right">Walk</td>
+<td align="center">1</td>
+<td>Batter advances to first; runners advance only if forced</td>
+</tr>
+<tr>
+<td align="right">Double</td>
+<td align="center">1</td>
+<td>Everyone on base scores; batter advances to second base</td>
+</tr>
+<tr>
+<td align="right">Triple</td>
+<td align="center">1</td>
+<td>Everyone on base scores; batter advances to third base</td>
+</tr>
+<tr>
+<td align="right">Home run</td>
+<td align="center">1</td>
+<td>Everyone on base plus the batter scores</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: there are some obvious simplifying assumptions in my "outcomes" above. It's possible to get different answers to this Riddler if you treat game events differently. For example, "double play" and "base on error" have the most embedded assumptions about who is tagged out, who scores, and how runners advance. Most of the other events are fairly straightfoward. Please let me know if you think my algorithmic team management style should be adjusted!</p>
+</blockquote>
+<h5>Coding the Game Actions in Python</h5>
+<p>Now we need to encode how a given state will change as the results of a game action. We'll need 11 functions - one for each game action - that take a starting state as input and return the ending state and any runs that may have occured as a result. Here's an example of one of these functions, that describes what happens when there's a "fly out". In this case, we assume a runner on third is able to score (called "tagging up"), but only if the pop fly is the first or second out. If it's the third out, the inning ends without the run counting. As I mentioned above, there is some subjectivity in the outcomes of each game event, and that's part of the fun of this problem!</p>
+<p>Also note that the function below takes a single input: the game state, but returns two results: the subsequent game state and the number of runs that were scored. In this way, we can track the game state as it changes, and keep a running total of runs as they occur during the inning. You can find the other 10 game action functions below in the code.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fly_out</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a fly out</span>
+<span class="sd">        * runner on third scores unless it&#39;s the third out</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">outs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">outs</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">outs</span><span class="p">,</span> <span class="n">runners</span><span class="p">),</span> <span class="n">runs</span>
+</pre></div>
+
+
+<h5>Running a Single-Inning Simulation</h5>
+<p>Now we have all the tools we need to track the state of our game, the likelihood of moving to new states, and the rewards associated with certain actions. All innings start with 0 strikes, 0 outs, and bases empty: <code>Inning(0, 0, (0,0,0))</code>. From the starting state, we simulate dice rolls and play the game, updating the game state and tracking runs as we go. Here's a python function that plays a single inning and prints a summary of what happens. Note that the results are randomly generated according to the weighted probabilities described above, so the results will change every time it's run.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">single_inning</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulate a single inning until three outs are recorded. Return the number</span>
+<span class="sd">    of runs scored during the inning. If verbose=True, print a &quot;play-by-play&quot;</span>
+<span class="sd">    summary of the inning for each action. If verbose=False, just return runs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">state</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">state</span><span class="o">.</span><span class="n">outs</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">ACTIONS</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">WEIGHTS</span><span class="p">)</span>
+        <span class="n">state</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="n">runs</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{action:15}: {state}, {score} total runs scored&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">score</span>
+
+<span class="c1"># sample output</span>
+<span class="c1"># -------------</span>
+<span class="c1"># single         : Inning(strikes=0, outs=0, runners=(1, 0, 0)), 0 total runs scored</span>
+<span class="c1"># strike         : Inning(strikes=1, outs=0, runners=(1, 0, 0)), 0 total runs scored</span>
+<span class="c1"># base_on_error  : Inning(strikes=0, outs=0, runners=(1, 1, 0)), 0 total runs scored</span>
+<span class="c1"># triple         : Inning(strikes=0, outs=0, runners=(0, 0, 1)), 2 total runs scored</span>
+<span class="c1"># strike         : Inning(strikes=1, outs=0, runners=(0, 0, 1)), 2 total runs scored</span>
+<span class="c1"># double         : Inning(strikes=0, outs=0, runners=(0, 1, 0)), 3 total runs scored</span>
+<span class="c1"># single         : Inning(strikes=0, outs=0, runners=(1, 0, 0)), 4 total runs scored</span>
+<span class="c1"># fly_out        : Inning(strikes=0, outs=1, runners=(1, 0, 0)), 4 total runs scored</span>
+<span class="c1"># base_on_error  : Inning(strikes=0, outs=1, runners=(1, 1, 0)), 4 total runs scored</span>
+<span class="c1"># double_play    : Inning(strikes=0, outs=3, runners=(0, 0, 0)), 4 total runs scored</span>
+</pre></div>
+
+
+<h5>Conclustion: Answering the Question</h5>
+<blockquote>
+<p>... what’s the average number of runs that would be scored in nine innings of this dice game? What’s the distribution of the number of runs scored?</p>
+</blockquote>
+<p>Now that we can simulate a single inning, we can answer the question by repeating our simulation a large number of times to estimate the long-term distribution of runs scored. Fortunately, each inning is independent (at least in our dice game - no momentum or slumps to worry about). Therefore, if we accurately simulate a single inning, we can accurately simulate a single game by multiplying by nine. </p>
+<p class="text-muted">Now, perhaps the truly detail-oriented among you may note that this answer isn't entirely correct because it precludes the possibility of extra innings. There is a small probability that both teams score the same number of runs after nine innings. If that happened, they would continue playing one inning at a time until one team wins. I may save this small addendum for a separate update later.</p>
+
+<p><strong>Ignoring the small possibility of ties and extra innings, we see that the expected number of runs per inning is roughly 1.61, which means the expected number of runs per nine-inning game is roughly 14.5.</strong> According to <a href="https://www.sportingcharts.com/articles/mlb/what-is-the-average-number-of-runs-scored-in-an-mlb-game.aspx", target="_blank">sportingcharts.com</a> the actual <em>total score</em> of MLB games from 1990 to 2016 hovered between 8-10, which means each team scored between 4 and 5 runs. Our dice game certainly gives the advantage to the sluggers!</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">simulate_innings</span><span class="p">(</span><span class="n">trials</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simulate a large number of innings and return the total runs scored&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">single_inning</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">trials</span><span class="p">)])</span>
+
+<span class="c1"># sample output of 1 million innings</span>
+<span class="c1"># ----------------------------------</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">simulate_innings</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="mf">1.611836</span>
+</pre></div>
+
+
+<p>What's also interesting is that these results allow us to track not only the average number of runs scored per inning, but the full distribution: how many goose eggs (roughly 40% of the time) vs. quadruple-grand-slams (the highest inning recorded 22 runs). These results are best viewed as a histogram showing exactly how many simulated innings ended up with a given number of runs, which you can see below.</p>
+<p><img class="img-fluid mx-auto d-block" title="Baseball Histogram" src="../images/20190322-riddler.png"></p>
+<h5>Reference: Full Python Code</h5>
+<p>The full code to replicate my results is below. Feel free to let me know if my baseball strategy should be adjusted. You can submit pull requests to the github gist, found <a href="https://gist.github.com/ashanalytics/7ec1ffccea90ca58c9d1613736eb5a81" target="_blank">here</a>.</p>
+<div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Solves the fivethirtyeight Riddler problem from March 22, 2019</span>
+
+<span class="sd">Each inning is represnted by an object called &quot;Inning&quot;, that is comprised of</span>
+<span class="sd">strikes, outs, and runner positions, e.g. Inning(0, 1, (0,1,0)) for 0 strikes,</span>
+<span class="sd">1 out, and a runner on second base.</span>
+
+<span class="sd">There are 11 unique game actions that can occur. Each is represented by a </span>
+<span class="sd">function that takes an inning state as input and returns a tuple of the new </span>
+<span class="sd">inning state after the action and the number of runs that were scored as a </span>
+<span class="sd">result of the action.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+
+<span class="c1"># define a container for the current state of an inning</span>
+<span class="n">Inning</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Inning&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;strikes&#39;</span><span class="p">,</span> <span class="s1">&#39;outs&#39;</span><span class="p">,</span> <span class="s1">&#39;runners&#39;</span><span class="p">])</span>
+
+<span class="c1"># all possible game actions, handled with functions below</span>
+<span class="n">__actions__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;strike&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;out_at_first&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;fly_out&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;single&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;base_on_error&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> 
+    <span class="p">(</span><span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> 
+    <span class="p">(</span><span class="s1">&#39;double_play&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;foul_out&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;homerun&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;triple&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;walk&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">ACTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">__actions__</span><span class="p">]</span>
+<span class="n">WEIGHTS</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">__actions__</span><span class="p">]</span>
+<span class="n">WEIGHTS</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">WEIGHTS</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">WEIGHTS</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">single_inning</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulate a single inning until three outs are recorded. Return the number</span>
+<span class="sd">    of runs scored during the inning. If verbose=True, print a &quot;play-by-play&quot;</span>
+<span class="sd">    summary of the inning for each action. If verbose=False, just return runs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">state</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">state</span><span class="o">.</span><span class="n">outs</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">ACTIONS</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">WEIGHTS</span><span class="p">)</span>
+        <span class="n">state</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">action</span><span class="p">](</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="n">runs</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{action:15}: {state}, {score} total runs scored&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">score</span>
+
+<span class="k">def</span> <span class="nf">simulate_innings</span><span class="p">(</span><span class="n">trials</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simulate a large number of innings and return the total runs scored&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">single_inning</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">trials</span><span class="p">)])</span>
+
+<span class="k">def</span> <span class="nf">base_on_error</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a base on error</span>
+<span class="sd">        * batter and runners advance one base each</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span><span class="p">,</span> <span class="n">runners</span><span class="p">),</span> <span class="n">runs</span>
+
+<span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a double</span>
+<span class="sd">        * all runners score; batter advances to second</span>
+<span class="sd">        NOTE: in reality about 50% of runners on first score on a double</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="nb">sum</span><span class="p">(</span><span class="n">inning</span><span class="o">.</span><span class="n">runners</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">double_play</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a double play</span>
+<span class="sd">        * if the bases are empty this is treated like a single out; otherwise </span>
+<span class="sd">        it&#39;s assumed the two runners farthest advanced are picked off.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span>
+        <span class="c1"># only one out available</span>
+        <span class="n">runners</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">outs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)]:</span>
+        <span class="n">runners</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">outs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)]:</span>
+        <span class="n">runners</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">outs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">runners</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">outs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">runners</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">outs</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">outs</span><span class="p">,</span> <span class="n">runners</span><span class="p">),</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">fly_out</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a fly out</span>
+<span class="sd">        * runner on third scores unless it&#39;s the third out</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">outs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">outs</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">outs</span><span class="p">,</span> <span class="n">runners</span><span class="p">),</span> <span class="n">runs</span>
+
+<span class="k">def</span> <span class="nf">foul_out</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a foul out</span>
+<span class="sd">        * runners stay where they are</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span><span class="p">),</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">out_at_first</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for an out at first</span>
+<span class="sd">        * runners advance one base</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">outs</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">outs</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">outs</span><span class="p">,</span> <span class="n">runners</span><span class="p">),</span> <span class="n">runs</span>
+
+<span class="k">def</span> <span class="nf">single</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a single</span>
+<span class="sd">        * runners advance two bases; batter advances to first</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span><span class="p">,</span> <span class="n">runners</span><span class="p">),</span> <span class="n">runs</span>
+
+<span class="k">def</span> <span class="nf">strike</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning state for a strike</span>
+<span class="sd">    Returns a new Inning object and the number of runs scored</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">strikes</span> <span class="o">=</span> <span class="n">inning</span><span class="o">.</span><span class="n">strikes</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">strikes</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">strikes</span><span class="p">,</span> <span class="n">outs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">outs</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="n">strikes</span><span class="p">,</span> <span class="n">outs</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span><span class="p">),</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>     
+            <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="n">strikes</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span><span class="p">),</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">triple</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a triple</span>
+<span class="sd">        * all runners score; batter advances to third</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="nb">sum</span><span class="p">(</span><span class="n">inning</span><span class="o">.</span><span class="n">runners</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">homerun</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a triple</span>
+<span class="sd">        * all runners and the batter score</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="nb">sum</span><span class="p">(</span><span class="n">inning</span><span class="o">.</span><span class="n">runners</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="n">inning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the inning for a walk</span>
+<span class="sd">        * batter advances to first; runners advance if forced</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span> 
+        <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)]:</span>
+        <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)]:</span>
+        <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">inning</span><span class="o">.</span><span class="n">runners</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">runners</span><span class="p">,</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">Inning</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inning</span><span class="o">.</span><span class="n">outs</span><span class="p">,</span> <span class="n">runners</span><span class="p">),</span> <span class="n">runs</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">trials</span> <span class="o">=</span> <span class="mi">1000000</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">simulate_innings</span><span class="p">(</span><span class="n">trials</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Average score from {trials:,.0f} innings: {results.mean():,.2f}&#39;</span><span class="p">)</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
