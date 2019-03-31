@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Spelling Bee</h1>
+          <label class="text-muted">Mar 29, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>I have a distinct memory of participating in my elementary school's spelling bee when I was in second grade. I was the unlikely runner-up, even though I was competing against children in third and fourth grade. (For what it's worth, I will never forget how to spell the word that ultimately bested me, "gingham".) What was the secret to my overperformance? Not my natural spelling ability, but rather the rules of the game: a participant is eliminated from the spelling bee after failing to spell a word correctly, which means that going last is an advantage. I was lucky enough to be the near the tail-end of the participants in my spelling bee, which surely improved my final ranking.</p>
+<p>This week's riddler asks us to quantify the "going last" advantage. Fortunately we can solve it with python, which is perhaps easier than competing in a spelling bee itself. Here's the full question text:</p>
+<blockquote>
+<p>You are competing in a spelling bee alongside nine other contestants. You can each spell words perfectly from a certain portion of the dictionary but will misspell any word not in that portion of the book. Specifically, you have 99 percent of the dictionary down cold, and your opponents have 98 percent, 97 percent, 96 percent, and so on down to 90 percent memorized. The bee’s rules are simple: The contestants take turns spelling in some fixed order, which then restarts with the first surviving speller at the end of a round. Miss a word and you’re out, and the last speller standing wins. The bee words are chosen randomly from the dictionary.
+<br><br>
+First, say the contestants go in decreasing order of their knowledge, so that you go first. What are your chances of winning the spelling bee? Second, say the contestants go in increasing order of knowledge, so that you go last. What are your chances of winning now?</p>
+</blockquote>
+<h5>Problem Setup</h5>
+<p>As the problem states, we can identify participants by their probabilities of spelling words correctly. For example, we have a "99%" speller all the way through a "90%" speller. We'll organize the participants into numpy arrays, where we can sort from best to worst or worst to best.</p>
+<div class="highlight"><pre><span></span><span class="c1"># best to worst</span>
+<span class="n">spellers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">99</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+<span class="c1"># array([0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.93, 0.92, 0.91, 0.9 ])</span>
+
+<span class="c1"># worst to best</span>
+<span class="n">spellers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+<span class="c1"># array([0.9 , 0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99])</span>
+</pre></div>
+
+
+<h5>Spelling Bee Simulation</h5>
+<p>Next, we need a way to simulate one round of the spelling bee. A 99% speller only misses 1% of the words she attempts. We can simulate this by drawing random numbers from 0 to 1. If the number is greater than 0.99, which occurs 1% of the time, then the participant is eliminated. Otherwise, she moves to the next round. We generate random numbers for each participant, keep the ones who spell correctly, and remove the others. Importantly, if every participant is eliminated during the round, we know that the final participant would have won, so we return this person instead of an empty array. Here's the function that implements this logic.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">single_round</span><span class="p">(</span><span class="n">spellers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Play a single round of the spelling bee; draw a random number for each speller,</span>
+<span class="sd">    then compare the number vs. their rate. Each speller that answers correctly</span>
+<span class="sd">    is retained in the array, while incorrect spellers are removed. Returns a new </span>
+<span class="sd">    array of the spellers that advance to the next round.</span>
+
+<span class="sd">    NOTE : if the function would return an empty array, (in the case that every speller</span>
+<span class="sd">    failed to spell the word correctly) it instead returns the speller listed last in </span>
+<span class="sd">    the original array, who would have won without having to spell a word.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spellers</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">spellers</span><span class="p">[</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">spellers</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">spellers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+</pre></div>
+
+
+<p>To simulate the entire spelling bee, we'll run as many rounds as it takes to eliminate all but one participant.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bee</span><span class="p">(</span><span class="n">spellers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run a spelling bee with as many rounds as it takes to eliminate all but one</span>
+<span class="sd">    speller.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">spellers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">spellers</span> <span class="o">=</span> <span class="n">single_round</span><span class="p">(</span><span class="n">spellers</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spellers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+
+<h5>Results</h5>
+<p>Now that we have the tools to simulate a single spelling bee, we're interested in the distribution of results for a large number of them. This will help us understand how much of an advantage it is to go last. Therefore, we run 1 million spelling bees in which participants are ordered from best to worst, and 1 million in which they are ordered from worst to best. We calculate the number of bees won by each participant under each ordering, and show the results below in a table. The numbers represent a participant's chance of winning a spelling bee under both sets of orderings.</p>
+<p>The question asked us (as the fantastic 99% speller that we are) how our chances of winning change based on whether we go first or last. Unsurprisingly, we have a significant edge over our opponents, winning more than half of all simulated bees regardless of ordering. But if we want that extra edge, <strong>going last will increase our chances of winning from 51.9% to 52.5%</strong>.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Speller</th>
+<th align="center">Best to Worst</th>
+<th align="center">Worst to Best</th>
+<th align="center">Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>0.90</strong></td>
+<td align="center">0.004534</td>
+<td align="center">0.004140</td>
+<td align="center">0.000394</td>
+</tr>
+<tr>
+<td align="center"><strong>0.91</strong></td>
+<td align="center">0.006646</td>
+<td align="center">0.006159</td>
+<td align="center">0.000487</td>
+</tr>
+<tr>
+<td align="center"><strong>0.92</strong></td>
+<td align="center">0.009734</td>
+<td align="center">0.008977</td>
+<td align="center">0.000757</td>
+</tr>
+<tr>
+<td align="center"><strong>0.93</strong></td>
+<td align="center">0.014766</td>
+<td align="center">0.013655</td>
+<td align="center">0.001111</td>
+</tr>
+<tr>
+<td align="center"><strong>0.94</strong></td>
+<td align="center">0.022588</td>
+<td align="center">0.021717</td>
+<td align="center">0.000871</td>
+</tr>
+<tr>
+<td align="center"><strong>0.95</strong></td>
+<td align="center">0.036309</td>
+<td align="center">0.035115</td>
+<td align="center">0.001194</td>
+</tr>
+<tr>
+<td align="center"><strong>0.96</strong></td>
+<td align="center">0.060632</td>
+<td align="center">0.060064</td>
+<td align="center">0.000568</td>
+</tr>
+<tr>
+<td align="center"><strong>0.97</strong></td>
+<td align="center">0.109423</td>
+<td align="center">0.108333</td>
+<td align="center">0.001090</td>
+</tr>
+<tr>
+<td align="center"><strong>0.98</strong></td>
+<td align="center">0.215985</td>
+<td align="center">0.216553</td>
+<td align="center">-0.000568</td>
+</tr>
+<tr>
+<td align="center"><strong>0.99</strong></td>
+<td align="center"><strong>0.519383</strong></td>
+<td align="center"><strong>0.525287</strong></td>
+<td align="center"><strong>-0.005904</strong></td>
+</tr>
+</tbody>
+</table>
+<h5>Reference: Full Python Code</h5>
+<p>Also can be found as a gist <a href="https://gist.github.com/ashanalytics/db09e8bb131f5bc856a018fa0856f2f0" target="_blank">here</a>.</p>
+<div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Solves the fivethirtyeight Riddler Classic problem from March 29, 2019</span>
+
+<span class="sd">Each speller is identified by their probability of spelling a word correctly,</span>
+<span class="sd">such as &quot;0.99&quot; to represent a 99% correct speller. The program simulates a</span>
+<span class="sd">large number of spelling bees and returns the winner of each bee.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">single_round</span><span class="p">(</span><span class="n">spellers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Play a single round of the spelling bee; draw a random number for each speller,</span>
+<span class="sd">    then compare the number vs. their rate. Each speller that answers correctly</span>
+<span class="sd">    is retained in the array, while incorrect spellers are removed. Returns a new </span>
+<span class="sd">    array of the spellers that advance to the next round.</span>
+
+<span class="sd">    NOTE : if the function would return an empty array, (in the case that every speller</span>
+<span class="sd">    failed to spell the word correctly) it instead returns the speller listed last in </span>
+<span class="sd">    the original array, who would have won without having to spell a word.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spellers</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">spellers</span><span class="p">[</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">spellers</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">spellers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+
+<span class="k">def</span> <span class="nf">bee</span><span class="p">(</span><span class="n">spellers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run a spelling bee with as many rounds as it takes to eliminate all but one</span>
+<span class="sd">    speller.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">spellers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">spellers</span> <span class="o">=</span> <span class="n">single_round</span><span class="p">(</span><span class="n">spellers</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spellers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">spellers</span><span class="p">,</span> <span class="n">trials</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run any number of spelling bees and return the winner for each one. </span>
+<span class="sd">    Results returned as a numpy array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bee</span><span class="p">(</span><span class="n">spellers</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">trials</span><span class="p">)])</span>
+
+<span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="n">spellers</span><span class="p">,</span> <span class="n">trials</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a dictionary with key=speller, value=wins from the simulated results</span>
+
+<span class="sd">    NOTE : the order of &quot;p&quot; matters, because the last speller has an advantage</span>
+<span class="sd">    each round. However, the results are shown after sorting the array from </span>
+<span class="sd">    lowest to highest so that different orders of &quot;p&quot; can be compared easily.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">spellers</span><span class="p">,</span> <span class="n">trials</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">results</span> <span class="o">==</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">trials</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">spellers</span><span class="p">)}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="c1"># spellers arranged from best to worst</span>
+    <span class="n">spellers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">99</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">spellers</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">1000000</span><span class="p">))</span>
+
+    <span class="c1"># spellers arranged from worst to best</span>
+    <span class="n">spellers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">spellers</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">1000000</span><span class="p">))</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
