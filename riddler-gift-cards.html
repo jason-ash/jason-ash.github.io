@@ -118,8 +118,14 @@ $$P(1, 0) = \binom{2}{1}\left(\frac{1}{2}\right)^{2} = 0.5$$</p>
 
 <span class="n">trials</span> <span class="o">=</span> <span class="mi">1000000</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">n_drinks</span><span class="o">=</span><span class="mi">50</span><span class="p">)))</span>
+
+<span class="c1"># expected value</span>
 <span class="k">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 <span class="c1"># 7.038671</span>
+
+<span class="c1"># probability of any drinks remaining</span>
+<span class="k">print</span><span class="p">((</span><span class="n">results</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">trials</span><span class="p">)</span>
+<span class="c1"># 0.920398</span>
 </pre></div>
 
 
