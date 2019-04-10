@@ -76,9 +76,11 @@
 What is the probability that the other card still has free drinks on it? How many free drinks can you expect are still available?</p>
 </blockquote>
 <h5>Analytical Solution</h5>
-<p>Let's define some terms first. Both cards start with $n$ drinks. The question specifically asks about $n=50$ but we can generalize to any $n$. We are interested in the number $k$ drinks remaining on either card when we try (and fail) to buy a drink with one of our cards. Note that $k$ can be zero, as in the case where we draw down each card equally after buying 100 drinks total. When we frame the question like this, it lets us define the only two possible outcomes, which are: <br><br>
-1. Card A runs out of drinks first; card B has $k$ drinks remaining.
-2. Card B runs out of drinks first; card A has $k$ drinks remaining.</p>
+<p>Let's define some terms first. Both cards start with $n$ drinks. The question specifically asks about $n=50$ but we can generalize to any $n$. We are interested in the number $k$ drinks remaining on either card when we try (and fail) to buy a drink with one of our cards. Note that $k$ can be zero, as in the case where we draw down each card equally after buying 100 drinks total. When we frame the question like this, it lets us define the only two possible outcomes, which are: <br></p>
+<ol>
+<li>Card A runs out of drinks first; card B has $k$ drinks remaining.</li>
+<li>Card B runs out of drinks first; card A has $k$ drinks remaining.</li>
+</ol>
 <p>These two terminating conditions are symetric - outcome 1 is just as likely as outcome 2. Therefore, we can solve for the probability of outcome 1 and double it for our final answer.</p>
 <p>If we run out of drinks on card A, we will have $k$ drinks remaining on card B, where $k$ is any number between 0 and our starting number, $n$. We know that for this to happen, we must have purchased $n$ drinks on the first card, $n-k$ drinks on the second card, and attempted $1$ more purchase on the first card, for a total of $2n - k + 1$. Of those purchases, $n$ must have occured on a single card, which gives us an "n choose k" binomial formula. Here's the probability of our event 1 occuring:</p>
 <p>$$P(n, k) = \binom{2n-k}{n}\left(\frac{1}{2}\right)^{2n-k+1}$$</p>
