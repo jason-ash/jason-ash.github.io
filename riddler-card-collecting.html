@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Card Collecting</h1>
+          <label class="text-muted">Mar 1, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>The Riddler Express this week asks us about collecting sets of cards. In particular, we're interested in collecting a complete set of 144 unique cards. We purchase one random card at a time for $5 each. How many purchases should we expect to make - and how much money should we expect to spend - in order to collect at least one of every card?</p>
+<p>This problem can be approached in two ways: analytically, in which we develop and solve a formula to arrive at an exact answer, and via simulation, in which we model the card collecting process over a large number of trials in order to learn about the true distribution of results. Let's walk through each method below.</p>
+<h5>Analytical Solution</h5>
+<p>We can model this problem as a set of "states" and likelihoods of moving between those states. Each state tells us how many cards we've collected. For example, we begin in a state of "0 cards". Then we move to a state of "1 card" after we purchase our first one. It doesn't matter which card we get, because we know it will be unique. In order to transition to a state of "2 cards", we need to buy another pack and see a card we don't already own. Because there are 143 unique cards remaining out of the total set of 144, our odds of transitioning from "1 card" to "2 cards" are $\frac{143}{144}$. On the other hand, our odds of staying in a state of "1 card" are $\frac{1}{144}$, because there is a small chance that we receive the exact card we already have. </p>
+<p>After this process continues for some time, we will arrive in a state of "143 cards" - we've collected all but one of the total cards, and we need one last card to complete our collection. Each new pack we purchase has a $\frac{1}{144}$ chance of giving us the card we're seeking, and a $\frac{143}{144}$ chance of remaining in a state of "143 cards".</p>
+<p>We can define every possible state and all possible transition probabilities in a transition matrix. The transition matrix specifies the state we're currently in on the vertical axis, and the states we could move into on the horizontal axis. Here's one way to create this matrix in python.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">transition_matrix</span><span class="p">(</span><span class="n">n_cards</span><span class="o">=</span><span class="mi">144</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the transition matrix for any number of cards,</span>
+<span class="sd">    where the default is 144 (taken from the problem).</span>
+
+<span class="sd">    The matrix is all zeros except for the main diagonal and</span>
+<span class="sd">    the upper diagonal, which are the probabilities of moving</span>
+<span class="sd">    from one state to the next. All rows will sum to 1.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create the matrix, initialized with all zeros</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_cards</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># set the first off-diagonal elements, decreasing from 1 -&gt; 0</span>
+    <span class="c1"># this is the probability of finding a new card</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag_indices</span><span class="p">(</span><span class="n">n_cards</span><span class="p">)</span>
+    <span class="n">M</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_cards</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_cards</span>
+
+    <span class="c1"># set the diagonal elements, increasing from 0 -&gt; 1</span>
+    <span class="c1"># this is the probability of finding a card we already have</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag_indices</span><span class="p">(</span><span class="n">n_cards</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">M</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_cards</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_cards</span>
+
+    <span class="c1"># confirm we have a valid transition matrix where rows sum to 1.0</span>
+    <span class="k">assert</span> <span class="n">M</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="o">==</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="n">M</span>
+</pre></div>
+
+
+<p>One nice feature of the <code>transition_matrix</code> function is that we can create matrices of any size, representing any number of unique cards. For example, we can generate the matrix for a set of five cards below. </p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">transition_matrix</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([[</span><span class="mf">0.</span> <span class="p">,</span> <span class="mf">1.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.</span> <span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">0.</span> <span class="p">,</span> <span class="mf">1.</span> <span class="p">]])</span>
+</pre></div>
+
+
+<p>Each row represents the starting state of owning a number of cards, starting with zero at the top and moving to five at the bottom. Each column represents the ending state, also from zero to five, left to right. For example, we see a probability of 100% that we move from a state of zero (first row) to a state of one (second column), where we see the number "1". We also see a probability of 20% that we move from a state of four cards (second-to-last row) to five cards (last column). Finally, if we start in a state of five cards (last row), we see that we're always going to end up in the same state. This is called an absorbing state because it is impossible for us to move anywhere else once we end up here. </p>
+<p>Transition matrices like these have a fascinating property that lets us calculate the amount of time it takes to move from one state to another. We subtract the non-absorbing subset of our matrix, which is every row and column except for the last ones, from the identity matrix, take the inverse, and we have our answer! Here's what it looks like for our simplified five-card set.</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="n">transition_matrix</span><span class="p">(</span><span class="mi">5</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">11.41666667</span><span class="p">,</span> <span class="mf">10.41666667</span><span class="p">,</span>  <span class="mf">9.16666667</span><span class="p">,</span>  <span class="mf">7.5</span>       <span class="p">,</span>  <span class="mf">5.</span>        <span class="p">])</span>
+</pre></div>
+
+
+<p>Each number in this array represents the time it takes to reach the absorbing state (where we have collected the entire set.) The array has the same length as the total number of cards. The first entry, 11.416, represents the time it takes to move from "0 cards" to "5 cards". The second entry, 10.416, represents the time it takes to move from "1 card" to "5 cards".</p>
+<p>Now, to solve this week's riddler, all we have to do is apply the same logic to our full set of 144 cards. We're interested in the first entry in the array, which tells us how many cards we expect to see before we've collected every unique one. </p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">n_cards</span> <span class="o">=</span> <span class="mi">144</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_cards</span><span class="p">)</span> <span class="o">-</span> <span class="n">transition_matrix</span><span class="p">(</span><span class="n">n_cards</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([</span><span class="mf">799.27159218</span><span class="p">,</span> <span class="mf">798.27159218</span><span class="p">,</span> <span class="mf">797.26459918</span><span class="p">,</span> <span class="mf">796.25051467</span><span class="p">,</span> <span class="o">...</span> <span class="p">])</span>
+</pre></div>
+
+
+<p><strong>We see that it takes an expected 799.27 random cards before we collect each of the 144 unique cards! At 5 dollars each, this means we have to spend roughly $3996 in order to collect the entire set.</strong></p>
+<h5>Simulated Solution</h5>
+<p>Another way to solve this problem is to model the card collecting process and count the number of steps required to complete the set. However, because the process is random, every time we model it we will get a different answer. On the other hand, if we model the process a large number of times, say one million, then we would expect the average result to converge to the true result.</p>
+<p>Here is the short python function that generates random trials. We run the function with a large number of trials to observe the distribution of results.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">=</span><span class="mi">144</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solve the riddler express via simulation: collecting cards, and </span>
+<span class="sd">    counting the number of steps required to collect the entire set</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">trials</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">collected</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">collected</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">n_cards</span><span class="p">:</span>
+            <span class="n">collected</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_cards</span><span class="p">))</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">yield</span> <span class="n">i</span> <span class="o">*</span> <span class="n">price</span>
+
+<span class="n">trials</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">trials</span><span class="p">)))</span>
+
+<span class="c1"># print the average result</span>
+<span class="k">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="c1"># 3995.78149</span>
+</pre></div>
+
+
+<p>Good news! Our simulated result is very close to our analytical result above, at roughly $3996. The simulation also gives us information about the full distribution of results as well. For example, while it is theortically possible to collect 144 unique cards by drawing 144 unique cards in a row, the odds are extremely slim. What was the lowest cost from our simulation? What was the highest? This can all be seen by analyzing the results directly, or visualized as a density plot, which shows how likely it is that we would pay a certain amount to collect the full set of cards.</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">results</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="mi">1795</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">results</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="mi">13725</span>
+</pre></div>
+
+
+<p><img class="img-fluid mx-auto d-block" title="Histogram" src="../images/20190301-riddler.png"></p>
+<p>You'll notice in the chart that the most likely amount we'll pay to assemble the entire set is around 3500. However, the average amount we expect to pay is around 4000. Why are the numbers different? The average amount includes those tail scenarios where it takes us nearly 10,000 to collect the entire set, which moves it higher than the single most likely amount we would expect to pay. This is part of the reason why seeing the entire distribution, rather than just a single metric like the average, can be helpful in understanding the problem.</p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
