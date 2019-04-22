@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Circles</h1>
+          <label class="text-muted">Apr 19, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>The <a href="https://fivethirtyeight.com/features/what-comes-after-840-the-answer-may-surprise-you/" target="_blank">Riddler</a> this week asks us about random points on the edge of a circle. Specifically, if we generate $n$ random points around the circumference of a circle, how likely are those points to fall on only one side? Our answer should be a function of $n$. Here is the full text.</p>
+<blockquote>
+<p>If N points are generated at random places on the perimeter of a circle, what is the probability that you can pick a diameter such that all of those points are on only one side of the newly halved circle?</p>
+</blockquote>
+<h5>Starting with intuition</h5>
+<p>It's possible to build an intuitive sense of our answer by examining a few values of $n$. For example, by definition, a single point, $n=1$, must always be true: a single point is always on its own side. Therefore the odds are 100%. </p>
+<p>For $n=2$, let's take the case that the points are on exact opposite ends of the circle - for example at the "9 o'clock" and "3 o'clock" positions, respectively. Those points will lie on the same bisecting line of the circle, and I think it's fair to say they should both be considered to be on the same side of the circle. In any other case of randomly generated points, they will be even closer, so it's trivial to show that they will lie on the same side of the circle. Again, our odds are 100%.</p>
+<p>When $n=3$ it becomes more complicated. Because we're dealing with randomly generated points, we can always "spin" our circle around to fix one point in any position we like. For example, we can assume we will always have a point at the "3 o'clock" position. Our next point can be anywhere on the circle, but by similar logic we can maneuver our circle so this next point is on the top half. Given these two points, we can define the valid region of the circle's circumference that satisfies our problem. For example, if the second point is at the "12 o'clock" position, then our third point must be located anywhere <em>except</em> between "3 o'clock" and "6 o'clock" to satisfy our criteria. This will happen 75% of the time. </p>
+<p>If the second point is located directly on top of our first point, then we have virtually 100% likelihood of satisfying our criteria. If the second point is located directly <em>across</em> from our first point, then we have 50% likelihood. Therefore, we can take the average of these two values to show that for $n=3$, the overall likelihood is 75%.</p>
+<p>From here, the cases get far more complicated, so I opted to let my computer do the hard work for me! Our single sanity check is that we would expect probabilities to decrease as $n$ increases. As we generate more points, we expect them to cover more of the circle's circumference, making it less likely that they would be clustered on a single side.</p>
+<h5>Coding a simulation</h5>
+<p>In order to solve this problem through simulation, we need to define our program instructions. We need a way to generate random points on a circle, and a way to check whether our points lie on the same side or not. </p>
+<p><strong>Generating random points</strong> - any point on the circle can be uniquely identified by its angle, which is a number between 0 and 360 (for degrees), or between 0 and $2\pi$ (for radians). We can also simplify this even further and say a point is uniquely identified by a number between 0 and 1, which can be translated into an angle by multiplying by either 360 or by $2\pi$.</p>
+<p><strong>Calculating the criteria</strong> - we can imagine each point of the circle defining two different halves for us to check. If we find that every other point is contained in one of those halves, then we know our criteria is satisfied. To simplify this, we can imagine "cutting" our circle at the "3 o'clock" position and stretching it out into a number line.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20190419-riddler1.png">
+<img class="img-fluid mx-auto d-block" src="../images/20190419-riddler2.png"></p>
+<p>You can see that the points we generated around the edge are simply transposed onto the number line. Next, we generate both sides of each point, shown in grey, keeping in mind that we can wrap around each side of the number line, just like we would on the circle. Thankfully, we can use modular arithmetic to do this "wrapping" automatically. The next several images show the two halves we generate from two of our random points. We see that in at least one case, we found a single region that contained each of the three points, so we consider this simulation a success.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20190419-riddler3.png">
+<img class="img-fluid mx-auto d-block" src="../images/20190419-riddler4.png">
+<img class="img-fluid mx-auto d-block" src="../images/20190419-riddler5.png">
+<img class="img-fluid mx-auto d-block" src="../images/20190419-riddler6.png"></p>
+<p>Because this is a simulation, we want to generate many trials and count the number of successes. If we divide the number of successes by the total number of trials, we get an approximation of the true rate of success. Here is the Python function that implements our simulation.</p>
+<p>What is neat about this code is that we can run all of our simulations simultaneously. This is an example of vectorized code. Vectorized code is often significanly faster than similar code implemented using loops. This code runs one million trials nearly instantly.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">trials</span><span class="o">=</span><span class="mi">1000000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solves the Riddler Classic from April 19, 2019</span>
+
+<span class="sd">    First generates a random number array of shape (trials, n). Then </span>
+<span class="sd">    calculates the distance between each point in the array from each</span>
+<span class="sd">    other point, wrapping around one or zero, just like a circle.</span>
+
+<span class="sd">    Using these distances, we calculate the minimum distance that </span>
+<span class="sd">    encompasses all points in the array. If the minimum distance is </span>
+<span class="sd">    less than 0.5, we return True, otherwise False. The function then</span>
+<span class="sd">    returns the sum of all True values divided by the number of trials</span>
+<span class="sd">    to estimate the probability for a given value of n.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">None</span><span class="p">])</span> <span class="o">%</span> <span class="mf">1.0</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">trials</span>
+</pre></div>
+
+
+<h5>Results</h5>
+<p>Using this function, we can test success rates for several values of $n$. </p>
+<div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">model</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)}</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="mf">0.749476</span><span class="p">,</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="mf">0.500362</span><span class="p">,</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="mf">0.312846</span><span class="p">,</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="mf">0.188008</span><span class="p">,</span>
+ <span class="mi">7</span><span class="p">:</span> <span class="mf">0.109496</span><span class="p">,</span>
+ <span class="mi">8</span><span class="p">:</span> <span class="mf">0.062215</span><span class="p">,</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="mf">0.0348</span><span class="p">,</span>
+ <span class="mi">10</span><span class="p">:</span> <span class="mf">0.01946</span><span class="p">,</span>
+ <span class="mi">11</span><span class="p">:</span> <span class="mf">0.010781</span><span class="p">,</span>
+ <span class="mi">12</span><span class="p">:</span> <span class="mf">0.005754</span><span class="p">,</span>
+ <span class="mi">13</span><span class="p">:</span> <span class="mf">0.003154</span><span class="p">,</span>
+ <span class="mi">14</span><span class="p">:</span> <span class="mf">0.001721</span><span class="p">,</span>
+ <span class="mi">15</span><span class="p">:</span> <span class="mf">0.000897</span><span class="p">,</span>
+ <span class="mi">16</span><span class="p">:</span> <span class="mf">0.000491</span><span class="p">,</span>
+ <span class="mi">17</span><span class="p">:</span> <span class="mf">0.000237</span><span class="p">,</span>
+ <span class="mi">18</span><span class="p">:</span> <span class="mf">0.00013</span><span class="p">,</span>
+ <span class="mi">19</span><span class="p">:</span> <span class="mf">7.1e-05</span><span class="p">,</span>
+ <span class="mi">20</span><span class="p">:</span> <span class="mf">4.4e-05</span><span class="p">}</span>
+</pre></div>
+
+
+<p>As usual, we can also visualize these probabilities in a histogram, shown below. We see that probabilities decrease significantly, to roughly less than 1% once we reach 10 or more points. When we generate 20 points, it's virtually impossible for them all to be on a single side of the circle. This confirms our intuition from above.</p>
+<p>This was another interesting, and deceptively complex problem. It's one that I'd like to come back to and attempt to find an analytical solution later.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20190419-riddler7.png"></p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
