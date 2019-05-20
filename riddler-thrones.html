@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Thrones</h1>
+          <label class="text-muted">May 17, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This week's <a href="https://fivethirtyeight.com/features/how-many-soldiers-do-you-need-to-beat-the-night-king/" target="_blank">Riddler</a> pits the army of the dead vs. the army of the living. As the two armies battle, any fallen soldiers from the living army rise to fight with the dead. How many soldiers would each side need to make it a fair fight? Here's the full problem text:</p>
+<blockquote>
+<p>At a pivotal moment in an epic battle between the living and the dead, the Night King, head of the army of the dead, raises all the fallen (formerly) living soldiers to join his ranks. This ability obviously presents a huge military advantage, but how big an advantage exactly?
+<br><br>
+Forget the Battle of Winterfell and model our battle as follows. Each army lines up single file, facing the other army. One soldier steps forward from each line and the pair duels — half the time the living soldier wins, half the time the dead soldier wins. If the living soldier wins, he goes to the back of his army’s line, and the dead soldier is out (the living army uses dragonglass weapons, so the dead soldier is dead forever this time). If the dead soldier wins, he goes to the back of their army’s line, but this time the (formerly) living soldier joins him there. (Reanimation is instantaneous for this Night King.) The battle continues until one army is entirely eliminated.
+<br><br>
+What starting sizes of the armies, living and dead, give each army a 50-50 chance of winning?</p>
+</blockquote>
+<h5>Setup</h5>
+<p>As with most Riddlers, I'll use Python to do much of the computation. However, it is still up to us to translate the problem into something our computers can understand. </p>
+<p>First, let's deal with the inputs. We want the first input, $x$, to be the number of soldiers in the living army. The next input, $y$, will be the number of soldiers in the dead army. We also need a function that takes both $x$ and $y$ as inputs and returns a probability, which I'll define as the likelihood that the living army prevails in the battle. This will be a number between 0 and 1. For example, if the living army has 100 soldiers and the dead army has 50 soldiers, what is the likelihood the living army will win the battle?</p>
+<p>Then, to solve the problem as stated above, we'll need another function that accepts either $x$ or $y$, but not both, and returns the other variable such that the odds of winning are 50% for both sides. For example, we might want to know how many soldiers the living army needs to have fair odds against a dead army with 50 soldiers. Or we might want to know how many soldiers the dead army would need to battle against a living army of 500.</p>
+<p>We know that soldiers in the army fight one at a time until one of the armies is depleted. Therefore, we know the terminating case of our program could be either $x=0$ or $y=0$. We also define a "reward" in each terminating state, which will help us calculate the probabilities of each army winning. Define the reward when $y=0$ as 1. This means that if the living army wins the battle with any number of soldiers remaining, then the reward is 1. On the other hand, if the dead army wins the battle, we terminate with $x=0$, and we set the reward to 0. </p>
+<p>Lastly, we know how to move from different values of $x$ and $y$ to other values. For example, we know that if both armies start with 10 soldiers each, one of two things could happen. </p>
+<ol>
+<li>The living soldier wins. Then the living army remains at 10 soldiers, and the dead army goes from 10 soldiers to 9.</li>
+<li>The dead soldier wins. Then the living army goes from 10 to 9 soldiers, and the dead army goes from 10 to 11 soldiers. This is the advantage of night king!</li>
+</ol>
+<p>Therefore, we move from a state of ($x$, $y$) to a state of ($x$, $y-1$) with 50% probability and to a state of ($x-1$, $y+1$) with the other 50% probability. This is everything we need to write a recursive function that fully describes the battle!</p>
+<h5>The Code</h5>
+<p>The function below calculates the likelihood that the living army wins the battle, given a starting number of soldiers for each side. Importantly, the function is memoized, which means that answers it's already calculated are saved and stored so we don't repeat any steps we've already done.</p>
+<p>What is interesting to me is that the problem clearly has elements of randomness: each duel has 50% likelihood of ending in either army's favor. But the function below doesn't need to simulate that randomness. Instead, it uses expected values and calculates exact probabilities.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">living</span><span class="p">,</span> <span class="n">dead</span><span class="p">,</span> <span class="n">win_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>  
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the likelihood of the living army winning the battle, </span>
+<span class="sd">    given a starting army size for both living and dead.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    living : int, the starting number of living soldiers</span>
+<span class="sd">    dead : int, the starting number of dead soldiers</span>
+<span class="sd">    win_rate : float, between 0 and 1, the likelihood of a living</span>
+<span class="sd">        soldier winning a single duel</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    outcome : float, between 0 and 1, the likelihood of the living</span>
+<span class="sd">        army winning the entire battle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dead</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># living army wins</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">elif</span> <span class="n">living</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># dead army wins</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># return the weighted average of both potential branches</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">win_rate</span> <span class="o">*</span> <span class="n">model</span><span class="p">(</span><span class="n">living</span><span class="p">,</span> <span class="n">dead</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">win_rate</span><span class="p">)</span>
+            <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">win_rate</span><span class="p">)</span> <span class="o">*</span> <span class="n">model</span><span class="p">(</span><span class="n">living</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dead</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">win_rate</span><span class="p">)</span>
+        <span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">model</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="mf">0.5</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">model</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="mf">0.30745625495910645</span>
+</pre></div>
+
+
+<p>Everything we described above shows up in this code. If we enter into a terminating condition with either $x=0$ or $y=0$, we end the calculation and return the 1 or 0. Otherwise, we branch into the two possible worlds where the living soldier and the dead soldier each win their battle. The end result of this recursion is a final probability that takes all of the branching possibilities into account. </p>
+<p>We can also validate our results by looking at the base case of $x=y=1$. In this simple case, our final answer should be exactly equal to the soldiers' individual probability of winning a duel, because only one duel will occur before the battle is over. This makes sense, because we know the winner of the single duel determines the overall winner of the battle, and each duel is won by the living soldier 50% of the time. This is confirmed when we see that <code>model(1, 1)</code> returns 50%.</p>
+<p>We now have a function that solves for the probability of the living army winning a battle with any combination of starting army sizes. However, that's not quite enough to solve the problem on its own. We know how to find probability based on army sizes, but we also need to be able to find army sizes from a probability. We'll tackle that next.</p>
+<h5>Graphing the Results</h5>
+<p>As usual, graphing the results can help to understand the dynamics of this problem. We know the dead army has a significant advantage, but exactly how much? We can use the function from the prior section to map all combinations of army sizes to try to understand the probability surface.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20190517-riddler.png"></p>
+<p>As we can see, the dead army's advantage compounds as it grows. In other words, each additional dead army soldier requires an increasing number of additional living army soldiers to fight. When the dead army has 10 soldiers, it requires 106 living soldiers just to keep the odds fair and square. I've also plotted the soldiers required for different battle probabilities. For example, if the living army wants to win with 60% certainty instead of 50%, it needs even more soldiers.</p>
+<p>The relationship here is very close to a square root. For example, if we want to solve for the number of dead soldiers required for 50% odds, given a fixed number of living soldiers, we should take the square root. For example, if the dead army fights a living army with 400 soldiers, it should send roughly 20 of its own for a fair fight. Conversely, if the living army knows how many soldiers it will be facing, it should plan to amass that number squared! Even though the purpose of this Riddler was to solve for even odds, it's hard to imagine how the odds are not stacked in the night king's favor.</p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
