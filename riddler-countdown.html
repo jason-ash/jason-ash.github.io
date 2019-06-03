@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Countdown</h1>
+          <label class="text-muted">May 31, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>Computers continue to fascinate me. The <a href="https://fivethirtyeight.com/features/can-you-win-the-loteria/" target="_blank">Riddler</a> this week deals with an explosion of combinations and math that is nearly impossible to grasp without the help of a computer. Specifically, we're interested in crafting an ideal strategy for the "numbers game" from the UK television show Countdown. The numbers game asks contestants to use four mathematical operations (addition, subtraction, multiplication, and division) with six numbers as inputs to solve for a single, three digit target. Most of the time, this can be quite difficult, especially with a 30-second time limit. However, with the help of a computer, we can solve for every possible combination of input and output to identify the strategy that gives the humans the best chance to win!</p>
+<p>Here is the complete problem text.</p>
+<blockquote>
+<p>My favorite game show is “Countdown” on Channel 4 in the UK. I particularly enjoy its Numbers Game. Here is the premise: There are 20 “small” cards, two of each numbered 1 through 10. There are also four “large” cards numbered 25, 50, 75 and 100. The player asks for six cards in total: zero, one, two, three or four “large” numbers, and the rest in “small” numbers. The hostess selects that chosen number of “large” and “small” at random from the deck. A random-number generator then selects a three-digit number, and the players have 30 seconds to use addition, subtraction, multiplication and division to combine the six numbers on their cards into a total as close to the selected three-digit number as they can.
+<br><br>
+There are four basic rules: You can only use a number as many times as it comes up in the six-number set. You can only use the mathematical operations given. At no point in your calculations can you end on something that isn’t a counting number. And you don’t have to use all of the numbers.
+<br><br>
+For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 9 and 75. Your target is 657. One way to solve this would be to say 7×8×9 = 504, 75×2 = 150, 504+150 = 654 and 654+3 = 657. You could also say 75+7 = 82, 82×8 = 656, 3-2 = 1 and 656+1 = 657.
+<br><br>
+<strong>This riddle is twofold. One: What number of “large” cards is most likely to produce a solvable game and what number of “large” cards is least likely to be solvable? Two: What three-digit numbers are most or least likely to be solvable?</strong></p>
+</blockquote>
+<h5>Solution</h5>
+<p>This Riddler was quite complicated, but it was also one of my favorites because it combined healthy doses of math, probabiltiy, combinatorics, and computer programming. Because of the complexity, I'll start by showing the results, then continue by walking through my solution for readers interested in the details. (Or you can skip to the full code at the bottom of the article!)</p>
+<p>The first part of the question asked us to identify the number of 'large' cards that would be expected to produce the most or least solvable puzzles. Recall that we start the game by selecting either 0, 1, 2, 3, or all 4 large numbers, so let's examine our odds of solving the puzzle given those starting conditions. The table below shows our inputs: the number of large and small numbers, the total number of combinations we could receive, the total number of solvable puzzles that could be created from those inputs, and the percent of solvable puzzles, which is the column we're interested in.</p>
+<p><strong>We should select two large numbers and four small numbers in order to have the best odds of creating a solvable puzzle. If we do so, we create a solvable puzzle roughly 95% of the time. On the other hand, if we wanted to make things difficult for ourselves, we could choose all four large numbers, leaving us with just shy of 80% odds of any valid solution existing.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Large #</th>
+<th>Small #</th>
+<th>Combinations Large</th>
+<th>Combinations Small</th>
+<th>Combinations Total</th>
+<th>Sum of Solvable Targets</th>
+<th>% of Solvable Targets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>6</td>
+<td>1</td>
+<td>38,760</td>
+<td>38,760</td>
+<td>27,619,614</td>
+<td><strong>79.18%</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td>5</td>
+<td>4</td>
+<td>15,504</td>
+<td>62,016</td>
+<td>52,249,824</td>
+<td><strong>93.61%</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>6</td>
+<td>4845</td>
+<td>29,070</td>
+<td>24,765,395</td>
+<td><strong>94.66%</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+<td>1140</td>
+<td>4560</td>
+<td>3,636,852</td>
+<td><strong>88.62%</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+<td>190</td>
+<td>190</td>
+<td>135,068</td>
+<td><strong>78.99%</strong></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>$average$</td>
+<td>134,596</td>
+<td>108,406,753</td>
+<td><strong>89.49%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The second part of the question asked us to identify which three-digit numbers would be more or less likely to be valid solutions. Obviously this depends on our choice of large numbers, so I'll show the likelihood of each number being a valid solution given each of the five initial conditions. In fact, the chart below helps us visualize several key trends.</p>
+<ol>
+<li>We confirm that choosing two large cards gives us the highest average probability of finding a solution. The chart on the bottom left has higher values across all target numbers than any other chart. </li>
+<li>Higher target numbers are harder to solve for. In fact, several values, like 937 and 961 are more difficult to solve, regardless of the number of large cards we choose.</li>
+<li>"Round" numbers, like 200, 250, 300, etc. are much easier to solve consistently when we choose more large cards. This makes sense, given that we're more likely to find the 50 or 100 card when we select more from that pool, but isn't enough of an incentive to sacrifice the valuable "small" numbers that help us fill in the gaps.</li>
+</ol>
+<p><img class="img-fluid mx-auto d-block" src="../images/20190531-riddler.png"></p>
+<p>Here is a table of the most difficult numbers to solve, given a starting number of large cards. For example, if we choose 1 large card and 5 small cards, and our target number is 937, then across all the different combinations of numbers we could be given, we will be able to solve the puzzle just 77% of the time.</p>
+<table>
+<thead>
+<tr>
+<th>Pick 0 Large</th>
+<th>Pick 1 Large</th>
+<th>Pick 2 Large</th>
+<th>Pick 3 Large</th>
+<th>Pick 4 Large</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>997, 32.6%</strong></td>
+<td><strong>937, 71.6%</strong></td>
+<td><strong>961, 77.0%</strong></td>
+<td><strong>961, 61.3%</strong></td>
+<td><strong>961, 31.1%</strong></td>
+</tr>
+<tr>
+<td>949, 34.1%</td>
+<td>941, 72.7%</td>
+<td>962, 77.0%</td>
+<td>962, 62.6%</td>
+<td>863, 34.2%</td>
+</tr>
+<tr>
+<td>947, 34.5%</td>
+<td>961, 73.2%</td>
+<td>967, 78.3%</td>
+<td>863, 63.0%</td>
+<td>953, 34.7%</td>
+</tr>
+<tr>
+<td>923, 34.5%</td>
+<td>923, 73.2%</td>
+<td>913, 78.7%</td>
+<td>989, 63.0%</td>
+<td>839, 34.7%</td>
+</tr>
+<tr>
+<td>983, 34.9%</td>
+<td>933, 73.4%</td>
+<td>863, 78.8%</td>
+<td>964, 63.0%</td>
+<td>989, 35.3%</td>
+</tr>
+</tbody>
+</table>
+<p>And here is the list of easiest values to solve. If we choose at least 2 large cards, there are some target values that can be solved with every possible configuration of starting number pools! For example, numbers like 100, 150, 200, and other round numbers become completely solvable once we have enough "large" numbers to work with.</p>
+<table>
+<thead>
+<tr>
+<th>Pick 0 Large</th>
+<th>Pick 1 Large</th>
+<th>Pick 2 Large</th>
+<th>Pick 3 Large</th>
+<th>Pick 4 Large</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>120, 99.97%</td>
+<td>300, 100.0%</td>
+<td>15 @ 100%</td>
+<td>35 @ 100%</td>
+<td>149 @ 100%</td>
+</tr>
+<tr>
+<td>108, 99.96%</td>
+<td>100, 99.997%</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>126, 99.95%</td>
+<td>101, 99.997%</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>110, 99.95%</td>
+<td>120, 99.997%</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>105, 99.95%</td>
+<td>600, 99.994%</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5>Methodology</h5>
+<p>Even though we ultimately want to solve this problem for a pool of six numbers, let's start by considering just two. We want to build a function that takes two numbers as inputs and returns all valid numbers they can produce using addition, subtraction, multiplication, and division. We also want the function to return each of the numbers themselves, because we aren't required to use all the numbers available to us. </p>
+<p>Here's an example using the numbers $4$ and $5$. Our function should return:</p>
+<ul>
+<li>$4$</li>
+<li>$5$</li>
+<li>$4+5=9$</li>
+<li>$5-4=1$</li>
+<li>$4-5=-1$</li>
+<li>$4*5=20$</li>
+<li>$\frac{4}{5},\text{excluded because not a whole number}$</li>
+<li>$\frac{5}{4},\text{excluded because not a whole number}$</li>
+</ul>
+<p>We also need a way to store each of these values. For this problem, I used one of python's default data structures: sets. Sets are similar to arrays, except they are ordered collections of unique elements, such as <code>{1,3,5,7}</code>. If we attempt to add another <code>5</code> to this set, it will remain unchanged. This becomes very useful for our purposes here. For example, we can reproduce the logic above using this python function. (Note, I called the function <code>two</code> because it takes two numbers as inputs; later we'll have functions for three, four, five, and six. The naming conventins leave something to be desired, and I may refine this later!)</p>
+<p>The function is relatively straightforward. We always include a, b, addition, subtraction, and multiplication. We only include $\frac{a}{b}$ or $\frac{b}{a}$ if it is a whole number.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a set of all valid combinations of a and b:</span>
+<span class="sd">    identity of a, identity of b, addition, subtraction, </span>
+<span class="sd">    multiplication, and division</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">a</span><span class="o">/</span><span class="n">b</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">):</span> <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">b</span><span class="o">/</span><span class="n">a</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="o">/</span><span class="n">a</span><span class="p">):</span> <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="o">/</span><span class="n">a</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="c1"># examples</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">two</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">20</span><span class="p">}</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">two</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">}</span>
+</pre></div>
+
+
+<p>Now we have created the universe of valid targets for any two numbers. How could we handle three numbers, such as $a$, $b$, and $c$? We could add $a$ and $b$, then multiply by $c$, or subtract $c$ from $a$ then divide by $b$, we might want to ignore $c$ completely, or consider many other possibilities. Fortunately, we can use recursion to delegate this explosion of possibilities to the computer. </p>
+<p>First, we create the list of valid numbers that we can derive from $a$ and $b$. Then, for each possible output, we combine it with $c$. For example, we found above that $4$ and $5$ combine to give us a set of $(-1, 1, 4, 5, 9, 20)$. If our third value were $3$, then we would also want to find all numbers we could create from pairs of $(3,-1), (3,1), (3,4), (3,5), (3,9), \text{and }(3,20)$. </p>
+<p>However, we could also start by pairing $3$ and $5$, then pairing those outputs with $4$. The answers we get depend on the order of operations! For this, we want to combine $3$ and $5$ first, giving us a set of $(-2, 2, 3, 5, 8, 15)$. Then we would pair each of those values with $4$. Finally, we would generate all values from $3$ and $4$ and pair each of them with our last number, $5$. All told, we need to perform three "combinations of combinations".</p>
+<p>Each time we generate new possible derived values, we want to add them to a master set of all values we were able to create. Sets in python have the mathematical operations we expect, such as the "union". When we take the union of two or more subsets, we return every number that occurs in at least one of the subsets. The final union of our three combinations tells us every possible number we can create starting from the original three.</p>
+<p>Here is how I implemented this in python. The <code>*</code> notation is python's list unpacking, which helps us collect each unique value we generate through the mathematical operations and store them in a single, larger set. We see that every possible number we can generate starting with $3$, $4$, and $5$ is 30 numbers ranging from $-17$ to $60$. You can verify this, though it takes some time, using pen and paper!</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)],</span>
+    <span class="p">])</span>
+
+<span class="c1"># examples</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">three</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="p">{</span><span class="o">-</span><span class="mi">17</span><span class="p">,</span> <span class="o">-</span><span class="mi">11</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> 
+ <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> 
+ <span class="mi">17</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">60</span><span class="p">}</span>
+</pre></div>
+
+
+<p>Now we've established a method to find solutions for larger and larger pools of numbers. Each time we increase the numbers available to us, we call the prior function several times on each new combination of numbers, then take the union of all the sets we create. Eventually, we create a function that takes six numbers as arguments and returns a set of all valid combinations of those numbers. These sets can get quite large. For example, we can create 3,684 values using the numbers $3$, $4$, $5$, $6$, $7$, and $8$.</p>
+<p>Ultimately, we want to filter those sets for the target range we care about, which is three-digit numbers. This time, we use another operation on sets: the intersection. We're only interested in the combinations of our six numbers that fall between 100 and 999. In python, I wrote the <code>countdown</code> function to do this, shown below. It returns a set of up to 900 numbers (the most available in our desired range), for any six numbers.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">countdown</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the valid mathematical combinations of the six inputs</span>
+<span class="sd">    that fall between a range of &quot;low&quot; and &quot;high&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">six</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+
+<p>However, we're not done yet. We've built a general purpose solution-checker for any six numbers, but we need to consider which six numbers we're likely to receive on the show. To do this, we create two lists of all possible cards, separated into large and small numbers. Then we use these lists to generate all possible number pools, given our choice of large cards to start with.</p>
+<div class="highlight"><pre><span></span><span class="c1"># four large numbers: 25, 50, 75, and 100, and 20 small numbers from 1-10</span>
+<span class="n">LARGE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="n">SMALL</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">number_pool</span><span class="p">(</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of randomly selected numbers where the </span>
+<span class="sd">    returned list has &quot;n_large&quot; numbers selected from the </span>
+<span class="sd">    LARGE list, and &quot;total - n_large&quot; numbers selected </span>
+<span class="sd">    from the SMALL list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># ensure we don&#39;t try to pick more numbers than available</span>
+    <span class="n">n_large</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">LARGE</span><span class="p">),</span> <span class="n">n_large</span><span class="p">)</span>
+
+    <span class="c1"># generate the list of numbers, then sort it before returning</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> 
+        <span class="k">for</span> <span class="n">L</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">LARGE</span><span class="p">,</span> <span class="n">n_large</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">SMALL</span><span class="p">,</span> <span class="n">total</span> <span class="o">-</span> <span class="n">n_large</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">out</span><span class="p">]</span>
+</pre></div>
+
+
+<p>For example, the number pool with <code>n_large=1</code> is a list of all 62,016 different six-number pools we could possibly see on the show, such as $(25, 1, 3, 5, 7, 9)$, or $(75, 5, 5, 1, 1, 3)$. Each of those 62,016 number pools has its own solution space: the numbers we could create between 100 and 999 using them. We can create 885 unique target numbers using $(25, 1, 3, 5, 7, 9)$, and just 474 from $(75, 5, 5, 1, 1, 3)$. If it were just those two possibilities, we would say our average probability of success is $\frac{885+474}{2\times{900}} = 75.5\%$. Using our code, we can calculate the probability of solving for all target values starting with all number pools. </p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">solvable_percent</span><span class="p">(</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the percent of random targets that can be solved</span>
+<span class="sd">    given a list of six numbers comprised of &quot;n_large&quot; LARGE</span>
+<span class="sd">    numbers and &quot;total - n_large&quot; SMALL numbers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create number list given a number of LARGE numbers</span>
+    <span class="n">numbers</span> <span class="o">=</span> <span class="n">number_pool</span><span class="p">(</span><span class="n">n_large</span><span class="o">=</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+
+    <span class="c1"># run each group of numbers to count the total number of solvable targets</span>
+    <span class="n">numerator</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">solvable_count</span><span class="p">(</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">])</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">solvable_percent</span><span class="p">(</span><span class="n">n_large</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="mf">0.9465808584642434</span>
+</pre></div>
+
+
+<p>And this function, built slowly from its humble roots of comparing two numbers, allows us to solve the problem! We simply call this function with a given number of large cards, and it returns the likelihood that we would see a solvable puzzle from all possible number pools and random targets. Importantly, this is an exact solution - no simulation required! </p>
+<p>The second part of the question asked us to identify the target values that were most likely to be solvable. Up to this point, we didn't particularly care "how solvable" a target value was; we only cared that there was a way to solve it. But using our functions from above, we can tally the number of target values that are most and least likely to occur given our starting number pools, and our work here is done. The full code is available below.</p>
+<h5>Full Code</h5>
+<p>This was an extremely fun problem to work on, and finding a way to explore the hundreds of millions of combinations simply and quickly was a challenge. I think there are a few further optimizations to explore, and perhaps some functions to rename, now that I know how everything should work, but the process of building this was extremely enjoyable. Let me know if you find ways to improve this!</p>
+<div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Solves the Riddler Classic from May 31, 2019</span>
+
+<span class="sd">In the &#39;numbers game&#39; from the television show &#39;Countdown&#39;,</span>
+<span class="sd">what number of large numbers (from zero to four) gives the </span>
+<span class="sd">highest likelihood of being able to match a random number</span>
+<span class="sd">between 100 and 999?</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+
+<span class="c1"># four large numbers: 25, 50, 75, and 100, and 20 small numbers from 1-10</span>
+<span class="n">LARGE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="n">SMALL</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a set of all valid combinations of a and b:</span>
+<span class="sd">    identity of a, identity of b, addition, subtraction, </span>
+<span class="sd">    multiplication, and division</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">a</span><span class="o">/</span><span class="n">b</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">):</span> <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">b</span><span class="o">/</span><span class="n">a</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="o">/</span><span class="n">a</span><span class="p">):</span> <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="o">/</span><span class="n">a</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)],</span>
+    <span class="p">])</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
+    <span class="p">])</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">five</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+    <span class="p">])</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">six</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+    <span class="p">])</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">countdown</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the valid mathematical combinations of the six inputs</span>
+<span class="sd">    that fall between a range of &quot;low&quot; and &quot;high&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">six</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">solvable_count</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the number of solvable targets from the mask range</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">countdown</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">))</span>
+
+<span class="nd">@lru_cache</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">number_pool</span><span class="p">(</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of randomly selected numbers where the </span>
+<span class="sd">    returned list has &quot;n_large&quot; numbers selected from the </span>
+<span class="sd">    LARGE list, and &quot;total - n_large&quot; numbers selected </span>
+<span class="sd">    from the SMALL list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># ensure we don&#39;t try to pick more numbers than available</span>
+    <span class="n">n_large</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">LARGE</span><span class="p">),</span> <span class="n">n_large</span><span class="p">)</span>
+
+    <span class="c1"># generate the list of numbers, then sort it before returning</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">list</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> 
+        <span class="k">for</span> <span class="n">L</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">LARGE</span><span class="p">,</span> <span class="n">n_large</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">SMALL</span><span class="p">,</span> <span class="n">total</span> <span class="o">-</span> <span class="n">n_large</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">out</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">solvable_percent</span><span class="p">(</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the percent of random targets that can be solved</span>
+<span class="sd">    given a list of six numbers comprised of &quot;n_large&quot; LARGE</span>
+<span class="sd">    numbers and &quot;total - n_large&quot; SMALL numbers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create number list given a number of LARGE numbers</span>
+    <span class="n">numbers</span> <span class="o">=</span> <span class="n">number_pool</span><span class="p">(</span><span class="n">n_large</span><span class="o">=</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+
+    <span class="c1"># run each group of numbers to count the total number of solvable targets</span>
+    <span class="n">numerator</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">solvable_count</span><span class="p">(</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">])</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
+
+<span class="nd">@lru_cache</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">target_percent</span><span class="p">(</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a pandas Series indexed by targets, with values </span>
+<span class="sd">    equal to the likelihood of being able to successfully hit</span>
+<span class="sd">    the target given a random set of input numbers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">numbers</span> <span class="o">=</span> <span class="n">number_pool</span><span class="p">(</span><span class="n">n_large</span><span class="o">=</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">countdown</span><span class="p">(</span><span class="o">*</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">]</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">]</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">+</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">targets</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">targets</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">plot_target_percent</span><span class="p">(</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a bar graph of the target numbers and their likelihood</span>
+<span class="sd">    of being solvable, given a number of LARGE numbers in the pool.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">target_percent</span><span class="p">(</span><span class="n">n_large</span><span class="o">=</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+
+    <span class="n">targets</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">drawstyle</span><span class="o">=</span><span class="s1">&#39;steps&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ax</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
