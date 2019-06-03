@@ -80,10 +80,11 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 <br><br>
 <strong>This riddle is twofold. One: What number of “large” cards is most likely to produce a solvable game and what number of “large” cards is least likely to be solvable? Two: What three-digit numbers are most or least likely to be solvable?</strong></p>
 </blockquote>
+<p>Thanks to Laurent Lessard who <a href="https://twitter.com/LaurentLessard/status/1135601818296365064?s=20" target="_blank">pointed out</a> a bug in an earlier version of my code. It's since been updated.</p>
 <h5>Solution</h5>
 <p>This Riddler was quite complicated, but it was also one of my favorites because it combined healthy doses of math, probability, combinatorics, and computer programming. Because of the complexity, I'll start by showing the results, then continue by walking through my solution for readers interested in the details. (Or you can skip to the full code at the bottom of the article!)</p>
 <p>The first part of the question asked us to identify the number of 'large' cards that would be expected to produce the most or least solvable puzzles. Recall that we start the game by selecting either 0, 1, 2, 3, or all 4 large numbers, so let's examine our odds of solving the puzzle given those starting conditions. The table below shows our inputs: the number of large and small numbers, the total number of combinations we could receive, the total number of solvable puzzles that could be created from those inputs, and the percent of solvable puzzles, which is the column we're interested in.</p>
-<p><strong>We should select two large numbers and four small numbers in order to have the best odds of creating a solvable puzzle. If we do so, we create a solvable puzzle roughly 95% of the time. On the other hand, if we wanted to make things difficult for ourselves, we could choose all four large numbers, leaving us with just shy of 80% odds of any valid solution existing.</strong></p>
+<p><strong>We should select two large numbers and four small numbers in order to have the best odds of creating a solvable puzzle. If we do so, we create a solvable puzzle roughly 98% of the time. On the other hand, if we wanted to make things difficult for ourselves, we could choose zero large numbers, leaving us with roughly 84% odds of any valid solution existing.</strong></p>
 <table>
 <thead>
 <tr>
@@ -103,8 +104,8 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 <td>1</td>
 <td>38,760</td>
 <td>38,760</td>
-<td>27,619,614</td>
-<td><strong>79.18%</strong></td>
+<td>29,261,974</td>
+<td><strong>83.88%</strong></td>
 </tr>
 <tr>
 <td>1</td>
@@ -112,8 +113,8 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 <td>4</td>
 <td>15,504</td>
 <td>62,016</td>
-<td>52,249,824</td>
-<td><strong>93.61%</strong></td>
+<td>54,558,826</td>
+<td><strong>97.75%</strong></td>
 </tr>
 <tr>
 <td>2</td>
@@ -121,8 +122,8 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 <td>6</td>
 <td>4845</td>
 <td>29,070</td>
-<td>24,765,395</td>
-<td><strong>94.66%</strong></td>
+<td>25,690,882</td>
+<td><strong>98.20%</strong></td>
 </tr>
 <tr>
 <td>3</td>
@@ -130,8 +131,8 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 <td>4</td>
 <td>1140</td>
 <td>4560</td>
-<td>3,636,852</td>
-<td><strong>88.62%</strong></td>
+<td>3,887,884</td>
+<td><strong>94.73%</strong></td>
 </tr>
 <tr>
 <td>4</td>
@@ -139,8 +140,8 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 <td>1</td>
 <td>190</td>
 <td>190</td>
-<td>135,068</td>
-<td><strong>78.99%</strong></td>
+<td>154,693</td>
+<td><strong>90.46%</strong></td>
 </tr>
 <tr>
 <td></td>
@@ -148,19 +149,19 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 <td></td>
 <td>$average$</td>
 <td>134,596</td>
-<td>108,406,753</td>
-<td><strong>89.49%</strong></td>
+<td>113,554,259</td>
+<td><strong>93.74%</strong></td>
 </tr>
 </tbody>
 </table>
 <p>The second part of the question asked us to identify which three-digit numbers would be more or less likely to be valid solutions. Obviously this depends on our choice of large numbers, so I'll show the likelihood of each number being a valid solution given each of the five initial conditions. In fact, the chart below helps us visualize several key trends.</p>
 <ol>
 <li>We confirm that choosing two large cards gives us the highest average probability of finding a solution. The chart on the bottom left has higher values across all target numbers than any other chart. </li>
-<li>Higher target numbers are harder to solve for. In fact, several values, like 937 and 961 are more difficult to solve, regardless of the number of large cards we choose.</li>
+<li>Higher target numbers are harder to solve for. In fact, several values, like 967 and 863 are more difficult to solve, regardless of the number of large cards we choose.</li>
 <li>"Round" numbers, like 200, 250, 300, etc. are much easier to solve consistently when we choose more large cards. This makes sense, given that we're more likely to find the 50 or 100 card when we select more from that pool, but isn't enough of an incentive to sacrifice the valuable "small" numbers that help us fill in the gaps.</li>
 </ol>
 <p><img class="img-fluid mx-auto d-block" src="../images/20190531-riddler.png"></p>
-<p>Here is a table of the most difficult numbers to solve, given a starting number of large cards. For example, if we choose 1 large card and 5 small cards, and our target number is 937, then across all the different combinations of numbers we could be given, we will be able to solve the puzzle just 77% of the time.</p>
+<p>Here is a table of the most difficult numbers to solve, given a starting number of large cards. For example, if we choose 1 large card and 5 small cards, and our target number is 941, then across all the different combinations of numbers we could be given, we will be able to solve the puzzle just 84% of the time.</p>
 <table>
 <thead>
 <tr>
@@ -173,43 +174,43 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 </thead>
 <tbody>
 <tr>
-<td><strong>997, 32.6%</strong></td>
-<td><strong>937, 71.6%</strong></td>
-<td><strong>961, 77.0%</strong></td>
-<td><strong>961, 61.3%</strong></td>
-<td><strong>961, 31.1%</strong></td>
+<td><strong>997, 36.9%</strong></td>
+<td><strong>941, 84.1%</strong></td>
+<td><strong>967, 89.2%</strong></td>
+<td><strong>863, 75.2%</strong></td>
+<td><strong>839, 41.6%</strong></td>
 </tr>
 <tr>
-<td>949, 34.1%</td>
-<td>941, 72.7%</td>
-<td>962, 77.0%</td>
-<td>962, 62.6%</td>
-<td>863, 34.2%</td>
+<td>947, 38.5%</td>
+<td>937, 84.4%</td>
+<td>983, 90.1%</td>
+<td>967, 76.9%</td>
+<td>961, 43.7%</td>
 </tr>
 <tr>
-<td>947, 34.5%</td>
-<td>961, 73.2%</td>
-<td>967, 78.3%</td>
-<td>863, 63.0%</td>
-<td>953, 34.7%</td>
+<td>983, 39.2%</td>
+<td>933, 85.2%</td>
+<td>977, 90.6%</td>
+<td>961, 77.2%</td>
+<td>955, 47.9%</td>
 </tr>
 <tr>
-<td>923, 34.5%</td>
-<td>923, 73.2%</td>
-<td>913, 78.7%</td>
-<td>989, 63.0%</td>
-<td>839, 34.7%</td>
+<td>941, 40.4%</td>
+<td>947, 85.4%</td>
+<td>961, 90.9%</td>
+<td>862, 77.3%</td>
+<td>967, 48.9%</td>
 </tr>
 <tr>
-<td>983, 34.9%</td>
-<td>933, 73.4%</td>
-<td>863, 78.8%</td>
-<td>964, 63.0%</td>
-<td>989, 35.3%</td>
+<td>929, 41.3%</td>
+<td>863, 86.5%</td>
+<td>863, 91.3%</td>
+<td>964, 79.4%</td>
+<td>965, 51.6%</td>
 </tr>
 </tbody>
 </table>
-<p>And here is the list of easiest values to solve. If we choose at least 2 large cards, there are some target values that can be solved with every possible configuration of starting number pools! For example, numbers like 100, 150, 200, and other round numbers become completely solvable once we have enough "large" numbers to work with.</p>
+<p>And here is the list of easiest values to solve. If we choose at least 1 large card, there are some target values that can be solved with every possible configuration of starting numbers! For example, numbers like 100, 150, 200, and other round numbers become completely solvable once we have enough "large" numbers to work with.</p>
 <table>
 <thead>
 <tr>
@@ -222,36 +223,36 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 </thead>
 <tbody>
 <tr>
-<td>120, 99.97%</td>
-<td>300, 100.0%</td>
-<td>15 @ 100%</td>
-<td>35 @ 100%</td>
-<td>149 @ 100%</td>
+<td>108, 99.997%</td>
+<td>25 @ 100%</td>
+<td>36 @ 100%</td>
+<td>57 @ 100%</td>
+<td>203 @ 100%</td>
 </tr>
 <tr>
-<td>108, 99.96%</td>
-<td>100, 99.997%</td>
+<td>120, 99.99%</td>
 <td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>126, 99.95%</td>
-<td>101, 99.997%</td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td>110, 99.95%</td>
-<td>120, 99.997%</td>
+<td>105, 99.98%</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td>105, 99.95%</td>
-<td>600, 99.994%</td>
+<td>104, 99.98%</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>112, 99.98%</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -355,7 +356,7 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 </pre></div>
 
 
-<p>For example, the number pool with <code>n_large=1</code> is a list of all 62,016 different six-number pools we could possibly see on the show, such as $(25, 1, 3, 5, 7, 9)$, or $(75, 5, 5, 1, 1, 3)$. Each of those 62,016 number pools has its own solution space: the numbers we could create between 100 and 999 using them. We can create 885 unique target numbers using $(25, 1, 3, 5, 7, 9)$, and just 474 from $(75, 5, 5, 1, 1, 3)$. If it were just those two possibilities, we would say our average probability of success is $\frac{885+474}{2\times{900}} = 75.5\%$. Using our code, we can calculate the probability of solving for all target values starting with all number pools. </p>
+<p>For example, the number pool with <code>n_large=1</code> is a list of all 62,016 different six-number pools we could possibly see on the show, such as $(25, 1, 3, 5, 7, 9)$, or $(75, 5, 5, 1, 1, 3)$. Each of those 62,016 number pools has its own solution space: the numbers we could create between 100 and 999 using them. We can create all 900 unique target numbers using $(25, 1, 3, 5, 7, 9)$, and just 736 from $(75, 5, 5, 1, 1, 3)$. If it were just those two possibilities, we would say our average probability of success is $\frac{900+736}{2\times{900}} = 90.9\%$. Using our code, we can calculate the probability of solving for all target values starting with all number pools. </p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">solvable_percent</span><span class="p">(</span><span class="n">n_large</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">999</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the percent of random targets that can be solved</span>
@@ -371,14 +372,14 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
     <span class="k">return</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">solvable_percent</span><span class="p">(</span><span class="n">n_large</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="mf">0.9465808584642434</span>
+<span class="mf">0.9819547452509269</span>
 </pre></div>
 
 
 <p>And this function, built slowly from its humble roots of comparing two numbers, allows us to solve the problem! We simply call this function with a given number of large cards, and it returns the likelihood that we would see a solvable puzzle from all possible number pools and random targets. Importantly, this is an exact solution - no simulation required! </p>
 <p>The second part of the question asked us to identify the target values that were most likely to be solvable. Up to this point, we didn't particularly care "how solvable" a target value was; we only cared that there was a way to solve it. But using our functions from above, we can tally the number of target values that are most and least likely to occur given our starting number pools, and our work here is done. The full code is available below.</p>
 <h5>Full Code</h5>
-<p>This was an extremely fun problem to work on, and finding a way to explore the hundreds of millions of combinations simply and quickly was a challenge. I think there are a few further optimizations to explore, and perhaps some functions to rename, now that I know how everything should work, but the process of building this was extremely enjoyable. Let me know if you find ways to improve this!</p>
+<p>This was an extremely fun problem to work on, and finding a way to explore the hundreds of millions of combinations simply and quickly was a challenge. There are certainly further optimizations to explore, such as simplifying the code for the four, five and six functions, now that I know how everything should work. But the process of building this was extremely enjoyable. Let me know if you find ways to improve this!</p>
 <div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Solves the Riddler Classic from May 31, 2019</span>
@@ -431,6 +432,10 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="p">)],</span>
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)],</span>
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
+
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
     <span class="p">])</span>
 
 <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
@@ -441,6 +446,17 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)],</span>
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
     <span class="p">])</span>
 
 <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
@@ -452,6 +468,33 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)],</span>
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
         <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">five</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">two</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">four</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
+
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">f</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">e</span><span class="p">)],</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">two</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">three</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)],</span>
     <span class="p">])</span>
 
 <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
