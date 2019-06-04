@@ -82,7 +82,7 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 </blockquote>
 <p>Thanks to Laurent Lessard who <a href="https://twitter.com/LaurentLessard/status/1135601818296365064?s=20" target="_blank">pointed out</a> a bug in an earlier version of my code. It's since been updated.</p>
 <h5>Solution</h5>
-<p>This Riddler was quite complicated, but it was also one of my favorites because it combined healthy doses of math, probability, combinatorics, and computer programming. Because of the complexity, I'll start by showing the results, then continue by walking through my solution for readers interested in the details. (Or you can skip to the full code at the bottom of the article!)</p>
+<p>This Riddler was quite complicated, but it was also one of my favorites because it combined healthy doses of math, probability, combinatorics, and computer programming. I'll start by showing the results, then continue by walking through my solution for readers interested in the details. (Or you can skip to the <a href="#full-code">full code</a> at the bottom of the article!)</p>
 <p>The first part of the question asked us to identify the number of 'large' cards that would be expected to produce the most or least solvable puzzles. Recall that we start the game by selecting either 0, 1, 2, 3, or all 4 large numbers, so let's examine our odds of solving the puzzle given those starting conditions. The table below shows our inputs: the number of large and small numbers, the total number of combinations we could receive, the total number of solvable puzzles that could be created from those inputs, and the percent of solvable puzzles, which is the column we're interested in.</p>
 <p><strong>We should select two large numbers and four small numbers in order to have the best odds of creating a solvable puzzle. If we do so, we create a solvable puzzle roughly 98% of the time. On the other hand, if we wanted to make things difficult for ourselves, we could choose zero large numbers, leaving us with roughly 84% odds of any valid solution existing.</strong></p>
 <table>
@@ -378,7 +378,8 @@ For example, say you ask for one large and five smalls, and you get 2, 3, 7, 8, 
 
 <p>And this function, built slowly from its humble roots of comparing two numbers, allows us to solve the problem! We simply call this function with a given number of large cards, and it returns the likelihood that we would see a solvable puzzle from all possible number pools and random targets. Importantly, this is an exact solution - no simulation required! </p>
 <p>The second part of the question asked us to identify the target values that were most likely to be solvable. Up to this point, we didn't particularly care "how solvable" a target value was; we only cared that there was a way to solve it. But using our functions from above, we can tally the number of target values that are most and least likely to occur given our starting number pools, and our work here is done. The full code is available below.</p>
-<h5>Full Code</h5>
+<h5 id="full-code">Full Code</h5>
+
 <p>This was an extremely fun problem to work on, and finding a way to explore the hundreds of millions of combinations simply and quickly was a challenge. There are certainly further optimizations to explore, such as simplifying the code for the four, five and six functions, now that I know how everything should work. But the process of building this was extremely enjoyable. Let me know if you find ways to improve this!</p>
 <div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
