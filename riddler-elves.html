@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Elves</h1>
+          <label class="text-muted">Dec 21, 2018</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This week's holiday <a href="https://fivethirtyeight.com/features/santa-needs-some-help-with-math/" target="_blank">Riddler</a> is a twist on the classic "<a href="https://en.wikipedia.org/wiki/Birthday_problem" target="_blank">birthday problem</a>". The birthday problem asks us to calculate the probability that at least two people at a party have the same birthday. Most people hearing this problem for the first time are surprised at how few people you need - roughly 23 people results in 50% odds of finding at least one pair of birthdays! For this problem, we're interested in calculating how likely we are to hear the same song more than once from a shuffled playlist. Moreover, what can we infer about the size of the playlist, given that we hear repeats roughly half the time? Here is the exact problem we'll solve.</p>
+<blockquote>
+<p>In Santa’s workshop, elves make toys during a shift each day. On the overhead radio, Christmas music plays, with a program randomly selecting songs from a large playlist.
+<br><br>
+During any given shift, the elves hear 100 songs. A cranky elf named Cranky has taken to throwing snowballs at everyone if he hears the same song twice. This has happened during about half of the shifts. One day, a mathematically inclined elf named Mathy tires of Cranky’s sodden outbursts. So Mathy decides to use what he knows to figure out how large Santa’s playlist actually is.
+<br><br>
+Help Mathy out: How large is Santa’s playlist?</p>
+</blockquote>
+<h5>The Birthday Problem</h5>
+<p>The birthday problem is usually described like this: suppose you attend a party with $n$ total people, including yourself. What value of $n$ gives a 50% chance that at least two people share a birthday?</p>
+<p>Often in questions of probability it helps to calculate the odds of the event we're <em>not</em> interested in, and then we find the probability we care about by the property of complementarity. We can do this, because there are only two options: either there are no shared birthdays at all, or there are at least two shared birthdays. Therefore, the probability of one outcome is one minus the probability of the other outcome. As a result, we will calculate the probability that <em>nobody</em> in the room shares a birthday, then subtract that value from one for the answer we really want.</p>
+<p>In a group of two people, the probability of distinct birthdays is $\frac{364}{365}$. In other words, we only need to calculate the probability that the second person has any other birthday than the first person. In a group of three people, we need to check that the third person has a different birthday than the first person and the second person, so we get $\frac{364}{365}\times\frac{363}{365}$. We can continue this pattern for any number of people, and we get the following formula for a group of size $n$:</p>
+<p>$$\frac{1}{365^n}\times(365\times364\times363\times...\times(365-n+1))$$</p>
+<p>Most people are surprised to learn that a group of 23 people has a 49.3% chance of all unique birthdays, or a 50.7% chance of at least one shared birthday. Fortunately, we can use the same framework to solve the Riddler.</p>
+<h5>Solution</h5>
+<p>Now we have a general purpose formula for the odds of picking $n$ unique elements from a group of size $k$. In the birthday problem we are given $k=365$ and asked to solve for $n$ such that the outcome is 50%. This week's Riddler asks us a related question, where we are given $n=100$ and asked to solve for $k$ such that the outcome is 50%. Therefore we want to solve:</p>
+<p>$$0.50 = \frac{1}{k^{100}}\times(k\times(k-1)\times(k-2)\times...\times(k-100+1))$$</p>
+<p>Fortunately, we can delegate the computation to Python and quickly solve for any value of $k$.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">songs_heard</span><span class="p">,</span> <span class="n">playlist_size</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the probability of hearing a repeat song, given</span>
+<span class="sd">    a number of &quot;songs_heard&quot; and a total &quot;playlist_size&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">songs_heard</span> <span class="o">&gt;=</span> <span class="n">playlist_size</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">playlist_size</span> <span class="o">-</span> <span class="n">songs_heard</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playlist_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">playlist_size</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">s</span><span class="o">.</span><span class="n">prod</span><span class="p">()</span>
+
+<span class="c1"># birthday problem</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">model</span><span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="mi">365</span><span class="p">)</span>
+<span class="mf">0.5072972343239853</span>
+
+<span class="c1"># riddler example</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">model</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">7500</span><span class="p">)</span>
+<span class="mf">0.48466504008664024</span>
+</pre></div>
+
+
+<p>For $n=100$ and $k=7500$, we expect to hear repeated songs 48.5% of the time. Therefore, we know that the actual playlist should have fewer than 7500 songs. (When we lower the number of songs, the probability of repeated songs goes up.) After a few trials, we find the following:</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">model</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">7175</span><span class="p">)</span>
+<span class="mf">0.4999798251579207</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">python</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">7174</span><span class="p">)</span>
+<span class="mf">0.5000283570392747</span>
+</pre></div>
+
+
+<p>If the playlist has 7175 songs in it and we listen to 100 randomly chosen songs, we'd expect to hear repeats 50% of the time. It's unclear if Cranky is accurate in his measurements out to the hundred-thousandths place, but the playlist with 7175 songs is the closest value to 50%, so that seems reasonable. <strong>Therefore, we conclude that Santa's playlist has 7175 songs in it.</strong></p>
+<p>The chart below plots the expected probability of hearing a repeat for various playlist sizes.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20181221-riddler.png"></p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
