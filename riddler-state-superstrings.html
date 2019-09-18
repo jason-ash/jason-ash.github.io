@@ -86,9 +86,7 @@
 <h5>Full Code</h5>
 <p>The full code this week is fairly straightforward to read, but takes quite a while to calculate. The <code>model</code> function took well over an hour to run on my computer. Fortunately, I saved the <a href="state_connections.json" target="_blank">full results</a> if you want to skip the calculation and look at the raw output. Each state pair is represented here, with one example of the longest simple path you could take between the two.</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>

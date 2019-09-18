@@ -146,13 +146,13 @@
       --
       
       <hr>
-      - Hypothesis: fair coin $\rightarrow$ 52 heads / 48 tails is likely
-      - Hypothesis: magician's coin $\rightarrow$ 52 heads / 48 tails is unlikely
+      - Probability of 52 heads / 48 tails with fair coin $\rightarrow$ high
+      - Probability of 52 heads / 48 tails with magician's coin $\rightarrow$ low
       --
 
       <hr>
-      - Hypothesis: fair coin $\rightarrow$ 12 heads / 88 tails, unlikely
-      - Hypothesis: magician's coin $\rightarrow$ 12 heads / 88 tails, likely
+      - Probability of 12 heads / 88 tails with fair coin $\rightarrow$ low
+      - Probability of 12 heads / 88 tails with magician's coin $\rightarrow$ high
       ---
 
       <h3 class="slide-header">Posterior</h3>
@@ -161,13 +161,13 @@
       --
       
       <hr>
-      - Observe 52 heads / 48 tails $\rightarrow$ likely to be fair coin
-      - Observe 12 heads / 88 tails $\rightarrow$ unlikely to be fair coin
+      - Probability of fair coin given 52 heads / 48 tails $\rightarrow$ high
+      - Probability of magician's coin given 52 heads / 48 tails $\rightarrow$ low
       --
 
       <hr>
-      - Observe 52 heads / 48 tails $\rightarrow$ unlikely to be magician's coin
-      - Observe 12 heads / 88 tails $\rightarrow$ likely to be magician's coin
+      - Probability of fair coin given 12 heads / 88 tails $\rightarrow$ low
+      - Probability of magician's coin given 12 heads / 88 tails $\rightarrow$ high
       ---
 
       <h3 class="slide-header">All Together Now</h3>
@@ -180,9 +180,10 @@
 
       The posterior distribution is the updated hypothesis<br>based on our original hypothesis _and_ the data we observed.
 
-      With less data we rely more on the prior hypothesis.
-      
-      With more data we rely more on what we observe.
+      --
+
+      - More data $\rightarrow$ rely primarily on what you observe
+      - Less data $\rightarrow$ rely primarily on the prior hypothesis
       ---
 
       <h1><span class="text-muted" style="font-weight: 200;">Example:</span><br>Coin Flipping</h1>
@@ -194,7 +195,7 @@
 
       --
 
-      **What is the probabiliy of flipping "heads" next?**
+      **What is the probability of flipping "heads" next?**
       ---
 
       <h3 class="slide-header">Coin flipping - prior</h3>
@@ -218,17 +219,43 @@
       <hr>
       <img src="images/coin_prior.png" class="img-fluid mx-auto d-block" style="max-width: 75%;">
       ---
+      
+      <h3 class="slide-header">Coin flipping - prior</h3>
+
+      **Prior:** hypothesis of $P(\text{heads})$ before we see data.
+
+      <hr>
+
+      $$Prior \sim Beta(\alpha, \beta)$$
+
+      ```python
+      from scipy.stats import beta
+
+      # strong prior
+      beta(alpha=50, beta=50)
+
+      # moderate prior
+      beta(alpha=10, beta=10)
+
+      # weak prior (equivalent to uniform distribution on [0,1])
+      beta(alpha=1, beta=1)
+      ```
+      ---
 
       <h3 class="slide-header">Coin flipping - likelihood</h3>
 
       **Likelihood:** odds of observing the data, given the hypothesis.
 
+      <hr>
+
       $$\text{Likelihood}\sim \text{Bernoulli}(p)$$
 
-      $$P(X=x)=\begin{cases}
-        \text{1, with probability} \ p \\\\
-        \text{0, with probability} \ 1-p
-      \end{cases}$$
+      ```python
+      from scipy.stats import bernoulli
+
+      # likelihood is a bernoulli random variable with parameter, p
+      bernoulli(p=p)
+      ```
       ---
       
       <h3 class="slide-header">Coin flipping - posterior</h3>
@@ -274,7 +301,7 @@
 
       Open source probabilistic programming language
 
-      Provides comprehensive tools to build bayesian models
+      Provides comprehensive tools to build Bayesian models
 
       Robust and fast Markov chain Monte Carlo solving algorithms
 
@@ -468,22 +495,21 @@
 
       --
 
-      The uniform prior means all mortality rates from 0% to 100% are equally likely.
+      $Beta(1, 1)$ $\rightarrow$ all rates from 0% to 100% equally likely.
 
       --
 
-      We know the average rate should be around 1.1% for this age group, and the variance is small.
+      Historical average rate is ~1.1%. Variance is small.
 
       --
 
-      We can calibrate a prior distribution using historical data
-      - from the Social Security Administration
-      - or from past company data
+      We should calibrate a prior distribution using historical data.
       ---
+
       <h3 class="slide-header">Mortality analysis - strong prior</h3>
 
-      Subjective prior using roughly 100,000 historical records.
-      
+      Subjective prior with $E[X] = 1.136%$, small variance.
+
       <img src="images/mortality_prior2.png" class="img-fluid mx-auto d-block"  style="max-width: 75%;">
       ---
 
@@ -517,10 +543,9 @@
 
       <h3 class="slide-header">Mortality analysis - comparison</h3>
 
-      The stronger prior pulls data toward the historical distribution.
-
-      The weaker prior relies more on the data we observed.
-
+      - Strong prior $\rightarrow$ posterior closer to historical distribution.
+      - Weak prior $\rightarrow$ posterior closer to observed data.
+      
       <div class="row">
         <div class="col-6">
             <img src="images/mortality_posterior1.png" class="img-fluid mx-auto d-block" style="max-width: 100%;">
@@ -529,8 +554,6 @@
             <img src="images/mortality_posterior2.png" class="img-fluid mx-auto d-block" style="max-width: 100%;">
         </div>
       </div>
-
-
       ---
 
       <h3 class="slide-header">Mortality analysis - results</h3>
@@ -551,7 +574,7 @@
 
       Prior distributions have a large impact on results.
 
-      This presents opporunities and responsibilities for the modeler.
+      This presents opportunities and responsibilities for the modeler.
       
       --
 
@@ -608,6 +631,11 @@
       ---
 
       <h3 class="slide-header">Linear Regression - sample data</h3>
+
+      "Hidden" parameters:
+      - $m=2$
+      - $b=-1$
+      - $\sigma=0.75$
 
       ```python
       def generate_linear_data(n, m=2, b=-1, mu=0, std=1, random_state=42):
@@ -747,7 +775,7 @@
       
       <h3 class="slide-header">Student's t-distribution</h3>
 
-      <div class="text-center"><span class="text-primary"><strong>Normal</strong></span> vs. <span class="text-danger"><strong>Student's t</strong></span></div>
+      <div class="text-center"><span class="text-primary"><strong>Normal</strong></span> vs. <span class="text-danger"><strong>Student's t</strong> ($\nu=1$)</span></div>
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/T_distribution_1df_enhanced.svg/1024px-T_distribution_1df_enhanced.svg.png" class="img-fluid mx-auto d-block"  style="max-width: 50%;">
       ---
 
@@ -798,7 +826,7 @@
 
       - In this example, outliers were easy to spot visually.
       - Large datasets may be impossible to inspect visually.
-      - How do you decide what is an outlier or not?
+      - How do you decide what qualifies as an outlier?
 
       --
 
