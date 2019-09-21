@@ -73,9 +73,10 @@
 <blockquote>
 <p>You are the coach for Team Riddler at the Tour de FiveThirtyEight, where there are 20 teams (including yours). Your objective is to win the Team Time Trial race, which has the following rules:
 <br><br>
-Each team rides as a group throughout the course at some fixed pace, specified by that team’s coach. Teams that can’t maintain their pace are said to have “cracked,” and don’t finish the course.
-The team that finishes the course with the fastest pace is declared the winner.
-Teams ride the course one at a time. After each team completes its attempt, the next team quickly consults with its coach (who assigns a pace) and then begins its ride. Coaches are aware of the results of all previous teams when choosing their own team’s pace.
+- Each team rides as a group throughout the course at some fixed pace, specified by that team’s coach. Teams that can’t maintain their pace are said to have “cracked,” and don’t finish the course.<br>
+- The team that finishes the course with the fastest pace is declared the winner.<br>
+- Teams ride the course one at a time. After each team completes its attempt, the next team quickly consults with its coach (who assigns a pace) and then begins its ride. Coaches are aware of the results of all previous teams when choosing their own team’s pace.
+<br><br>
 Assume that all teams are of equal ability: At any given pace, they have the exact same probability of cracking, and the faster the pace, the greater the probability of cracking. Teams’ chances of cracking are independent, and each team’s coach knows exactly what a team’s chances of cracking are for each pace.
 <br><br>
 Team Riddler is the first team to attempt the course. To maximize your chances of winning, what’s the probability that your team will finish the course? What’s the probability you’ll ultimately win?
@@ -83,19 +84,21 @@ Team Riddler is the first team to attempt the course. To maximize your chances o
 <strong>Extra Credit:</strong> If Team Riddler is the last team to attempt the course (rather than the first), what are its chances of victory?</p>
 </blockquote>
 <h5>Solution</h5>
-<p>At first, it seems like the problem doesn't give us enough information about the relationship between the pace and the probability of cracking. Wouldn't it be useful to know exactly how the probability of cracking changes if we choose different paces? Is it a linear relationship? Quadratic? Fortunately, we can solve the problem without knowing these facts - of course the Riddler wouldn't let us down! Let's figure out how.</p>
-<p>Let's call the probability of cracking $p$. This value will be a number between 0% and 100%. At 0%, we've selected a pace such that we're guaranteed to finish the course: it might be slow, but it will guarantee we complete the race. At 100%, we're guaranteed <em>not</em> to finish the race, so it's impossible for us to win overall. Some point in between lies the best chance for us to win.</p>
-<p>Suppose we pick some value in between - say, 50%. If we complete the race, our competitors will choose a probability of cracking that is <em>slightly</em> higher, resulting in a pace that is <em>slightly</em> faster. If they also complete the race, they will move ahead of us in the rankings. This will continue for each subsequent team.</p>
+<p>At first, it seems like the problem doesn't give us enough information about the relationship between the pace and the probability of cracking. Wouldn't it be useful to know exactly what pace is associated with the probability of cracking? Is it a linear relationship? Quadratic? Fortunately, we can solve the problem without knowing this - of course the Riddler wouldn't let us down! Let's figure out how.</p>
+<p>Let's call the probability of cracking $p$. This value will be a number between 0% and 100%. At 0%, we've selected a pace such that we're guaranteed to finish the course: it might be slow, but we will be sure to complete the race. At 100%, we're guaranteed <em>not</em> to finish the race, so it's impossible for us to win. Some point in between lies the best chance for us to win.</p>
+<p>Suppose we pick a value of $p=50\%$. If we complete the race, our competitors will choose a probability of cracking that is <em>slightly</em> higher, resulting in a pace that is <em>slightly</em> faster. If they also complete the race, they will move ahead of us in the rankings. This will continue for each subsequent team. On the other hand, if we fail to complete the race, then our competitors could choose any new value of $p$ they want, but it won't matter for us, because we would already have been eliminated.</p>
 <blockquote>
-<p>A note about choosing values of $p$: we can set aside the fact that later teams will select slightly higher values of $p$, and instead assume they pick exactly $p$. If we do this, then the answers we calculate will be the <em>limit</em> on the odds of winning, as the delta between values of $p$ decreases to zero.)</p>
+<p>A note about choosing values of $p$: we can set aside the fact that later teams will select slightly higher values of $p$, and instead assume they pick exactly $p$. If we do this, then the answers we calculate will be the <em>limit</em> on the odds of winning, as the delta between values of $p$ decreases to zero.</p>
 </blockquote>
-<p>Suppose we choose a value of $p$ and complete the race successfully. Then each team after us will also try to win the race with the same value of $p$. If we don't complete the race, then our competitors could choose any new value of $p$ they want, but it won't matter for us, because we would already have been eliminated.</p>
-<p>Therefore, we win the time trial if and only if two things happen: 
-1. We complete the race successfully at our desired pace.
-2. Each of the 19 subsequent teams fails to complete the race with <em>at least</em> the same pace we set.</p>
+<p>Therefore, we win the time trial if and only if two things happen:</p>
+<ol>
+<li>We complete the race successfully at our desired pace.</li>
+<li>Each of the 19 subsequent teams fails to complete the race with <em>at least</em> the same pace we set.</li>
+</ol>
 <p>If we express this mathematically, our odds of winning, $f(p)$, look like this.</p>
 <p>$$f(p) &gt; p^{19} \times (1 - p)$$</p>
-<p>This equation has the two components we want: our probability of finishing the race, given by the $(1-p)$, and the probability of each competitor failing to complete the race, given by $p^{19}$. To find the value of $p$ that maximizes this function, we turn to calculus: take the derivative, set it to zero, then solve for $p$. This tells us the point at which the function stops rising or falling, which means it is either minimum or a maximum. We use the chain rule to differentiate $f(p)$, which gives us the following:</p>
+<p>This equation has the two components we want: our probability of finishing the race, given by $(1-p)$, and the probability of each competitor failing to complete the race, given by $p^{19}$. To find the value of $p$ that maximizes this function, we use calculus: take the derivative, set it to zero, then solve for $p$. This tells us the point at which the function stops rising or falling, which means it is either a minimum or a maximum. </p>
+<p>We use the chain rule to differentiate $f(p)$, which gives us the following:</p>
 <p>$$\frac{\partial f}{\partial p} = -p^{19} + 19p^{18}(1-p)$$</p>
 <p>When we set $\frac{\partial f}{\partial p}$ to zero and simplify the terms on the right, we get:</p>
 <p>$$0 = -20p^{19} + 19p^{18}$$</p>
@@ -103,11 +106,11 @@ Team Riddler is the first team to attempt the course. To maximize your chances o
 <p>$$20p^{19}=19p^{18}$$</p>
 <p>and finally:</p>
 <p>$$p=\frac{19}{20}$$</p>
-<p><strong>Therefore, the value of $p$ that maximizes our odds of winning is $\frac{19}{20}=95\%$.</strong> When we choose 95% for $p$, our overall chances of winning the event are $f(0.95)&gt;(1-0.95)\times 0.95^{19}=1.89\%$. In other words, we should pick an extremely risky strategy with a low probability of success in order to have the best odds of winning the entire event. Our odds of completing the time trial are low, but so are everyone else's! As we can see in the chart below, the function hits a maximum value at 95%, and it's no other values come close.</p>
+<p><strong>Therefore, the value of $p$ that maximizes our odds of winning is $\frac{19}{20}=95\%$. When we choose 95% for $p$, our overall chances of winning the event are $f(0.95)&gt;(1-0.95)\times 0.95^{19}=1.89\%$.</strong> In other words, we should pick an extremely risky strategy with a low probability of success in order to have the best odds of winning the entire event. Our odds of completing the time trial are low, but so are everyone else's! As we can see in the chart below, the function hits a maximum value at 95%.</p>
 <p><img class="img-fluid mx-auto d-block" src="../images/20190920-riddler1.png"></p>
 <h5>Extra Credit</h5>
-<p>There's a nice feature of our answer above. The value of $p=\frac{19}{20}$ corresponds exactly with the number of teams in the competition. In fact, for a race with $n$ teams, the team going first should always race with $p=\frac{n-1}{n}$. (For example, the first team in a 10-team field should select 90% as their value of $p$.) Subsequent teams will race with values of $p$ that depend on what has happened before. They will either race at the highest successful attempt so far, or the value of $p$ they would select as if they were racing first in a brand new event.</p>
-<p>In our race, with 20 teams, the table below shows the values of $p$ that each team would select, given no prior team has completed the race. For example, the fifth team would select a value of $p=93.75\%$ if no prior team had finished. If a prior team had finished, the fifth team would select the value of $p$ set by the prior team. The final team, with the advantage of seeing everyone's scores before competing, could potentially select a value of $p=0\%$ if nobody had successfully finished the race - guaranteeing a finish and a win. Otherwise, they would select the value of $p$ from the last team that finished.</p>
+<p>There's a nice feature of our answer above. The value of $p=\frac{19}{20}$ corresponds exactly with the number of teams in the competition. In fact, for a race with $n$ teams, the team going first should always race with $p=\frac{n-1}{n}$. (For example, the first team in a 10-team field should select $\frac{9}{10}=90\%$ as their value of $p$.) Subsequent teams will race with values of $p$ that depend on what has happened before. They will either race at the highest successful attempt so far, or the value of $p$ they would select as if they were racing first in a brand new event.</p>
+<p>In our race, with 20 teams, the table below shows the values of $p$ that each team would select, as long as no prior team has completed the race. For example, the fifth team would select a value of $p=93.75\%$ if no prior team had finished. If a prior team had finished, the fifth team would select the value of $p$ set by that prior team. The final team, with the advantage of seeing everyone's scores before competing, could potentially select a value of $p=0\%$ if nobody had successfully finished the race - guaranteeing a finish and a win. Otherwise, they would select the value of $p$ from the last team that finished.</p>
 <table>
 <thead>
 <tr>
@@ -191,17 +194,22 @@ Team Riddler is the first team to attempt the course. To maximize your chances o
 </tr>
 </tbody>
 </table>
-<p>Now we have the tools we need to answer the extra credit problem. Suppose team 1 completes the race, which happens 5% of the time. Every subsequent team would be forced to attempt (almost exactly) the same pace, and team #20 would win the overall competition only if they are able to complete the course as well with the same value of $p$, which occurs (almost exactly) 5% of the time. The total odds are $(\frac{1}{20})^2$. If team 1 fails their attempt, then we would move to team 2, which would choose a value of $p=94.74\%$. If they succeed, every subsequent team attempts the same pace, all the way until team 20. This pattern continues for all teams.</p>
+<p>Now we have the tools we need to answer the extra credit problem. Suppose team 1 completes the race, which happens 5% of the time. Every subsequent team would be forced to attempt (almost exactly) the same pace, and team 20 would win the overall competition only if they are able to complete the course as well with the same value of $p$, which occurs (almost exactly) 5% of the time. The total odds of this happening are $(\frac{1}{20})^2$. If team 1 fails their attempt, then we would move to team 2, which would choose a value of $p=94.74\%$. If they succeed, every subsequent team would attempt the same pace, all the way until team 20. This pattern continues for all teams.</p>
 <p>To calculate the odds of team 20 winning the competition, we must account for each of these branching paths, summing the probabilities along the way. We will use the $&lt;$ operator to show the <em>maximum</em> probability that team 20 wins, by assuming they attempt exactly the same $p$ as prior successful teams. </p>
 <p>$$P(\text{Team 20 wins})&lt;\frac{1}{20^2} + \frac{19}{20} \times(\frac{1}{19^2} + \frac{18}{19} \times (\frac{1}{18^2} + \frac{17}{18} \times ...$$</p>
-<p>A formula like this lends itself to a recursive implementation using code. (Side benefit, it will let us calculate the odds of winning for any number of teams in the competition.) In our case, <strong>with 20 teams, the team going last has at most a 17.99% chance of winning overall.</strong></p>
+<p>A formula like this lends itself to a recursive implementation using code. <strong>With 20 teams, the team going last has at most a 17.99% chance of winning overall.</strong></p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">teams</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Solves the extra credit portion of the Riddler Classic from 9/20/19&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solves the extra credit portion of </span>
+<span class="sd">    the Riddler Classic from 9/20/19</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">teams</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="c1"># if there is only one team, they win 100% of the time!</span>
+        <span class="c1"># if there is only one team,</span>
+        <span class="c1"># they win 100% of the time!</span>
         <span class="k">return</span> <span class="mf">1.0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># multiple teams; calculate the likelihood of the last team winning</span>
+        <span class="c1"># multiple teams; calculate the </span>
+        <span class="c1"># odds of the last team winning</span>
         <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">teams</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">teams</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">teams</span><span class="o">*</span><span class="n">model</span><span class="p">(</span><span class="n">teams</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">model</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
@@ -209,77 +217,8 @@ Team Riddler is the first team to attempt the course. To maximize your chances o
 </pre></div>
 
 
-<p>Finally, we can plot the win percentages for the team going last among a competition with $n$ competitors. It's a remarkable advantage to go last! Compare the roughly 18% expected win rate for team 20 with the less than 2% win rate for team one.</p>
-<p><img class="img-fluid mx-auto d-block" src="../images/20190920-riddler2.png"></p>
-<h5>Full Code</h5>
-<p>We relied mostly on calculus (the kind you can do on paper) to solve this week's problem, but I thought it would be useful (if at least for my personal future reference) to show the code that generated my first chart. Styling a <code>matplotlib</code> figure like this ends up taking virtually one line of code for each element in the chart. Yes, there are ways to style this permanently if you're making many charts that look the same, but for this one-off example I coded everything from the ground up. Enjoy!</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-
-<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1.inset_locator</span> <span class="kn">import</span> <span class="n">mark_inset</span><span class="p">,</span> <span class="n">zoomed_inset_axes</span>
-
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;This is the objective function we&#39;ll try to maximize&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">19</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-    <span class="s1">&#39;Racing First? Choose a risky strategy.&#39;</span><span class="p">,</span>
-    <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;left&#39;</span> 
-<span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-    <span class="s1">&#39;The first team should choose a pace with 95</span><span class="si">% c</span><span class="s1">hance of cracking</span><span class="se">\n</span><span class="s1">&#39;</span>
-    <span class="s1">&#39;to maximize their odds of winning the competition - at just 1.89%.&#39;</span><span class="p">,</span>
-    <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.0199</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontstyle</span><span class="o">=</span><span class="s1">&#39;italic&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;0.4&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span>
-<span class="p">)</span>
-
-<span class="c1"># main plot</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10001</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0205</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
-
-<span class="c1"># inset plot</span>
-<span class="n">axins</span> <span class="o">=</span> <span class="n">zoomed_inset_axes</span><span class="p">(</span>
-    <span class="n">parent_axes</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">zoom</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span>
-    <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span> <span class="n">bbox_transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span>
-<span class="p">)</span>
-<span class="n">mark_inset</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">axins</span><span class="p">,</span> <span class="n">loc1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">loc2</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;0.8&#39;</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.84</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;0.7&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="mf">0.95</span><span class="p">),</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">0.92</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.0185</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">])</span>
-
-<span class="c1"># style</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;0.4&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;0.4&#39;</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;0.9&#39;</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;0.9&#39;</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;0.8&#39;</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;{:,.0%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s1">&#39;{:,.1%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0201</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">)])</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;{:,.0%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.92</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)])</span>
-<span class="n">axins</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s1">&#39;{:,.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.0005</span><span class="p">)])</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Probability of Cracking&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Probability of Team #1 Winning the Event&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;20190920-riddler.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div></p>
+<p>Finally, we can plot the win percentages for the team going last among a competition with $n$ competitors. It's a remarkable advantage to go last!</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20190920-riddler2.png"></p></p>
         </div>
       </div>
     </div>
