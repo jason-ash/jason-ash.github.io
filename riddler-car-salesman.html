@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Car Salesman</h1>
+          <label class="text-muted">Jan 8, 2016</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Full Code</h5>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_unseen_cards</span><span class="p">(</span><span class="o">*</span><span class="n">seen</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns all potential unseen cards, given a list of seen cards</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seen : list of cards seen so far, e.g. 1000, 1200</span>
+<span class="sd">    n_cards : int, number of total cards available, default 5</span>
+<span class="sd">    units : int, the increments added to the base value, N</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    unseen : list of potential cards remaining, given what we</span>
+<span class="sd">        know from the cards we&#39;ve seen so far</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; _unseen_cards(1000, 1200)</span>
+<span class="sd">    [[800, 900, 1100], [900, 1100, 1300], [1100, 1300, 1400]]</span>
+
+<span class="sd">    &gt;&gt;&gt; _unseen_cards(1000, 1200, 1300)</span>
+<span class="sd">    [[900, 1100], [1100, 1400]]</span>
+
+<span class="sd">    &gt;&gt;&gt; _unseen_cards(1000, 1400)</span>
+<span class="sd">    [[1100, 1200, 1300]]</span>
+
+<span class="sd">    &gt;&gt;&gt; _unseen_cards(1000, 1100, 1300, 1200, 1400)</span>
+<span class="sd">    [[]]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">low</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">seen</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">seen</span><span class="p">)</span>
+    <span class="n">cards</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">units</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n_cards</span><span class="o">*</span><span class="n">units</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">n_cards</span><span class="o">*</span><span class="n">units</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">unseen</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sublist</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">]</span> 
+        <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">cards</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">unseen</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_unseen_expectation</span><span class="p">(</span><span class="o">*</span><span class="n">seen</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;    </span>
+<span class="sd">    &gt;&gt;&gt; _unseen_expectation(1000, 1100, 1200, 800)</span>
+<span class="sd">    900.0</span>
+
+<span class="sd">    &gt;&gt;&gt; _unseen_expectation(1000, 1100, 1200, 900)</span>
+<span class="sd">    1050.0</span>
+
+<span class="sd">    &gt;&gt;&gt; _unseen_expectation(1000, 1100, 1200, 1300)</span>
+<span class="sd">    1150.0</span>
+
+<span class="sd">    &gt;&gt;&gt; _unseen_expectation(1000, 1100, 1200, 1400)</span>
+<span class="sd">    1300.0</span>
+
+<span class="sd">    &gt;&gt;&gt; _unseen_expectation(1000, 1100, 1200)</span>
+<span class="sd">    1033.3333333333333</span>
+
+<span class="sd">    &gt;&gt;&gt; _unseen_expectation(1000, 1400)</span>
+<span class="sd">    1100.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">unseen</span> <span class="o">=</span> <span class="n">_unseen_cards</span><span class="p">(</span><span class="o">*</span><span class="n">seen</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">=</span><span class="n">n_cards</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">unseen</span> <span class="o">==</span> <span class="p">[[]]:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">seen</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">all_unseen</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">unseen</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">min</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">_unseen_expectation</span><span class="p">(</span><span class="o">*</span><span class="n">seen</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">=</span><span class="n">n_cards</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">all_unseen</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">strategy</span><span class="p">(</span><span class="o">*</span><span class="n">seen</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns &#39;continue&#39; or &#39;stop&#39; for a given card</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; strategy(1000)</span>
+<span class="sd">    &#39;continue&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; strategy(1000, 1400)</span>
+<span class="sd">    &#39;continue&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; strategy(1400, 1000)</span>
+<span class="sd">    &#39;stop&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># continue if the future expectation is lower than the current card</span>
+    <span class="k">if</span> <span class="n">seen</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">_unseen_expectation</span><span class="p">(</span><span class="o">*</span><span class="n">seen</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">=</span><span class="n">n_cards</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;continue&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;stop&#39;</span>
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="o">*</span><span class="n">cards</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return what we would pick from an ordered sequence of cards</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; model(1400, 1000, 1100, 1200, 1300)</span>
+<span class="sd">    1000</span>
+
+<span class="sd">    &gt;&gt;&gt; model(1400, 1200, 1100, 1300, 1000)</span>
+<span class="sd">    1100</span>
+
+<span class="sd">    &gt;&gt;&gt; model(1400, 1100, 1000, 1200, 1300)</span>
+<span class="sd">    1100</span>
+
+<span class="sd">    &gt;&gt;&gt; model(1000, 1100, 1300, 1200, 1400)</span>
+<span class="sd">    1400</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># run through cards one-by-one until we reach a stopping point</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cards</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">strategy</span><span class="p">(</span><span class="o">*</span><span class="n">cards</span><span class="p">[:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">n_cards</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cards</span><span class="p">),</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;stop&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">c</span>
+
+<span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="n">n_cards</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Print the summary of overpayment in a game with n_cards&quot;&quot;&quot;</span>
+    <span class="n">cards</span> <span class="o">=</span> <span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_cards</span><span class="o">*</span><span class="n">units</span><span class="o">+</span><span class="mi">1000</span><span class="p">,</span> <span class="n">units</span><span class="p">))</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cards</span><span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span> <span class="o">-</span> <span class="mi">1000</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{n:2} cards : {summary(n):6,.2f}&#39;</span><span class="p">)</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>

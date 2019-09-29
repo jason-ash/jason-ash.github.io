@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler League Baseball</h1>
+          <label class="text-muted">Sep 27, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>What happens when you create a baseball league from three teams with peculiar specialties? That's the objective of this week's <a href="https://fivethirtyeight.com/features/which-baseball-team-will-win-the-riddler-fall-classic/">Riddler</a>. We're asked to determine whether it's better to specialize in home runs, doubles, or walks as a strategy to tally the most wins from a season of baseball in the Riddler League.</p>
+<p>We've seen <a href="https://www.jtash.com/riddler-baseball">similar problems</a> from the Riddler about baseball simulations, but this one has a competitive twist - simulating an entire season of games among a full League of teams. Here's the full problem text.</p>
+<blockquote>
+<p>Riddler League Baseball, also known as the RLB, consists of three teams: the Mississippi Moonwalkers, the Delaware Doubloons and the Tennessee Taters.
+<br><br>
+Each time a batter for the Moonwalkers comes to the plate, they have a 40 percent chance of getting a walk and a 60 percent chance of striking out. Each batter for the Doubloons, meanwhile, hits a double 20 percent percent of the time, driving in any teammates who are on base, and strikes out the remaining 80 percent of the time. Finally, each batter for the Taters has a 10 percent chance of hitting a home run and a 90 percent chance of striking out.
+<br><br>
+During the RLB season, each team plays an equal number of games against each opponent. Games are nine innings long and can go into extra innings just like in other baseball leagues. Which of the three teams is most likely to have the best record at the end of the season?</p>
+</blockquote>
+<h5>Solution</h5>
+<p>It turns out that swinging for the fences is a viable strategy in Riddler League Baseball. The Taters, who hit home runs with 10% of their batting attempts, are able to win a decisive victory against their opponents. The table below shows the win rates for each potential matchup in the League, based on simulating 10 million games between each pair of teams. (Note there is no actual home field advantage, but assigning teams to "home" and "away" helps clarify which team has the better odds of winning.)</p>
+<p>The Taters have a clear advantage over the Doubloons, winning over 62% of their games against that team. The closest matchup is between the Taters and the Moonwalkers - teams with seemingly polar opposite game plans. </p>
+<table>
+<thead>
+<tr>
+<th align="left">Home Team</th>
+<th align="left">Away Team</th>
+<th align="left">Home team win %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Taters</td>
+<td align="left">Doubloons</td>
+<td align="left">62.73%</td>
+</tr>
+<tr>
+<td align="left">Moonwalkers</td>
+<td align="left">Doubloons</td>
+<td align="left">58.49%</td>
+</tr>
+<tr>
+<td align="left">Taters</td>
+<td align="left">Moonwalkers</td>
+<td align="left">51.62%</td>
+</tr>
+</tbody>
+</table>
+<p>If we simulate a season of 162 games using the win rates from the table above, we get the following records for each team. For example, the Taters are expected to play the Doubloons 81 times and the Moonwalkers 81 times. They win 62.73% of their 81 games against the Doubloons and 51.62% of their 81 games against the Moonwalkers for a total of $81\times62.73\% + 81\times51.62\%=92.6$ wins for the season. We calculate wins and losses similarly for each other team. </p>
+<table>
+<thead>
+<tr>
+<th align="left">Team</th>
+<th align="left">Expected Wins</th>
+<th align="left">Expected Losses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Taters</td>
+<td align="left">92.6</td>
+<td align="left">69.4</td>
+</tr>
+<tr>
+<td align="left">Moonwalkers</td>
+<td align="left">86.6</td>
+<td align="left">75.4</td>
+</tr>
+<tr>
+<td align="left">Taters</td>
+<td align="left">63.8</td>
+<td align="left">98.2</td>
+</tr>
+</tbody>
+</table>
+<h5>Methodology</h5>
+<p>How did we calculate the win percentages? We want to tally the number of runs scored by each team during a game, which is the sum of the runs scored during each of nine innings. How many runs might each of our teams score in a single inning?</p>
+<ul>
+<li><strong>Taters:</strong> Each batter has a 10% chance of scoring a single run. We want to count the number of runs scored before the third out is recorded.</li>
+<li><strong>Doubloons:</strong> The inning starts with bases empty. Once the first player hits a double, the <em>next</em> batter drives in a run if he also hits a double. Furthermore, every subsequent batter also drives in a run with a double, because strikeouts don't affect baserunners. Therefore, if the Doubloons have three doubles in an inning, we know they have scored two runs. </li>
+<li><strong>Moonwalkers:</strong> Similar to the Doubloons, the Moonwalkers score runs for each walk after the first three walks. If they have seven walks in an inning, we know they scored four runs.</li>
+</ul>
+<p>Suppose we want to calculate the likelihood that the Doubloons score three runs in a single inning. We know they need four hits before the third out. They get a single hit with 20% odds, so four hits occurs with probability $0.2^4$. We also need three outs, which occurs with probability (1-0.8)^3. The order of hits and outs doesn't matter (as long as all four hits occur before the third out), so we can account for each valid ordering by adding a combinatorial term, ${{hits + outs - 1}\choose {hits}} = {6 \choose 4}$. We multiply all three components together for the overall probability of three runs: ${6 \choose 4}\times0.2^4\times0.8^3=1.2288\%$</p>
+<p>This process of counting a number of occurrences before a terminal event (e.g. "3 outs") is modeled by a <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution">Negative Binomial distribution</a>. The Doubloons can be modeled by a Negative Binomial Distribution with a slight modification: the value of the distribution is the number of runs scored <em>plus one</em>. If we subtract the hit required to put the first person on base, we are left with the total number of runs scored for that inning.</p>
+<p>We can build Negative Binomial distributions in Python using the <code>scipy.stats</code> library. Our trick will be to shift each distribution by the number of hits (or walks) required to prime the bases for future runs. For the Doubloons, we shift the distribution left by one position; for the Moonwalkers, we shift left by three positions. Then, if the distribution ever returns a negative number, we simply floor the value at zero, knowing that no runs were scored during the inning.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">nbinom</span>
+
+<span class="c1"># mississippi moonwalkders: walks 40% of the time</span>
+<span class="c1"># delaware doubloons: doubles 20% of the time</span>
+<span class="c1"># tennessee taters: home runs 10% of the time</span>
+<span class="n">MOONWALKERS</span> <span class="o">=</span> <span class="n">nbinom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">DOUBLOONS</span> <span class="o">=</span> <span class="n">nbinom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">TATERS</span> <span class="o">=</span> <span class="n">nbinom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Then the number of runs scored during a full game is the sum of runs scored during nine innnings. We draw random samples from the distributions using the <code>.rvs()</code> method attached to the <code>nbinom</code> distributions. Below, I've also shown smoothed distributions of the number of runs scored by each team during a full 9-inning game (not including extra innings.) </p>
+<p>The distribution shows us that the Taters consistently score between one to five runs per game, enough to beat the average performance from the Doubloons and Moonwalkers. However, the Moonwalkers have the potential for high-scoring ~~slugfests~~, er, <em>walkfests</em>. They might not be the most exciting team, but they are actually quite competitive against the Taters, winning roughly 49% of their games.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">game_score</span><span class="p">(</span><span class="n">team</span><span class="p">,</span> <span class="n">innings</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="mi">1000000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns random samples of the number of runs scored during a </span>
+<span class="sd">    single game, for the number of trials, default 1 million.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    team : a &quot;team&quot; is represented by a negative binomial distribution</span>
+<span class="sd">        object from scipy.stats. It describes the likelihood of scoring</span>
+<span class="sd">        various numbers of runs during an inning</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">team</span><span class="o">.</span><span class="n">rvs</span><span class="p">((</span><span class="n">games</span><span class="p">,</span> <span class="n">innings</span><span class="p">)))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img class="img-fluid mx-auto d-block" src="../images/20190927-riddler.png"></p>
+<p>Now that we can sample from the distribution of runs scored per game, we can pit the teams against one another. Adding a bit of extra logic to handle ties, we are able to calculate the win percentages we showed above. I was also interested in testing how well the teams performed in sudden death. Was any team able to sneak wins from a better opponent if they had just one inning? The percentages suggest not - each team performs roughly the same whether it's a full 9-inning game or a sudden death tiebreaker.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Home Team</th>
+<th align="left">Away Team</th>
+<th align="left">Home team win %</th>
+<th align="left">Sudden Death win %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Taters</td>
+<td align="left">Doubloons</td>
+<td align="left">62.73%</td>
+<td align="left">61.17%</td>
+</tr>
+<tr>
+<td align="left">Moonwalkers</td>
+<td align="left">Doubloons</td>
+<td align="left">58.49%</td>
+<td align="left">59.59%</td>
+</tr>
+<tr>
+<td align="left">Taters</td>
+<td align="left">Moonwalkers</td>
+<td align="left">51.62%</td>
+<td align="left">51.09%</td>
+</tr>
+</tbody>
+</table>
+<h5>Full Code</h5>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">nbinom</span>
+
+
+<span class="c1"># mississippi moonwalkders: walks 40% of the time</span>
+<span class="c1"># delaware doubloons: doubles 20% of the time</span>
+<span class="c1"># tennessee taters: home runs 10% of the time</span>
+<span class="n">MOONWALKERS</span> <span class="o">=</span> <span class="n">nbinom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">DOUBLOONS</span> <span class="o">=</span> <span class="n">nbinom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">TATERS</span> <span class="o">=</span> <span class="n">nbinom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">game_score</span><span class="p">(</span><span class="n">team</span><span class="p">,</span> <span class="n">innings</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="mi">1000000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns random samples of the number of runs scored during a </span>
+<span class="sd">    single game, for the number of trials, default 1 million.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    team : a &quot;team&quot; is represented by a negative binomial distribution</span>
+<span class="sd">        object from scipy.stats. It describes the likelihood of scoring</span>
+<span class="sd">        various numbers of runs during an inning</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">team</span><span class="o">.</span><span class="n">rvs</span><span class="p">((</span><span class="n">games</span><span class="p">,</span> <span class="n">innings</span><span class="p">)))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">win_rate</span><span class="p">(</span><span class="n">team</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">innings</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns random samples of the number of runs scored during a </span>
+<span class="sd">    single game, for the number of trials, default 1 million.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    team : a &quot;team&quot; is represented by a negative binomial distribution</span>
+<span class="sd">        object from scipy.stats. It describes the likelihood of scoring</span>
+<span class="sd">        various numbers of runs during an inning</span>
+<span class="sd">    other : the opponent, another &quot;team&quot;, distribution object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+    <span class="c1"># play all nine innings, then count number of wins</span>
+    <span class="n">team_score</span> <span class="o">=</span> <span class="n">game_score</span><span class="p">(</span><span class="n">team</span><span class="p">,</span> <span class="n">innings</span><span class="o">=</span><span class="n">innings</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="n">games</span><span class="p">)</span>
+    <span class="n">other_score</span> <span class="o">=</span> <span class="n">game_score</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">innings</span><span class="o">=</span><span class="n">innings</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="n">games</span><span class="p">)</span>
+    <span class="n">team_wins</span> <span class="o">=</span> <span class="p">(</span><span class="n">team_score</span> <span class="o">&gt;</span> <span class="n">other_score</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">other_wins</span> <span class="o">=</span> <span class="p">(</span><span class="n">other_score</span> <span class="o">&gt;</span> <span class="n">team_score</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="c1"># play extra innings for any ties, continue until no more ties</span>
+    <span class="k">while</span> <span class="n">team_wins</span> <span class="o">+</span> <span class="n">other_wins</span> <span class="o">&lt;</span> <span class="n">games</span><span class="p">:</span>
+        <span class="n">team_score</span> <span class="o">=</span> <span class="n">game_score</span><span class="p">(</span><span class="n">team</span><span class="p">,</span> <span class="n">innings</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="n">games</span> <span class="o">-</span> <span class="n">team_wins</span> <span class="o">-</span> <span class="n">other_wins</span><span class="p">)</span>
+        <span class="n">other_score</span> <span class="o">=</span> <span class="n">game_score</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">innings</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="n">games</span> <span class="o">-</span> <span class="n">team_wins</span> <span class="o">-</span> <span class="n">other_wins</span><span class="p">)</span>
+        <span class="n">team_wins</span> <span class="o">+=</span> <span class="p">(</span><span class="n">team_score</span> <span class="o">&gt;</span> <span class="n">other_score</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">other_wins</span> <span class="o">+=</span> <span class="p">(</span><span class="n">other_score</span> <span class="o">&gt;</span> <span class="n">team_score</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">team_wins</span> <span class="o">/</span> <span class="n">games</span>
+
+<span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="n">games</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">taters_doubloons</span> <span class="o">=</span> <span class="n">win_rate</span><span class="p">(</span><span class="n">TATERS</span><span class="p">,</span> <span class="n">DOUBLOONS</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="n">games</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">moonwalkers_doubloons</span> <span class="o">=</span> <span class="n">win_rate</span><span class="p">(</span><span class="n">MOONWALKERS</span><span class="p">,</span> <span class="n">DOUBLOONS</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="n">games</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">taters_moonwalkers</span> <span class="o">=</span> <span class="n">win_rate</span><span class="p">(</span><span class="n">TATERS</span><span class="p">,</span> <span class="n">MOONWALKERS</span><span class="p">,</span> <span class="n">games</span><span class="o">=</span><span class="n">games</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">f</span><span class="s1">&#39;| Home Team   | Away Team   | Home team win % |</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">f</span><span class="s1">&#39;|:------------|:------------|:----------------|</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">f</span><span class="s1">&#39;| Taters      | Doubloons   | {taters_doubloons:.2%} |</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">f</span><span class="s1">&#39;| Moonwalkers | Doubloons   | {moonwalkers_doubloons:.2%} |</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">f</span><span class="s1">&#39;| Taters      | Moonwalkers | {taters_moonwalkers:.2%} |</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">table</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">summary</span><span class="p">(</span><span class="n">games</span><span class="o">=</span><span class="mi">10000000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">))</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
