@@ -146,7 +146,7 @@ During the RLB season, each team plays an equal number of games against each opp
 <p>We can build Negative Binomial distributions in Python using the <code>scipy.stats</code> library. Our trick will be to shift each distribution by the number of hits (or walks) required to prime the bases for future runs, using the <code>loc</code> attribute of each distribution. For the Doubloons, we shift the distribution left by one position; for the Moonwalkers, we shift left by three positions. Then, if the distribution ever returns a negative number, it means we didn't have enough hits to score any runs, so we return a zero for the inning.</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">nbinom</span>
 
-<span class="c1"># mississippi moonwalkders: walks 40% of the time</span>
+<span class="c1"># mississippi moonwalkers: walks 40% of the time</span>
 <span class="c1"># delaware doubloons: doubles 20% of the time</span>
 <span class="c1"># tennessee taters: home runs 10% of the time</span>
 <span class="n">MOONWALKERS</span> <span class="o">=</span> <span class="n">nbinom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">3</span><span class="p">)</span>
@@ -209,7 +209,7 @@ During the RLB season, each team plays an equal number of games against each opp
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">nbinom</span>
 
 
-<span class="c1"># mississippi moonwalkders: walks 40% of the time</span>
+<span class="c1"># mississippi moonwalkers: walks 40% of the time</span>
 <span class="c1"># delaware doubloons: doubles 20% of the time</span>
 <span class="c1"># tennessee taters: home runs 10% of the time</span>
 <span class="n">MOONWALKERS</span> <span class="o">=</span> <span class="n">nbinom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">3</span><span class="p">)</span>
