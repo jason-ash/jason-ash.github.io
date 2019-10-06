@@ -69,17 +69,27 @@
         </div>
         <div class="mb-5">
           <p><h5>Introduction</h5>
-<p>This week's <a href="https://fivethirtyeight.com/features/who-wants-to-be-a-riddler-millionaire/">Riddler</a> is a twist on the classic <a href="https://en.wikipedia.org/wiki/Birthday_problem">birthday problem</a>. The birthday problem tells us - somewhat unintuitively - that a group of just 23 people is all it takes to have even odds of at least one pair of matching birthdays. What if we want the first birthday triplet instead?</p>
+<p>This week's <a href="https://fivethirtyeight.com/features/who-wants-to-be-a-riddler-millionaire/">Riddler</a> is a twist on the classic <a href="https://en.wikipedia.org/wiki/Birthday_problem">birthday problem</a>. The birthday problem tells us that among a group of just 23 people, we are 50% likely to find at least one pair of matching birthdays. But what if we want to find three matching birthdays instead?</p>
 <blockquote>
 <p>In the U.S. Senate, three senators happen to share the same birthday of October 20: Kamala Harris, Brian Schatz and Sheldon Whitehouse.
 <br><br>
 How many people do you need to have better-than-even odds that at least three of them have the same birthday? (Again, ignore leap years.)</p>
 </blockquote>
 <h5>Solution</h5>
-<p>The US Senate comprises a group of 100 individuals. It turns out that among a group of that size, we expect three shared birthdays roughly 64% of the time. <strong>For 50% odds, we need a group of 88 people.</strong></p>
+<p>The US Senate comprises a group of 100 individuals. It turns out that for a group of that size, we expect three shared birthdays roughly 64% of the time. <strong>For 50% odds, we need a group of 88 people.</strong></p>
 <h5>Methodology</h5>
 <p>The classic birthday problem can be solved with pen, paper, and probability. We consider two possibilities: no shared birthdays, or at least one shared birthday. Because these are the only two possibilities, their odds must sum to 100%. It's often easier to solve for the likelihood of <em>all unique</em> birthdays, then subtract that answer from 100% to solve the problem.</p>
-<p>However, with three birthdays the math becomes much more involved. In fact, I opted to solve this problem using simulated trials enough times to converge on the correct answer. Python does the heavy lifting this week. The function itself is short, but we rely on a million sampled groups to converge on the correct answer.</p>
+<p>However, with three birthdays the math becomes much more involved. For a group of size $n$, we would have to partition the world into categories like this:</p>
+<ol>
+<li>$n$ distinct birthdays</li>
+<li>1 pair of birthdays &amp; $n-1$ distinct birthdays</li>
+<li>2 pairs of birthdays &amp; $n-2$ distinct birthdays</li>
+<li>3 pairs of birthdays &amp; $n-3$ distinct birthdays
+...</li>
+</ol>
+<p>At the extreme, we would have $\frac{n}{2}$ pairs of birthdays (everyone in the group has a birthday buddy). The final option would be that at least three people share the same birthday. We sum the likelihoods of everything <em>except</em> the probability we're interested in, subtract from 100%, and arrive at our answer.</p>
+<p>Instead, I opted to solve this problem using simulated trials. By simulating enough groups and measuring how many people are needed to find three matching birthdays, we can estimate the answer. If we simulate one million groups, we can measure the median group size of our samples to find the point at which we cross 50% likelihood.</p>
+<p>Python does the heavy lifting this week. The function itself is short, but we rely on a million sampled groups to converge on the correct answer.</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">days</span><span class="o">=</span><span class="mi">365</span><span class="p">):</span>
     <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">seen</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
@@ -94,9 +104,9 @@ How many people do you need to have better-than-even odds that at least three of
 </pre></div>
 
 
-<p>Each time we run <code>model()</code>, it returns a random sample of the number of people required to find three matching birthdays. The function is also general enough to search for any number of desired birthdays, though the speed decreases as we search for larger numbers.</p>
-<p>The function tracks the number of occurrences of each birthday in the group. In the default case, looking for three matching birthdays, it tracks the number of birthdays we've seen only once, and the number of birthdays we've seen twice. For each new random number we draw, we determine if we haven't seen it yet, or if we've seen it once or twice before. Once we see a birthday for the third time, the function halts and returns the number of random draws we used.</p>
-<p>The chart below shows the cumulative curves for two, three, and four matching birthdays. As we know from the classic problem, we reach 50% cumulative likelihood with a group of 23. For three birthdays, we need 88, and for four birthdays we need 188! (For higher numbers, we may want to consider the House of Representatives, rather than the Senate!)</p>
+<p>Each time we run <code>model()</code>, it returns a random sample of the number of people required to find three matching birthdays. The function is also general enough to search for any number of desired birthdays - for example, the number of people we need for four matching birthdays - though the speed decreases as we search for larger numbers.</p>
+<p>The function tracks the number of occurrences of each birthday in the group. In the default case, looking for three matching birthdays, it tracks the number of birthdays we've seen only once, and the number of birthdays we've seen twice. For each new random number we draw, we determine how many times we've seen it before. If it's brand new, we add it to the first set. If we've seen it once before, we add it to the second set. And if we've seen it twice before, we know we've found the third instance, so the function halts and returns the number of birthdays we needed to see in total.</p>
+<p>The chart below shows the cumulative curves for two, three, and four matching birthdays. As we know from the classic problem, we reach 50% cumulative likelihood with a group of 23. For three birthdays, we need 88, and for four birthdays we need 188! Therefore the House of Representatives is more likely than not to have at least four matching birthdays.</p>
 <p><img class="img-fluid mx-auto d-block" src="../images/20191004-riddler.png"></p></p>
         </div>
       </div>
