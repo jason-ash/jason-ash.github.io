@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Introducing pyesg!</h1>
+          <label class="text-muted">Oct 31, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>I'm announcing a new personal project, called <code>pyesg</code> - Python Economic Scenario Generator. Economic Scenario Generators, or ESGs, are used to simulate possible future markets, like stock prices, interest rates, or volatilities. Actuaries use ESGs to determine the potential values of insurance portfolios in the future. This helps them ensure that their companies will have enough money to pay claims even under the worst scenarios. Other professionals might use ESGs to understand how business decisions today could affect company value in the future. The Python ecosystem has amazing libraries for data analysis, machine learning, and many other fields, but not for generating economic scenarios. I hope that an ESG library for Python will make this type of analysis easier and more widely adopted.</p>
+<p>Today, one of the most widely used economic scenario generators among actuaries is provided for free by the Society of Actuaries and the American Academy of Actuaries. It is an Excel file that is available <a href="https://www.soa.org/resources/tables-calcs-tools/research-scenario/">here</a>. This is a fantastic resource provided by these organizations, but suffers from the classic drawbacks of Excel, including lack of unit-testing, compatibility issues (it is a .xls file, not the more ubiquitous .xlsx or .xlsm files today), and speed issues (it takes roughly 7-8 minutes to generate a full set of scenarios.) One of the goals of <code>pyesg</code> is to provide the same functionality as the Academy generator in a well-tested and fast python package.</p>
+<h5>Objectives</h5>
+<p>I'm not aware of any comprehensive ESG library available for Python today. I think such a library should have the following components:</p>
+<ol>
+<li>A suite of stochastic models - inspired by the "fit"/"predict" scikit-learn API<ul>
+<li>that are easy to calibrate ("fit") using historical data, or to manually provide parameters.</li>
+<li>that can simulate future economic paths ("predict")</li>
+</ul>
+</li>
+<li>A suite of model and scenario evaluation tools to <ul>
+<li>evaluate the goodness of fit of models</li>
+<li>calculate significance measures of generated scenarios (to select subsets of scenarios if desired)</li>
+</ul>
+</li>
+<li>Replicate the existing SOA and AAA Excel generator so actuarial teams can migrate to Python.</li>
+<li>Minimal dependencies - relying on the standard scientific python stack: <code>numpy</code>, <code>pandas</code>, and <code>scipy</code>, with optional plotting from <code>matplotlib</code>.</li>
+</ol>
+<p>I expect that these objectives may shift or expand as I continue working on the library. Please let me know if you think anything is missing!</p>
+<h5>Example - Vasicek Interest Rate Model</h5>
+<p>The project is in its early stages, but I've recently implemented the Vasicek interest rate model. At the moment, the API looks like this.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyesg</span>
+
+<span class="c1"># load a dataset of historical US Treasury rates, contained in pyesg.datasets</span>
+<span class="c1"># ust is a pandas dataframe of rates for various maturities, indexed by year and month</span>
+<span class="n">ust</span> <span class="o">=</span> <span class="n">pyesg</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_ust_historical</span><span class="p">()</span>
+
+<span class="c1"># for this example, we&#39;ll train on the following data:</span>
+<span class="c1"># y - the 3-month US treasury rate</span>
+<span class="c1"># X - the time value of each observation, starting at zero, increasing by monthly steps</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ust</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;3-month&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+
+<span class="c1"># create a vasicek model object, just like you would create an estimator model from sklearn</span>
+<span class="n">vasicek</span> <span class="o">=</span> <span class="n">pyesg</span><span class="o">.</span><span class="n">Vasicek</span><span class="p">()</span>
+
+<span class="c1"># fit the model by passing the X and y vectors; the model is now trained</span>
+<span class="n">vasicek</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># sample future paths from the model</span>
+<span class="c1"># specify the number of scenarios (e.g. 1000)</span>
+<span class="c1"># length of projection (e.g. 30 years)</span>
+<span class="c1"># and time step (e.g. weekly, or 52 time-steps per year)</span>
+<span class="n">scenarios</span> <span class="o">=</span> <span class="n">vasicek</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">52</span><span class="p">))</span>
+</pre></div>
+
+
+<h5>Example - Nelson-Siegel and Nelson-Siegel-Svensson Curve Interpolators</h5>
+<p>We can almost always observe interest rates at key maturities, for example, bonds trading with maturies of 1, 2, 3, 5, 7, or 10 years. If we want to estimate the interest rate for an 8-year bond, we need to interpolate between the observed values. Simple techniques like linear interpolation are possible, but have certain obvious disadvantages - namely that the interest rate curve is non-linear. Instead, better techniques like the Nelson-Siegel and Nelson-Siegel-Svensson interpolators might give better results. Both interpolators are availabe in <code>pyesg</code>.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyesg</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+
+<span class="c1"># load a dataset of historical US Treasury rates, contained in pyesg.datasets</span>
+<span class="c1"># ust is a pandas dataframe of rates for various maturities, indexed by year and month</span>
+<span class="n">ust</span> <span class="o">=</span> <span class="n">pyesg</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_ust_historical</span><span class="p">()</span>
+
+<span class="c1"># we will be interpolating rates from the file:</span>
+<span class="c1"># y - the observed US Treasury rate for the given maturity for a select observation date</span>
+<span class="c1"># X - the maturity of the bond measured in years</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>
+
+<span class="c1"># create Nelson-Siegel and Nelson-Siegel-Svensson interpolator objects</span>
+<span class="c1"># then fit both models using the historical data</span>
+<span class="n">ns</span> <span class="o">=</span> <span class="n">pyesg</span><span class="o">.</span><span class="n">NelsonSiegel</span><span class="p">()</span>
+<span class="n">nss</span> <span class="o">=</span> <span class="n">pyesg</span><span class="o">.</span><span class="n">NelsonSiegelSvensson</span><span class="p">()</span>
+<span class="n">ns</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">nss</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># finally, we can plot the results</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">121</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ns</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Nelson-Siegel&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nss</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Nelson-Siegel-Svensson&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">]:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img class="img-fluid mx-auto d-block" src="../images/20191031-pyesg.png"></p>
+<h5>Progress</h5>
+<p>The <code>pyesg</code> package is <a href="https://pypi.org/project/pyesg/">available on pypi</a>, and can be installed quickly using:</p>
+<div class="highlight"><pre><span></span>pip install pyesg
+</pre></div>
+
+
+<p>The source code is <a href="https://github.com/jason-ash/pyesg">available on github</a>, and is open-source licensed under <a href="https://github.com/jason-ash/pyesg/blob/master/LICENSE">MIT</a>.</p>
+<p>If this project sounds interesting to you, I would love to hear your thoughts! I would also welcome contributions. You can reach me at <a href="mailto:jason@ashanalytics.com">jason@ashanalytics.com</a>.</p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
