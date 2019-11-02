@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Dowries</h1>
+          <label class="text-muted">Nov 1, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>A small twist on a classic problem is this week's challenge from the <a href="https://fivethirtyeight.com/features/how-long-is-the-snails-slimy-trail/">Riddler</a>. We're going to tackle an extension of the <a href="https://en.wikipedia.org/wiki/Secretary_problem">secretary problem</a> - also known as the Sultan's Dowry problem. This classic puzzle has led to fascinating research in <a href="https://en.wikipedia.org/wiki/Optimal_stopping">optimal stopping theory</a>, which we will use to determine how effective our Sultan is at choosing a suitor. Let's dive in!</p>
+<blockquote>
+<p>The sultan has asked her vizier to present her with 10 candidates for marriage. The vizier has searched the kingdom for the 10 most desirable partners, but he does not know whom the sultan will prefer. If she saw them all at the same time, she would easily be able to rank them from 1 (the best partner) to 10 (the worst partner). But the vizier can only present the candidates one at a time — very hard to sync everybody’s calendars, even back then — and in a random order. Upon seeing each candidate, the sultan must reject or accept him. If a candidate is rejected, the sultan cannot pick him again. But on seeing each new candidate, she knows exactly where he’d stack up relative to the candidates she has rejected. <strong>If she strategizes, what’s the highest rank she can expect her chosen candidate to have on average?</strong>
+<br><br>
+For example, if she simply accepted the first candidate presented to her, his rank could be anywhere from 1 to 10 with equal probability, averaging to 5.5. Surely she can do better…</p>
+</blockquote>
+<p>As an aside, I recently read <a href="https://www.amazon.com/Algorithms-Live-Computer-Science-Decisions-ebook-dp-B015CKNWJI/dp/B015CKNWJI/ref=mt_kindle?_encoding=UTF8&me=&qid=">Algorithms to Live By</a>, which covered how puzzles like these might be applied to real-life situations as well. It was a fun read discussing how computer science algorithms can help us make better decisions, from folding socks as efficiently as possible to deciding whether to return to our favorite restaurant or try a new one. Highly recommended!</p>
+<h5>Solution</h5>
+<p><strong>If the Sultan chooses optimally, her suitor will have an average rank of 7.975.</strong></p>
+<p>The classic problem asks a narrower question: how often will the Sultan select the <em>best</em> candidate? To solve that problem, we use the following strategy.</p>
+<ol>
+<li>Interview the first $N/e$ candidates without choosing any of them, but keep track of the best candidate we see from that group. ($N$ is the total number of candidates in the pool, and $e$ is the famous Euler's number, roughly 2.1828....) We round the value of $N/e$ down to the nearest whole number.</li>
+<li>Select the next candidate that beats all the ones we saw from step 1. </li>
+<li>If no candidate is better than those from step 1, we default to choosing last candidate.</li>
+</ol>
+<p>For our group of $N=10$ suitors, we should select the first 3 as guinea pigs (poor suitors...) They have no chance of actually being selected, but they will establish the benchmark for future suitors. For example, suppose we observe candidates with true ranks 5, 7, and 2. We don't know exactly how good these suitors are, but we will know if we see an 8, 9, or 10 later, because we can compare against the prior suitors. </p>
+<p>Next, suppose we interview someone with rank 6. This suitor isn't better than the best we've already seen, so we continue. Next, we interview someone with rank 8. We know this is the best we've seen so far, so we choose this suitor. As it turns out, two better candidates would have come later, but we will never meet them.</p>
+<p>In the classic problem, this outcome would be considered a "failure", because we didn't select the candidate with rank 10. However, for the Riddler, we want to track the actual rank: 8. That's the key difference between the classic problem and our task this week. We'll determine the ranks of the suitors we choose from all the possible arrangements of suitors, then calculate the average. For that, let's turn to Python.</p>
+<h5>Code</h5>
+<p>We can generate all permutations of the numbers 1-10 with the <code>itertools</code> library. There are $10!=3,628,800$ possible arrangements. The <code>permutations</code> function returns a generator, which we convert to a list, then finally into a <code>numpy</code> array. It's a bit verbose, but <code>numpy</code> will come in handy for indexing later. </p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
+
+<span class="n">orderings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">))))</span>
+</pre></div>
+
+
+<p>We know we'll interview the first three candidates and calculate the best rank among them. Even though we don't actually know the true rank of the candidates at this point, we can still track the numbers without cheating, because we know that an "8" is better than a "7" when we see it.</p>
+<div class="highlight"><pre><span></span><span class="c1"># calculate the best rank we see from the first 3 candidates</span>
+<span class="c1"># then store it as a vertical array</span>
+<span class="n">threshold</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Now we want to calculate the first candidate from the remaining seven that exceeds the threshold. To do this, we'll first calculate <em>every</em> subsequent candidate that beats the threshold, then use the <code>argmax</code> function to identify the first one (from left to right) that we saw. We end up with an array called <code>idx</code> that tells us the position of the suitor we would have selected from each ordering. (I add the 3 back at the end so we can index on the entire original array - just a matter of preference.)</p>
+<div class="highlight"><pre><span></span><span class="c1"># determine all remaining candidates that exceed the threshold</span>
+<span class="c1"># then select the first one we see; if we never see someone</span>
+<span class="c1"># better, then we default to choosing the last person</span>
+<span class="n">candidates</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="n">candidates</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
+</pre></div>
+
+
+<p>The last step is to find out the true rank of the suitors we selected from each of the 3,628,800 arrangements. We use some <code>numpy</code> slicing magic to grab the ranks from each row of our original orderings array.</p>
+<div class="highlight"><pre><span></span><span class="c1"># get the rank of the candidates we eventually selected</span>
+<span class="n">ranks</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">orderings</span><span class="p">)),</span> <span class="n">idx</span><span class="p">]</span>
+</pre></div>
+
+
+<p>As a final step, we calculate the average rank of our selected suitors. We can use <code>ranks.mean()</code>, or get the exact fraction by calling <code>ranks.sum()</code> and dividing by the number of arrangements, which ends up being $\frac{28,939,680}{3,628,800}$, or a clean $7.975$. </p>
+<p>The benefit of explicitly counting the results from each possible arrangement is that we can show the full distribution of outcomes in the chart below. We see that despite the apparent limitations of the Sultan's situation, she is able to perform remarkably well, choosing the ideal candidate nearly 40% of the time!</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20191101-riddler.png"></p>
+<h5>Full Code</h5>
+<p>This function comprises the steps I covered above, in a slightly more generalized way, so that we can measure success for other values of $N$. However, this approach scales poorly once $N$ exceeds 10 - counting that many permutations is very difficult.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
+
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solves the Riddler Classic from November 1, 2019, in which</span>
+<span class="sd">    we calculate the average rank of the person selected from </span>
+<span class="sd">    the classic &quot;secretary problem&quot;. </span>
+
+<span class="sd">    Uses the well-known solution to this problem, in which we </span>
+<span class="sd">    determine the most qualified candidate from the first n/e </span>
+<span class="sd">    we see, then choose the next-best from the remaining applicants. </span>
+
+<span class="sd">    The only difference here is that we want to calculate the </span>
+<span class="sd">    actual rank of the person we select, rather than a boolean, </span>
+<span class="sd">    &quot;did we pick the best candidate&quot;, which is the classic outcome.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int, must be less than 11, otherwise raises a RuntimeError,</span>
+<span class="sd">        because the combinations get too large</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RuntimeError : if n &gt; 10</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    average_rank : float, the average rank of the selected candidate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span> 
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;n={n} is too large to run with this algorithm. &quot;</span>
+            <span class="s2">&quot;Try choosing an &#39;n&#39; less than or equal to 10.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># create an array of all possible orderings of the candidates</span>
+    <span class="n">orderings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))))</span>
+
+    <span class="c1"># optimal stopping rule is floor(n/e): we automatically skip the</span>
+    <span class="c1"># first number of candidates, then choose the next best we find</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="c1"># threshold is the best candidate we&#39;ve seen before the &quot;stop&quot;</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[:,</span> <span class="p">:</span><span class="n">stop</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># determine all remaining candidates that exceed the threshold</span>
+    <span class="c1"># then select the first one we see; if we never see someone</span>
+    <span class="c1"># better, then we default to choosing the last person</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[:,</span> <span class="n">stop</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">candidates</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">stop</span>
+
+    <span class="c1"># now return the rank of the candidates we eventually selected</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">orderings</span><span class="p">)),</span> <span class="n">idx</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ranks</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">model</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">)}</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
