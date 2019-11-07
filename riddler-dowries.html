@@ -77,117 +77,115 @@ For example, if she simply accepted the first candidate presented to her, his ra
 </blockquote>
 <p>As an aside, I recently read <a href="https://www.amazon.com/Algorithms-Live-Computer-Science-Decisions-ebook-dp-B015CKNWJI/dp/B015CKNWJI/ref=mt_kindle?_encoding=UTF8&me=&qid=">Algorithms to Live By</a>, which covered how puzzles like these might be applied to real-life situations as well. It was a fun read discussing how computer science algorithms can help us make better decisions, from folding socks as efficiently as possible to deciding whether to return to our favorite restaurant or try a new one. Highly recommended!</p>
 <h5>Solution</h5>
-<p><strong>If the Sultan chooses optimally, her suitor will have an average rank of 7.975.</strong></p>
-<p>The classic problem asks a narrower question: how often will the Sultan select the <em>best</em> candidate? To solve that problem, we use the following strategy.</p>
-<ol>
-<li>Interview the first $N/e$ candidates without choosing any of them, but keep track of the best candidate we see from that group. ($N$ is the total number of candidates in the pool, and $e$ is the famous Euler's number, roughly 2.1828....) We round the value of $N/e$ down to the nearest whole number.</li>
-<li>Select the next candidate that beats all the ones we saw from step 1. </li>
-<li>If no candidate is better than those from step 1, we default to choosing last candidate.</li>
-</ol>
-<p>For our group of $N=10$ suitors, we should select the first 3 as guinea pigs (poor suitors...) They have no chance of actually being selected, but they will establish the benchmark for future suitors. For example, suppose we observe candidates with true ranks 5, 7, and 2. We don't know exactly how good these suitors are, but we will know if we see an 8, 9, or 10 later, because we can compare against the prior suitors. </p>
-<p>Next, suppose we interview someone with rank 6. This suitor isn't better than the best we've already seen, so we continue. Next, we interview someone with rank 8. We know this is the best we've seen so far, so we choose this suitor. As it turns out, two better candidates would have come later, but we will never meet them.</p>
-<p>In the classic problem, this outcome would be considered a "failure", because we didn't select the candidate with rank 10. However, for the Riddler, we want to track the actual rank: 8. That's the key difference between the classic problem and our task this week. We'll determine the ranks of the suitors we choose from all the possible arrangements of suitors, then calculate the average. For that, let's turn to Python.</p>
-<h5>Code</h5>
-<p>We can generate all permutations of the numbers 1-10 with the <code>itertools</code> library. There are $10!=3,628,800$ possible arrangements. The <code>permutations</code> function returns a generator, which we convert to a list, then finally into a <code>numpy</code> array. It's a bit verbose, but <code>numpy</code> will come in handy for indexing later. </p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
-
-<span class="n">orderings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">))))</span>
-</pre></div>
-
-
-<p>We know we'll interview the first three candidates and calculate the best rank among them. Even though we don't actually know the true rank of the candidates at this point, we can still track the numbers without cheating, because we know that an "8" is better than a "7" when we see it.</p>
-<div class="highlight"><pre><span></span><span class="c1"># calculate the best rank we see from the first 3 candidates</span>
-<span class="c1"># then store it as a vertical array</span>
-<span class="n">threshold</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
-
-
-<p>Now we want to calculate the first candidate from the remaining seven that exceeds the threshold. To do this, we'll first calculate <em>every</em> subsequent candidate that beats the threshold, then use the <code>argmax</code> function to identify the first one (from left to right) that we saw. We end up with an array called <code>idx</code> that tells us the position of the suitor we would have selected from each ordering. (I add the 3 back at the end so we can index on the entire original array - just a matter of preference.)</p>
-<div class="highlight"><pre><span></span><span class="c1"># determine all remaining candidates that exceed the threshold</span>
-<span class="c1"># then select the first one we see; if we never see someone</span>
-<span class="c1"># better, then we default to choosing the last person</span>
-<span class="n">candidates</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="n">threshold</span>
-<span class="n">mask</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
-<span class="n">candidates</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="n">idx</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
-</pre></div>
-
-
-<p>The last step is to find out the true rank of the suitors we selected from each of the 3,628,800 arrangements. We use some <code>numpy</code> slicing magic to grab the ranks from each row of our original orderings array.</p>
-<div class="highlight"><pre><span></span><span class="c1"># get the rank of the candidates we eventually selected</span>
-<span class="n">ranks</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">orderings</span><span class="p">)),</span> <span class="n">idx</span><span class="p">]</span>
-</pre></div>
-
-
-<p>As a final step, we calculate the average rank of our selected suitors. We can use <code>ranks.mean()</code>, or get the exact fraction by calling <code>ranks.sum()</code> and dividing by the number of arrangements, which ends up being $\frac{28,939,680}{3,628,800}$, or a clean $7.975$. </p>
-<p>The benefit of explicitly counting the results from each possible arrangement is that we can show the full distribution of outcomes in the chart below. We see that despite the apparent limitations of the Sultan's situation, she is able to perform remarkably well, choosing the ideal candidate nearly 40% of the time!</p>
+<p>Thanks to some <a href="https://twitter.com/bradleyalbrecht/status/1191793941458239488">helpful suggestions</a>, I revised my original answer, in which I used the proven strategy for the <em>original</em> problem, rather than devising a new strategy for the specific problem we are trying to solve this week. In short, if we apply the strategy from the original problem - where we try to choose the single best suitor - the expected result is 3.025. On the other hand, if we devise a new strategy, we can improve the results by roughly half a rank. The following is what I believe to be the ideal strategy and answer. Thanks again for the helpful nudge in the right direction, Riddler Nation twitter!</p>
+<p><strong>If the Sultan chooses optimally, her suitor will have an average rank of roughly 2.56.</strong> </p>
+<h5>Methodology</h5>
+<p>We'll solve this problem using <a href="https://en.wikipedia.org/wiki/Dynamic_programming">Dynamic Programming</a>. I'll create a data structure called "State" that keeps track of everything we know about the world at each point in time. "State" is comprised of three variables.</p>
+<ul>
+<li><code>m</code> - the rank of the current suitor, relative to all suitors we've seen so far. For example, m=2 means we're looking at the second-best suitor we've seen so far.</li>
+<li><code>seen</code> - the number of suitors we've seen in total, including the one we're currently considering.</li>
+<li><code>N</code> - the total number of suitors available to consider, in our case, the default is 10.</li>
+</ul>
+<p>Together, these three variables tell us everything we need to know to make the right decision. To solve the problem, we work backwards, from the last step to the first. We know that we must pick the 10th suitor if we get to that point. We also know the actual rank of the suitor, because we've seen everyone. Therefore, if we have <code>State(m=4, seen=10, N=10)</code>, we know the rank we end up with is 4. </p>
+<p>If we are viewing the 9th suitor, then we have two options: choose the one we have in front of us, or pass, and gamble that the randomly drawn 10th suitor will be better. Intuitively, we might think that if we're looking at the best suitor we've seen so far: <code>State(m=1, seen=9, N=10)</code>, then it makes sense to stop. There's only a 10% chance we would find someone better. But if we're looking at the worst suitor we've seen so far: <code>State(m=9, seen=9, N=10)</code>, then it makes sense to pass and take our chances with the next one. When we formalize this process, we calculate the expected value of stopping and the expected value of continuing. At each point in the process, we choose the option that gives us the better (minimum) expected outcome. When we work backwards all the way to the very first suitor we see, we will have the answer we're looking for.</p>
+<p>The following code creates the <code>State</code> class by subclassing <code>namedtuple</code>, then adds methods to calculate the <code>stop_value</code> and <code>expected_value</code> of each State. We're interested in the expected value when we start the process, which is <code>State(m=1, seen=1, N=10)</code>. Then we call <code>expected_value()</code> to get our answer. It turns out that designing a new strategy from first principles allows us to improve the answer from above, and we get an average expected rank of 2.56.</p>
+<p>Furthermore, now that we have a framework with flexible inputs, we can also solve for different values of <code>N</code> - if the Sultan had a pool of 50 applicants, for example. We can plot the expected rank as the value of <code>N</code> changes, and we see a curve that quickly approaches ~3.7, though there has been interesting discussions about the actual <a href="https://twitter.com/dfranke/status/1190710221435473921">limiting behavior</a> of this process.</p>
 <p><img class="img-fluid mx-auto d-block" src="../images/20191101-riddler.png"></p>
 <h5>Full Code</h5>
-<p>This function comprises the steps I covered above, in a slightly more generalized way, so that we can measure success for other values of $N$. However, this approach scales poorly once $N$ exceeds 10 - counting that many permutations is very difficult.</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
+<p>This code is used for the ideal strategy I outline above.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
 
 
-<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">State</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="s2">&quot;seen&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">))):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Solves the Riddler Classic from November 1, 2019, in which</span>
-<span class="sd">    we calculate the average rank of the person selected from </span>
-<span class="sd">    the classic &quot;secretary problem&quot;. </span>
-
-<span class="sd">    Uses the well-known solution to this problem, in which we </span>
-<span class="sd">    determine the most qualified candidate from the first n/e </span>
-<span class="sd">    we see, then choose the next-best from the remaining applicants. </span>
-
-<span class="sd">    The only difference here is that we want to calculate the </span>
-<span class="sd">    actual rank of the person we select, rather than a boolean, </span>
-<span class="sd">    &quot;did we pick the best candidate&quot;, which is the classic outcome.</span>
+<span class="sd">    Represents the current state of the game. &quot;m&quot; is the rank of </span>
+<span class="sd">    the suitor we are currently considering, relative to the ones</span>
+<span class="sd">    we have seen already. &quot;seen&quot; is the number of candidates we have</span>
+<span class="sd">    already seen, including the one we are currently considering.</span>
+<span class="sd">    &quot;N&quot; is the total number of candidates available.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    n : int, must be less than 11, otherwise raises a RuntimeError,</span>
-<span class="sd">        because the combinations get too large</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    RuntimeError : if n &gt; 10</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    average_rank : float, the average rank of the selected candidate</span>
+<span class="sd">    m : int, the relative rank of the current suitor, compared</span>
+<span class="sd">        against the suitors we&#39;ve seen already. For example, </span>
+<span class="sd">        m=2 means we&#39;re viewing the second-best suitor we&#39;ve seen</span>
+<span class="sd">        up to this point. m &lt;= seen</span>
+<span class="sd">    seen : int, the number of suitors we&#39;ve seen so far, including</span>
+<span class="sd">        the one we are currently viewing.</span>
+<span class="sd">    N : int, the total number of suitors available</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span> 
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-            <span class="n">f</span><span class="s2">&quot;n={n} is too large to run with this algorithm. &quot;</span>
-            <span class="s2">&quot;Try choosing an &#39;n&#39; less than or equal to 10.&quot;</span>
-        <span class="p">)</span>
 
-    <span class="c1"># create an array of all possible orderings of the candidates</span>
-    <span class="n">orderings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))))</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">stop_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the expected value if we were to choose suitor m</span>
 
-    <span class="c1"># optimal stopping rule is floor(n/e): we automatically skip the</span>
-    <span class="c1"># first number of candidates, then choose the next best we find</span>
-    <span class="n">stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">))</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; State(m=3, seen=10, N=10).stop_value()</span>
+<span class="sd">        3.0</span>
 
-    <span class="c1"># threshold is the best candidate we&#39;ve seen before the &quot;stop&quot;</span>
-    <span class="n">threshold</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[:,</span> <span class="p">:</span><span class="n">stop</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="sd">        &gt;&gt;&gt; State(m=1, seen=9, N=10).stop_value()</span>
+<span class="sd">        1.1</span>
 
-    <span class="c1"># determine all remaining candidates that exceed the threshold</span>
-    <span class="c1"># then select the first one we see; if we never see someone</span>
-    <span class="c1"># better, then we default to choosing the last person</span>
-    <span class="n">candidates</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[:,</span> <span class="n">stop</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="n">threshold</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
-    <span class="n">candidates</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">stop</span>
+<span class="sd">        &gt;&gt;&gt; State(m=1, seen=8, N=10).stop_value()</span>
+<span class="sd">        1.2222222222222223</span>
 
-    <span class="c1"># now return the rank of the candidates we eventually selected</span>
-    <span class="n">ranks</span> <span class="o">=</span> <span class="n">orderings</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">orderings</span><span class="p">)),</span> <span class="n">idx</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">ranks</span>
+<span class="sd">        &gt;&gt;&gt; State(m=1, seen=7, N=10).stop_value()</span>
+<span class="sd">        1.3750000000000002</span>
+
+<span class="sd">        &gt;&gt;&gt; State(m=1, seen=1, N=10).stop_value()</span>
+<span class="sd">        5.500000000000001</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seen</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span>
+            <span class="c1"># if we&#39;re viewing the last suitor, stop value is m</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># otherwise, stop value is the weighted average of seeing </span>
+            <span class="c1"># someone better than m and seeing someone worse than m</span>
+            <span class="n">better</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">stop_value</span><span class="p">()</span>
+            <span class="n">worse</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">stop_value</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">better</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">+</span> <span class="n">worse</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seen</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seen</span> <span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">expected_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the expected value of this State, where expected value is </span>
+<span class="sd">        defined as the expected rank of suitor we will end up with if we </span>
+<span class="sd">        make perfect decisions from this point forward.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; State(m=1, seen=9, N=10).expected_value()</span>
+<span class="sd">        1.1</span>
+
+<span class="sd">        &gt;&gt;&gt; State(m=9, seen=9, N=10).expected_value()</span>
+<span class="sd">        5.5</span>
+
+<span class="sd">        &gt;&gt;&gt; State(m=1, seen=1, N=10).expected_value()</span>
+<span class="sd">        2.5579365079365086</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seen</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">:</span>
+            <span class="c1"># we must select the last suitor if we get to that point</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># otherwise, we find ourselves in a future state where seen </span>
+            <span class="c1"># is incremented by one, and we could view any new rank, m</span>
+            <span class="c1"># we then choose the optimal path in those future states</span>
+            <span class="n">ev</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">State</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">seen</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seen</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">ev</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">ev</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_value</span><span class="p">())</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">summary</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">model</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">)}</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div></p>
         </div>
       </div>
