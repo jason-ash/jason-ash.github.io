@@ -91,18 +91,20 @@ $$20E(1) = 1 + E(1)$$
 $$E(1) = \frac{1}{19}$$</p>
 <p>What about the next case, $E(2)$? With 33% probability we can roll a zero and end the game; with 33% probability we can roll a one, and we'll find ourselves in the $E(1)$ universe again; with 33% probability we can roll a two and stay in the $E(2)$ universe.</p>
 <p>$$E(2) = \frac{1}{3}\times{E(0)} + \frac{1}{3}\times{(\frac{1}{10} + \frac{E(1)}{10})} + \frac{1}{3}\times{(\frac{2}{10} + \frac{E(2)}{10})}$$</p>
-<p>With some algebra, we can solve this equation for $E(2)$, which gives $\frac{2}{19}$. See a pattern?</p>
-<p>For a dice with $N$ sides we can expand the formula as follows. For simplicity we'll omit the $E(0)$ term because we know it evaluates to zero.</p>
+<p>With some algebra, we can solve this equation for $E(2)$, which gives $\frac{2}{19}$. See a pattern? It looks like $E(N)=\frac{N}{19}$. Let's attempt to confirm by expanding the equation for $E(N)$. For a dice with $N$ sides we can expand the formula as follows. For simplicity we'll omit the $E(0)$ term because we know it evaluates to zero.</p>
 <p>$$E(N) = \frac{1}{N+1}\times{(\frac{1}{10} + \frac{E(1)}{10})} + \frac{1}{N+1}\times{(\frac{2}{10} + \frac{E(2)}{10})} + ... + \frac{1}{N+1}\times{(\frac{N}{10} + \frac{E(N)}{10})}$$</p>
 <p>We can factor the $N$'s and 10's from the denominator for a simpler expression:</p>
 <p>$$E(N) = \frac{\sum_{i=1}^N (i+E(i))}{10(N+1)}$$</p>
-<p>Before, we suspected that $E(N)=\frac{N}{19}$. Let's plug that into our equation above, and use the fact that $\sum_{i=1}^N i = \frac{N(N+1)}{2}$:</p>
-<p>$$\frac{N}{19}=\frac{\frac{N(N+1)}{2} + \frac{N(N+1)}{38}}{10(N+1)}$$</p>
-<p>Which simplifies to:</p>
-<p>$$\frac{10N(N+1)}{19} = \frac{N(N+1)}{2} + \frac{N(N+1)}{38}$$</p>
-<p>Canceling the $N(N+1)$ terms we can verify that:</p>
+<p>We will attempt to prove $E(N)=\frac{N}{19}$ using induction. We've already verified that $E(1)=\frac{1}{19}$. Now we must verify that $E(N+1)=\frac{N+1}{19}$. We will use the fact that $\sum_{i=1}^N i = \frac{N(N+1)}{2}$ to remove the summations from the numerator.</p>
+<p>$$\frac{N+1}{19}=\frac{\frac{(N+1)(N+2)}{2} + \frac{(N+1)(N+2)}{38}}{10(N+2)}$$</p>
+<p>Next, we multiply both sides by $10(N+2)$:</p>
+<p>$$\frac{10(N+1)(N+2)}{19}=\frac{(N+1)(N+2)}{2} + \frac{(N+1)(N+2)}{38}$$</p>
+<p>Now, remove the common $(N+1)(N+2)$ terms, and verify both sides are equal.</p>
 <p>$$\frac{10}{19}=\frac{1}{2} + \frac{1}{38}$$</p>
-<p>Now that we know $E(N)=\frac{N}{19}$, we plug in the problem's original value of 9 to show that $E(9)=\frac{9}{19}$. All done!</p></p>
+<p>Therefore we have proven by mathematical induction that $E(N)=\frac{N}{19}$. Our original problem was for $N=9$, so we confirm our answer of $E(9)=\frac{9}{19}$.</p>
+<h5>Proof</h5>
+<p>Because LaTeX is not my specialty, I also wrote an old-fashioned proof as well. Enjoy!</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20191115-riddler.png"></p></p>
         </div>
       </div>
     </div>
