@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Rolling</h1>
+          <label class="text-muted">Nov 15, 2019</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This week's <a href="https://fivethirtyeight.com/features/how-low-can-you-roll/">Riddler</a> tested our ability to think recursively, but surprisingly not of the coding variety. Instead, we'll use a series of equations to solve the problem analytically. Brings back memories of high school proofs... which I may or may not remember with complete fidelity.</p>
+<blockquote>
+<p>To start the game, you roll the die. Your current “score” is the number shown, divided by 10. For example, if you were to roll a 7, then your score would be 0.7. Then, you keep rolling the die over and over again. Each time you roll, if the digit shown by the die is less than or equal to the last digit of your score, then that roll becomes the new last digit of your score. Otherwise you just go ahead and roll again. The game ends when you roll a zero.
+<br><br>
+For example, suppose you roll the following: 6, 2, 5, 1, 8, 1, 0. After your first roll, your score would be 0.6, After the second, it’s 0.62. You ignore the third roll, since 5 is greater than the current last digit, 2. After the fourth roll, your score is 0.621. You ignore the fifth roll, since 8 is greater than the current last digit, 1. After the sixth roll, your score is 0.6211. And after the seventh roll, the game is over — 0.6211 is your final score.
+<br><br>
+What will be your <em>average</em> final score in this game?</p>
+</blockquote>
+<h5>Solution</h5>
+<p><strong>The expected value of this game is 9/19, roughly 0.473684.</strong> </p>
+<p>At first, the problem seems like a deeply nested recursive brain-melter. While that might be true, there is a pattern we can exploit in order to find a clean solution. We'll solve the problem by proving a simple base case, then build upon the base case to solve for the final answer.</p>
+<p>The simplest base case we can start with is a game with a one-sided dice. (Indulge me, and suspend your rational faculties for a moment.) In this "game", we will always have a score of zero. Formally, we can say that $E(0)=0$, meaning the expected value of this game is equal to zero.</p>
+<p>Now, let's build on the base case. Suppose we increase the complexity and have a two-sided dice with the numbers zero and one. (One might even say it resembles a coin...) What can happen in this game? We can roll a zero immediately and end with a score of zero, or we can roll a one and continue. If we roll a one, we increment our score in the appropriate decimal place, after which we will find ourselves in a familiar position: we can either flip a zero or a one again.</p>
+<p>We can now write an expression for $E(1)$ that takes both of these outcomes into account.</p>
+<p>$$E(1) = \frac{1}{2}\times{E(0)} + \frac{1}{2}\times{(\frac{1}{10} + \frac{E(1)}{10})}$$</p>
+<p>With 50% probability, we will receive the expected value of 0 and the game will end. With the other 50% probability we will roll a one and add $\frac{1}{10}$ to our total, then move to the next decimal place, where we will expect to add $\frac{E(1)}{10}$ to our score again. We divide $E(1)$ by ten to account for the fact that we move to the next decimal place each time we roll again.</p>
+<p>Now, after plugging in $E(0)=0$, we can solve the equation for $E(1)$. We get $E(1)=\frac{1}{19}$.</p>
+<p>$$E(1) = \frac{1}{20}\times{(1 + E(1))}$$
+$$20E(1) = 1 + E(1)$$
+$$E(1) = \frac{1}{19}$$</p>
+<p>What about the next case, $E(2)$? With 33% probability we can roll a zero and end the game; with 33% probability we can roll a one, and we'll find ourselves in the $E(1)$ universe again; with 33% probability we can roll a two and stay in the $E(2)$ universe.</p>
+<p>$$E(2) = \frac{1}{3}\times{E(0)} + \frac{1}{3}\times{(\frac{1}{10} + \frac{E(1)}{10})} + \frac{1}{3}\times{(\frac{2}{10} + \frac{E(2)}{10})}$$</p>
+<p>With some algebra, we can solve this equation for $E(2)$, which gives $\frac{2}{19}$. See a pattern?</p>
+<p>For a dice with $N$ sides we can expand the formula as follows. For simplicity we'll omit the $E(0)$ term because we know it evaluates to zero.</p>
+<p>$$E(N) = \frac{1}{N+1}\times{(\frac{1}{10} + \frac{E(1)}{10})} + \frac{1}{N+1}\times{(\frac{2}{10} + \frac{E(2)}{10})} + ... + \frac{1}{N+1}\times{(\frac{N}{10} + \frac{E(N)}{10})}$$</p>
+<p>We can factor the $N$'s and 10's from the denominator for a simpler expression:</p>
+<p>$$E(N) = \frac{\sum_{i=1}^N (i+E(i))}{10(N+1)}$$</p>
+<p>Before, we suspected that $E(N)=\frac{N}{19}$. Let's plug that into our equation above, and use the fact that $\sum_{i=1}^N i = \frac{N(N+1)}{2}$:</p>
+<p>$$\frac{N}{19}=\frac{\frac{N(N+1)}{2} + \frac{N(N+1)}{38}}{10(N+1)}$$</p>
+<p>Which simplifies to:</p>
+<p>$$\frac{10N(N+1)}{19} = \frac{N(N+1)}{2} + \frac{N(N+1)}{38}$$</p>
+<p>Canceling the $N(N+1)$ terms we can verify that:</p>
+<p>$$\frac{10}{19}=\frac{1}{2} + \frac{1}{38}$$</p>
+<p>Now that we know $E(N)=\frac{N}{19}$, we plug in the problem's original value of 9 to show that $E(9)=\frac{9}{19}$. All done!</p></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2019 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
