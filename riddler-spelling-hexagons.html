@@ -86,7 +86,7 @@ Which seven-letter honeycomb results in the highest possible game score? To be a
 <h5>Methodology</h5>
 <p>There are at least two ways of approaching this problem, which I'll call the "bottoms-up" aproach and the "top-down" approach.</p>
 <ul>
-<li><strong>Bottoms-up approach:</strong> we assemble every valid seven-letter pool, then build word lists from them, summing the total score as we go. We aren't allowed to use the letter "s" for this Riddler, so we can choose $25\times24\times23\times22\times21\times20\times19$ combinations, which is nearly 2.5 billion. This isn't impossible, but it's a daunting task.</li>
+<li><strong>Bottoms-up approach:</strong> we assemble every valid seven-letter pool, then build word lists from them, summing the total score as we go. We aren't allowed to use the letter "s" for this Riddler, so we can choose $25\choose6$ combinations, which is 3,364,900 possibilities. This isn't impossible, but it's a daunting task.</li>
 <li><strong>Top-down approach:</strong> we can narrow the field of valid seven-letter pools because we have the master word list. The rules state that we must be able to create at least one pangram, so we know the winning seven-letter pool must be found within at least one word on the list. It turns out there are 7,986 unique seven-letter pools represented by words in the list, which is a manageable list to check compared to the bottoms-up approach.</li>
 </ul>
 <p>On my computer, in pure python, it takes roughly 10 minutes to check each seven-letter group, as well as to check all possible center letters for each group. The code below returns the top 10 groups of letters. Heaven help New York Times readers if any of these puzzles show up in the paper!</p>
