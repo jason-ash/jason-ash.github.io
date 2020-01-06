@@ -69,7 +69,7 @@
         </div>
         <div class="mb-5">
           <p><h5>Introduction</h5>
-<p>This week's <a href="https://fivethirtyeight.com/features/can-you-solve-the-vexing-vexillology/">Riddler Classic</a> was a fun way to welcome the new year. We're asked to find seven letters that maximize the score from the New York Times Spelling Bee puzzle. I use pure Python (lists, sets, and dictionaries only) to find the optimum pool of seven words.</p>
+<p>This week's <a href="https://fivethirtyeight.com/features/can-you-solve-the-vexing-vexillology/">Riddler Classic</a> was a fun way to welcome the new year. We're asked to find seven letters that maximize the score from the New York Times <a href="https://www.nytimes.com/puzzles/spelling-bee">Spelling Bee</a> puzzle. I use pure Python (lists, sets, and dictionaries only) to find the optimum pool of seven words.</p>
 <blockquote>
 <p>The New York Times recently launched some new word puzzles, one of which is <a href="https://www.nytimes.com/puzzles/spelling-bee">Spelling Bee</a>. In this game, seven letters are arranged in a honeycomb lattice, with one letter in the center.
 <br><br>
@@ -83,7 +83,6 @@ Which seven-letter honeycomb results in the highest possible game score? To be a
 </blockquote>
 <h5>Solution</h5>
 <p>Using a brute-force approach in Python, I found the seven letters <strong>A, E, G, I, N, R, T</strong>, with a center letter of <strong>R</strong>, which has the highest potential score of <strong>3898</strong>. Even enterprising wordsmiths among us will have a hard time finding all 537 valid words. The choice of <strong>R</strong> as the center letter matters quite a bit: if we changed the center letter to <strong>G</strong>, the maximum potential score would drop to <strong>3095</strong>.</p>
-<p>The toughest puzzle (that contains at least one seven-letter pangram) is created from the letters <strong>B, E, J, K, O, U, X</strong>, with a center letter of <strong>X</strong>, and a maximum game score of just <strong>15</strong>. In other words, you can only create one word: <em>jukebox</em>.</p>
 <h5>Methodology</h5>
 <p>There are at least two ways of approaching this problem, which I'll call the "bottoms-up" aproach and the "top-down" approach.</p>
 <ul>
@@ -92,7 +91,7 @@ Which seven-letter honeycomb results in the highest possible game score? To be a
 </ul>
 <p>On my computer, in pure python, it takes roughly 10 minutes to check each seven-letter group, as well as to check all possible center letters for each group. The code below returns the top 10 groups of letters. Heaven help New York Times readers if any of these puzzles show up in the paper!</p>
 <h5>Full Code</h5>
-<p>This week's post is shorter on text and longer on code. It was so fun to write, I hope it speaks for itself!)</p>
+<p>This week's post is shorter on text and longer on code. It was so fun to write, I hope it speaks for itself!</p>
 <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
