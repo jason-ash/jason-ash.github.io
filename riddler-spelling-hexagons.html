@@ -89,82 +89,78 @@ Which seven-letter honeycomb results in the highest possible game score? To be a
 <li><strong>Bottoms-up approach:</strong> we assemble every valid seven-letter pool, then build word lists from them, summing the total score as we go. We aren't allowed to use the letter "s" for this Riddler, so we can choose $25\choose6$ combinations, which is 3,364,900 possibilities. This isn't impossible, but it's a daunting task.</li>
 <li><strong>Top-down approach:</strong> we can narrow the field of valid seven-letter pools because we have the master word list. The rules state that we must be able to create at least one pangram, so we know the winning seven-letter pool must be found within at least one word on the list. It turns out there are 7,986 unique seven-letter pools represented by words in the list, which is a manageable list to check compared to the bottoms-up approach.</li>
 </ul>
-<p>On my computer, in pure python, it takes roughly 10 minutes to check each seven-letter group, as well as to check all possible center letters for each group. The code below returns the top 10 groups of letters. Heaven help New York Times readers if any of these puzzles show up in the paper!</p>
+<p>On my computer, in pure python, it takes roughly 4 seconds to check each seven-letter group, as well as to check all possible center letters for each group. The code below returns the top 10 groups of letters. Good luck to New York Times readers if any of these puzzles show up in the paper!</p>
 <h5>Full Code</h5>
 <p>This week's post is shorter on text and longer on code. It was so fun to write, I hope it speaks for itself!</p>
-<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
 
 
-<span class="k">def</span> <span class="nf">get_words</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Download and return a list of valid words&quot;&quot;&quot;</span>
-    <span class="n">source</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">source</span><span class="p">)</span>
-
-    <span class="c1"># filter the full list of words to remove words that contain the</span>
-    <span class="c1"># letter &quot;s&quot;, words with fewer than 4 total letters, and words</span>
-    <span class="c1"># with more than 7 unique letters</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="s2">&quot;s&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">w</span><span class="p">)</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">words</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_words</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Download and yield a sequence of valid words&quot;&quot;&quot;</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s2">&quot;https://norvig.com/ngrams/enable1.txt&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;s&quot;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">word</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="k">yield</span> <span class="n">word</span>
 
 
 <span class="k">def</span> <span class="nf">word_score</span><span class="p">(</span><span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A word&#39;s score is based on the length of the word:</span>
-<span class="sd">    1 point for 4-letter words, 5 points for 5-letter words,</span>
-<span class="sd">    6 points for 6-letter words, etc., plus a bonus of</span>
-<span class="sd">    7 points if the word contains 7 unique letters</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Return the score of a word&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">word</span><span class="p">))</span> <span class="o">==</span> <span class="mi">7</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">Puzzle</span><span class="p">(</span><span class="nb">set</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A puzzle is a collection of letters that we can use to </span>
-<span class="sd">    make words. A word may use letters any number of times.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">get_letterset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns a dictionary of the sets of letters and their scores&quot;&quot;&quot;</span>
+    <span class="n">letterset</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">get_words</span><span class="p">():</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">word</span><span class="p">),</span> <span class="n">word_score</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="n">letterset</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">letterset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">score</span>
+    <span class="k">return</span> <span class="n">letterset</span>
 
-    <span class="n">word_list</span> <span class="o">=</span> <span class="n">get_words</span><span class="p">(</span><span class="s2">&quot;https://norvig.com/ngrams/enable1.txt&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center_letter</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        A puzzle&#39;s score is the score of all the words that can be created</span>
-<span class="sd">        from its letters, provided that the center letter is included</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">words</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_list</span> <span class="k">if</span> <span class="n">center_letter</span> <span class="ow">in</span> <span class="n">w</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">word_score</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Puzzle</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Puzzle&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;letters&#39;</span><span class="p">,</span> <span class="s1">&#39;center&#39;</span><span class="p">))):</span>
 
-    <span class="k">def</span> <span class="nf">max_score</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the max puzzle score by finding the best center letter&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">center</span><span class="p">)</span> <span class="k">for</span> <span class="n">center</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+    <span class="n">letterset</span> <span class="o">=</span> <span class="n">get_letterset</span><span class="p">()</span>
+    <span class="n">pangrams</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">letterset</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span><span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">max_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the center letter that maximizes the Puzzle&#39;s score&quot;&quot;&quot;</span>
-        <span class="n">scores</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">center</span><span class="p">),</span> <span class="n">center</span><span class="p">)</span> <span class="k">for</span> <span class="n">center</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">max_scores</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return all possible Puzzles and their maximum scores&quot;&quot;&quot;</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="n">pangram</span><span class="p">,</span> <span class="n">center</span><span class="p">):</span> <span class="n">Puzzle</span><span class="p">(</span><span class="n">pangram</span><span class="p">,</span> <span class="n">center</span><span class="p">)</span><span class="o">.</span><span class="n">score</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">pangram</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">pangrams</span> <span class="k">for</span> <span class="n">center</span> <span class="ow">in</span> <span class="n">pangram</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">subsets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of all sub-puzzles&quot;&quot;&quot;</span>
+        <span class="n">letters</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">letters</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the maximum possible score for this Puzzle&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">letterset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subsets</span><span class="p">()</span>
+        <span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
-    <span class="c1"># create a list of candidates: seven-letter pool</span>
-    <span class="c1"># that we can identify from the word list</span>
-    <span class="n">candidates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">Puzzle</span><span class="o">.</span><span class="n">word_list</span><span class="p">:</span>
-        <span class="n">uniques</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">uniques</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
-            <span class="n">candidates</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">uniques</span><span class="p">)))</span>
-
-    <span class="c1"># calculate the maximum score we can achieve from</span>
-    <span class="c1"># each candidate pool, and store as a dictionary</span>
-    <span class="c1"># use tqdm as a progress bar; takes ~10 minutes.</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">Puzzle</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">max_score</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">candidates</span><span class="p">)}</span>
-
-    <span class="c1"># print the top-10 seven letter combinations with scores</span>
-    <span class="k">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">])</span>
+    <span class="c1"># print the top 10 highest-scoring puzzles</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">Puzzle</span><span class="o">.</span><span class="n">max_scores</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div></p>
         </div>
       </div>
