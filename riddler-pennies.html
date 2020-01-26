@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Pennies</h1>
+          <label class="text-muted">Jan 24, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This week's <a href="https://fivethirtyeight.com/features/how-many-pennies-should-you-pinch/">Riddler Classic</a> explores ideal strategy in a two-player game. We take turns removing coins from two piles, and the last one to remove a coin wins. I'll use pen and paper to sketch out the logical framework, then code a flexible solution using python and dynamic programming.</p>
+<blockquote>
+<p>The game starts with somewhere between 20 and 30 pennies, which I then divide into two piles any way I like. Then we alternate taking turns, with you first, until someone wins the game. For each turn, a player may take any number of pennies he or she likes from either pile, or instead take the same number of pennies from both piles. Each player must also take at least one penny every turn. The winner of the game is the one who takes the last penny.
+<br><br>
+If we both play optimally, what starting numbers of pennies (again, between 20 and 30) guarantee that you can win the game?</p>
+</blockquote>
+<h5>Solution</h5>
+<p>I'll take a small liberty and answer the complementary question: what configurations of pennies guarantee that I <em>lose</em> the game? There are fewer combinations that satisfy this constraint, so it's easier to list them.</p>
+<p><strong>With their choice of 20-30 pennies, my opponent could create three configurations that guarantee I lose the game, provided I must play first: (8, 13), (9, 15), and (11, 18). These configurations require 21, 24, and 29 pennies, respectively.</strong> If my opponent starts with any other number of pennies between 20-30, there is <em>no</em> configuration they could create that I can't win by playing optimally.</p>
+<h5>Methodology</h5>
+<p>I used a combination of pen and paper and computer code to solve this problem. I started by looking for patterns in a highly simplified version of the game, then I generalized those patterns to larger numbers of coins. In computer science this approach is called <a href="https://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a>, where we solve a complex problem by breaking it down into simpler component parts that we can solve individually and recombine later.</p>
+<p>For this problem, the simplest game has just one coin. Without loss of generality, I will follow the convention that ($a$, $b$) represents the state of the game, where $a \le b$. I will assign winning states a value of 1, and losing states a value of -1. For $a=0$ and $b=1$, we can win immediately by taking the only coin available, so the expected value of (0, 1) is 1.</p>
+<p>With two coins, we can have two states: (0, 2) or (1, 1). With (0, 2) we can win immediately by taking both coins from pile $b$. With (1, 1), we can win immediately by taking one coin from each pile. The expected values of (0, 2) and (1, 1) are both 1. </p>
+<p>With three coins, we can have two states: (0, 3) or (1, 2). (0, 3) has a winning move by taking all three coins from pile $b$, so its expected value is 1. However, (1, 2) is more complicated. Let's list all available moves:</p>
+<table>
+<thead>
+<tr>
+<th>Begin State</th>
+<th>Move</th>
+<th>End State</th>
+<th>Expected Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(1, 2)</td>
+<td>(1, 0) - take one coin from $a$</td>
+<td>(0, 2)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>(1, 2)</td>
+<td>(0, 1) - take one coin from $b$</td>
+<td>(1, 1)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>(1, 2)</td>
+<td>(0, 2) - take two coins from $b$</td>
+<td>(0, 1)*</td>
+<td>1</td>
+</tr>
+<tr>
+<td>(1, 2)</td>
+<td>(1, 1) - take one coin from both piles</td>
+<td>(0, 1)</td>
+<td>1</td>
+</tr>
+<tr>
+<td></td>
+<td>*recall we always set $a \le b$</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Each of our possible moves results in a state with expected value 1... for our opponent! We can't make any move that avoids losing from this position, so the expected value of (1, 2) is -1.</p>
+<p>Now we have built a small dictionary of states and expected values. Each time we solve for a larger number of coins, we can list all the possible moves, and look up the expected value of the resulting states, flipping the sign of the expected value each time to account for the fact that we take turns with our opponent. If any move produces an expected value of 1, then it means we can win if we play optimally.</p>
+<p>If we continue this process by hand, we can build a small diagram of optimal decisions, shown below. Each state has a color: red states are losing, and green states are winning. To simplify the states, I've used a generic $n$ to represent some positions. (0, $n$) represents a state with a zero in one pile and any number of coins in the other. Similarly ($n$, $n$) represents a state with any number of equal coins in both piles. For example, we showed that no move from (1, 2) can win the game, because (1, 2) only connects to (0, $n$) and ($n$, $n$), which are winning states for our opponent. </p>
+<p>Suppose we start at (3, 7) on our turn. Our best move is to remove 2 coins from pile $b$, putting our opponent in the unwinnable state (3, 5). The opponent may choose to remove one coin from pile $b$, giving us the state (3, 4). We will remve 2 coins from both piles, giving our opponent the unwinnable (1, 2) state, from which we've shown we will eventually win. </p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200124-riddler.png"></p>
+<p>As the diagram shows, this process becomes complicated for larger numbers of coins. At this point I turned to the computer. In python I created a class called <code>GameState</code> that tracks the number of coins in each pile and allows us to simulate potential moves and calculate expected values. For example, we can verify the expected values we calculated by hand earlier.</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span>
+<span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span>
+<span class="o">-</span><span class="mi">1</span>
+</pre></div>
+
+
+<p>Each <code>GameState</code> simulates all possible moves we could make from a position, then calculates the expected value of the new <code>GameState</code> after we make our move. If we've calculated the new state's expected value before, we look it up from a table. Otherwise, we calculate it and store it in case we need it later.</p>
+<p>We can also use the <code>GameState</code> class to identify the best move to make from any state. For example, how should we play if there are 75 coins in pile $a$ and 90 coins in pile $b$?</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span><span class="o">.</span><span class="n">best_move</span><span class="p">()</span>
+<span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
+</pre></div>
+
+
+<p>The best move is to remove 51 coins from both piles. (Note, there may be several winning moves from a given position, but the code returns the move that wins the fastest. No need to delay the inevitable...) After our move, the opponent faces a new <code>GameState</code> with $a=24$ and $b=39$. What is our opponent's best move?</p>
+<div class="highlight"><pre><span></span><span class="x">&gt;&gt;&gt; GameState(a=24, b=39).best_move()</span>
+<span class="x">---------------------------------------------------------------------------</span>
+<span class="x">RuntimeError                              Traceback (most recent call last)</span>
+<span class="x">&lt;ipython-input-22-022489edfb4d&gt; in &lt;module&gt;</span>
+<span class="x">----&gt; 1 GameState(24, 39).best_move()</span>
+
+<span class="x">&lt;ipython-input-17-4a4755d04ade&gt; in best_move(self)</span>
+<span class="x">    103             if (self - move).expected_value() == -1:</span>
+<span class="x">    104                 return move</span>
+<span class="x">--&gt; 105         raise RuntimeError(&quot;No best move; this GameState is a losing position&quot;)</span>
+<span class="x">    106 </span>
+<span class="x">    107     def expected_value(self) -&gt; int:</span>
+
+<span class="x">RuntimeError: No best move; this GameState is a losing position</span>
+</pre></div>
+
+
+<p>Oops - looks like no matter what our opponent does, we are guaranteed to win. </p>
+<p>Finally, to answer the original question, we want to list all unwinnable states. Because we store all the expected values, we can search the database for all the losing states and return them as a list.</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="c1"># show the first 20 losing states</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">GameState</span><span class="o">.</span><span class="n">losing_states</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span>
+<span class="p">[</span><span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">13</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">18</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">23</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">26</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">17</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">28</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">19</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">31</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">34</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">36</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">39</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">41</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">44</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">29</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">47</span><span class="p">),</span>
+ <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">49</span><span class="p">)]</span>
+ <span class="sb">``</span><span class="err">`</span>
+
+ <span class="n">We</span> <span class="n">use</span> <span class="n">this</span> <span class="nb">list</span> <span class="n">to</span> <span class="n">answer</span> <span class="n">the</span> <span class="n">original</span> <span class="n">question</span><span class="o">.</span> <span class="n">With</span> <span class="mi">20</span><span class="o">-</span><span class="mi">30</span> <span class="n">coins</span><span class="p">,</span> <span class="n">only</span> <span class="n">the</span> <span class="n">states</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span> <span class="n">guarantee</span> <span class="n">us</span> <span class="n">to</span> <span class="n">lose</span> <span class="k">if</span> <span class="n">we</span> <span class="n">play</span> <span class="n">first</span><span class="o">.</span> <span class="n">Of</span> <span class="n">course</span> <span class="n">we</span> <span class="n">can</span> <span class="n">test</span> <span class="n">larger</span> <span class="n">numbers</span> <span class="n">of</span> <span class="n">coins</span><span class="p">,</span> <span class="n">but</span> <span class="n">I</span><span class="s1">&#39;ll leave that as an exercise for the motivated reader. My full code is available below!</span>
+
+<span class="c1">##### Full Code</span>
+<span class="n">The</span> <span class="n">code</span> <span class="k">for</span> <span class="n">this</span> <span class="n">week</span> <span class="n">was</span> <span class="n">fun</span> <span class="n">to</span> <span class="n">write</span><span class="o">.</span> <span class="n">I</span> <span class="n">created</span> <span class="n">a</span> <span class="k">class</span> <span class="nc">called</span> <span class="sb">`GameState`</span> <span class="n">that</span> <span class="n">represents</span> <span class="n">the</span> <span class="n">game</span><span class="p">,</span> <span class="n">has</span> <span class="n">methods</span> <span class="n">to</span> <span class="k">yield</span> <span class="n">valid</span> <span class="n">moves</span><span class="p">,</span> <span class="n">calculate</span> <span class="n">expected</span> <span class="n">value</span><span class="p">,</span> <span class="k">return</span> <span class="n">the</span> <span class="n">best</span> <span class="n">move</span> <span class="n">to</span> <span class="n">make</span><span class="p">,</span> <span class="ow">and</span> <span class="n">more</span><span class="o">.</span> <span class="n">I</span> <span class="n">feel</span> <span class="n">like</span> <span class="n">I</span> <span class="n">could</span> <span class="n">have</span> <span class="n">kept</span> <span class="n">adding</span> <span class="n">more</span> <span class="ow">and</span> <span class="n">more</span> <span class="n">functionality</span> <span class="n">to</span> <span class="n">this</span> <span class="n">class</span><span class="p">,</span> <span class="n">but</span> <span class="n">I</span> <span class="n">tried</span> <span class="n">to</span> <span class="n">keep</span> <span class="n">it</span> <span class="n">relatively</span> <span class="n">focused</span> <span class="k">for</span> <span class="n">now</span><span class="o">.</span>
+
+<span class="sb">``</span><span class="err">`</span><span class="n">python</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
+
+<span class="k">class</span> <span class="nc">GameState</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;GameState&quot;</span><span class="p">,</span> <span class="s2">&quot;a b&quot;</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Each turn of the game we may take any number of pennies from either pile, or</span>
+<span class="sd">    an equal number of pennies from both piles. (We must take at least one penny</span>
+<span class="sd">    per turn.) The person who takes the last penny (or pennies) wins the game.</span>
+
+<span class="sd">    Represent the state of the game as a tuple, (a, b), where a is the number of</span>
+<span class="sd">    pennies in the first pile, and b is the number of pennies in the second pile</span>
+
+<span class="sd">    If a == b, then the game will end this turn because we will take all pennies</span>
+<span class="sd">    from both piles. If either a or b == 0, then we can also end the game this</span>
+<span class="sd">    turn by taking the remaining pennies from the non-empty pile. Otherwise, we</span>
+<span class="sd">    will determine the optimal action to take by considering all possible moves</span>
+<span class="sd">    and choosing the one that gives the best chance of winning on a later turn.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # start a game with 8 pennies in &quot;a&quot; and 14 pennies in &quot;b&quot;</span>
+<span class="sd">    &gt;&gt;&gt; # then determine its expected value and best move</span>
+<span class="sd">    &gt;&gt;&gt; game = GameState(8, 14)</span>
+<span class="sd">    &gt;&gt;&gt; game.expected_value()</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; game.best_move()</span>
+<span class="sd">    (0, 1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_cache</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Custom hash function for the GameState, which allows us to assert</span>
+<span class="sd">        equality between GameState(a, b) and GameState(b, a)</span>
+
+<span class="sd">        &gt;&gt;&gt; GameState(5, 10).__hash__()</span>
+<span class="sd">        3713085962056061156</span>
+<span class="sd">        &gt;&gt;&gt; GameState(10, 5).__hash__()</span>
+<span class="sd">        3713085962056061156</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        We want GameState(a, b) to be equal to GameState(b, a)</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; GameState(5, 10) == GameState(10, 5)</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">hash</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the game state by subtracting pennies</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; GameState(9, 10) - (5, 5)</span>
+<span class="sd">        GameState(a=4, b=5)</span>
+<span class="sd">        &gt;&gt;&gt; GameState(10, 5) - (4, 0)</span>
+<span class="sd">        GameState(a=6, b=5)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="ow">or</span> <span class="n">other</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not enough pennies left to make this move.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GameState</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">-</span> <span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="n">other</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">available_moves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yield all possible moves for this GameState (as a generator)</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; moves = GameState(1, 2).available_moves()</span>
+<span class="sd">        &gt;&gt;&gt; list(moves)</span>
+<span class="sd">        [(1, 1), (1, 0), (0, 2), (0, 1)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># create separate generators for all moves taking coins from pile a,</span>
+        <span class="c1"># pile b, and equal draws from both piles. Chain the generators</span>
+        <span class="c1"># together, and order them so we list the biggest moves first</span>
+        <span class="n">gen_a</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">gen_b</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">gen_c</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">chain</span><span class="p">(</span><span class="n">gen_c</span><span class="p">,</span> <span class="n">gen_a</span><span class="p">,</span> <span class="n">gen_b</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">best_move</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the best possible move to make; if there are multiple best</span>
+<span class="sd">        moves, return the one that removes the most pennies from the board</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; GameState(9, 10).best_move()</span>
+<span class="sd">        (8, 8)</span>
+<span class="sd">        &gt;&gt;&gt; GameState(2, 1).best_move()</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">        ...</span>
+<span class="sd">        RuntimeError: No best move; this GameState is a losing position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_moves</span><span class="p">():</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span> <span class="o">-</span> <span class="n">move</span><span class="p">)</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">move</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No best move; this GameState is a losing position&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">expected_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the expected value from this GameState, assuming it is your</span>
+<span class="sd">        move. 1 represents a guaranteed win with a single move or series of</span>
+<span class="sd">        moves, while -1 represents a guaranteed loss.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; GameState(1, 3).expected_value()  # winning state</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; GameState(2, 2).expected_value()  # winning state</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; GameState(1, 2).expected_value()  # losing state</span>
+<span class="sd">        -1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check the cache to see if we&#39;ve already calculated the result</span>
+        <span class="c1"># otherwise, calculate the result and store it in the cache</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>        
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># the only value we need to explicitly encode is that if it is</span>
+                <span class="c1"># our turn and the GameState is (0, 0), we have lost</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># otherwise, we iterate through all possible moves, and try to</span>
+                <span class="c1"># find any single move that produces a winning line</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                    <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span> <span class="o">-</span> <span class="n">move</span><span class="p">)</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_moves</span><span class="p">()</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">losing_states</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">max_coins</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return all losing states from the cache up to a maximum coin count</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; GameState._cache = {}  # reset the cache before performing this test</span>
+<span class="sd">        &gt;&gt;&gt; GameState.losing_states(max_coins=8)</span>
+<span class="sd">        [GameState(a=0, b=0), GameState(a=1, b=2), GameState(a=3, b=5), GameState(a=4, b=7)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># run the GameState up to the max value to populate the cache</span>
+        <span class="n">GameState</span><span class="p">(</span><span class="n">max_coins</span><span class="p">,</span> <span class="n">max_coins</span><span class="p">)</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
