@@ -306,6 +306,7 @@ If we both play optimally, what starting numbers of pennies (again, between 20 a
             <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">winning_moves</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">sum</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No best move; this is a losing position&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
     <span class="k">def</span> <span class="nf">expected_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the expected value from this GameState, assuming it is your</span>
