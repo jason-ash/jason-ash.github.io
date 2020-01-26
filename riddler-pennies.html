@@ -154,24 +154,25 @@ If we both play optimally, what starting numbers of pennies (again, between 20 a
 
 
 <p>The best move is to remove 51 coins from both piles. (Note, there may be several winning moves from a given position, but the code returns the move that wins the fastest. No need to delay the inevitable...) After our move, the opponent faces a new <code>GameState</code> with $a=24$ and $b=39$. What is our opponent's best move?</p>
-<div class="highlight"><pre><span></span><span class="x">&gt;&gt;&gt; GameState(a=24, b=39).best_move()</span>
-<span class="x">---------------------------------------------------------------------------</span>
-<span class="x">RuntimeError                              Traceback (most recent call last)</span>
-<span class="x">&lt;ipython-input-22-022489edfb4d&gt; in &lt;module&gt;</span>
-<span class="x">----&gt; 1 GameState(24, 39).best_move()</span>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="nt">GameState</span><span class="o">(</span><span class="nt">a</span><span class="o">=</span><span class="nt">24</span><span class="o">,</span> <span class="nt">b</span><span class="o">=</span><span class="nt">39</span><span class="o">)</span><span class="p">.</span><span class="nc">best_move</span><span class="o">()</span>
 
-<span class="x">&lt;ipython-input-17-4a4755d04ade&gt; in best_move(self)</span>
-<span class="x">    103             if (self - move).expected_value() == -1:</span>
-<span class="x">    104                 return move</span>
-<span class="x">--&gt; 105         raise RuntimeError(&quot;No best move; this GameState is a losing position&quot;)</span>
-<span class="x">    106 </span>
-<span class="x">    107     def expected_value(self) -&gt; int:</span>
+<span class="nt">---------------------------------------------------------------------------</span>
+<span class="nt">RuntimeError</span>                              <span class="nt">Traceback</span> <span class="o">(</span><span class="nt">most</span> <span class="nt">recent</span> <span class="nt">call</span> <span class="nt">last</span><span class="o">)</span>
+<span class="o">&lt;</span><span class="nt">ipython-input-22-022489edfb4d</span><span class="o">&gt;</span> <span class="nt">in</span> <span class="o">&lt;</span><span class="nt">module</span><span class="o">&gt;</span>
+<span class="nt">----</span><span class="o">&gt;</span> <span class="nt">1</span> <span class="nt">GameState</span><span class="o">(</span><span class="nt">24</span><span class="o">,</span> <span class="nt">39</span><span class="o">)</span><span class="p">.</span><span class="nc">best_move</span><span class="o">()</span>
 
-<span class="x">RuntimeError: No best move; this GameState is a losing position</span>
+<span class="o">&lt;</span><span class="nt">ipython-input-17-4a4755d04ade</span><span class="o">&gt;</span> <span class="nt">in</span> <span class="nt">best_move</span><span class="o">(</span><span class="nt">self</span><span class="o">)</span>
+    <span class="nt">103</span>             <span class="nt">if</span> <span class="o">(</span><span class="nt">self</span> <span class="nt">-</span> <span class="nt">move</span><span class="o">)</span><span class="p">.</span><span class="nc">expected_value</span><span class="o">()</span> <span class="o">==</span> <span class="nt">-1</span><span class="o">:</span>
+    <span class="nt">104</span>                 <span class="nt">return</span> <span class="nt">move</span>
+<span class="nt">--</span><span class="o">&gt;</span> <span class="nt">105</span>         <span class="nt">raise</span> <span class="nt">RuntimeError</span><span class="o">(</span><span class="s2">&quot;No best move; this GameState is a losing position&quot;</span><span class="o">)</span>
+    <span class="nt">106</span> 
+    <span class="nt">107</span>     <span class="nt">def</span> <span class="nt">expected_value</span><span class="o">(</span><span class="nt">self</span><span class="o">)</span> <span class="nt">-</span><span class="o">&gt;</span> <span class="nt">int</span><span class="o">:</span>
+
+<span class="nt">RuntimeError</span><span class="o">:</span> <span class="nt">No</span> <span class="nt">best</span> <span class="nt">move</span><span class="o">;</span> <span class="nt">this</span> <span class="nt">GameState</span> <span class="nt">is</span> <span class="nt">a</span> <span class="nt">losing</span> <span class="nt">position</span>
 </pre></div>
 
 
-<p>Oops - looks like no matter what our opponent does, we are guaranteed to win. </p>
+<p>Oops - looks like no matter what our opponent does, we are guaranteed to win.</p>
 <p>Finally, to answer the original question, we want to list all unwinnable states. Because we store all the expected values, we can search the database for all the losing states and return them as a list.</p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="c1"># show the first 20 losing states</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">GameState</span><span class="o">.</span><span class="n">losing_states</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span>
@@ -195,15 +196,13 @@ If we both play optimally, what starting numbers of pennies (again, between 20 a
  <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">44</span><span class="p">),</span>
  <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">29</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">47</span><span class="p">),</span>
  <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">49</span><span class="p">)]</span>
- <span class="sb">``</span><span class="err">`</span>
+</pre></div>
 
- <span class="n">We</span> <span class="n">use</span> <span class="n">this</span> <span class="nb">list</span> <span class="n">to</span> <span class="n">answer</span> <span class="n">the</span> <span class="n">original</span> <span class="n">question</span><span class="o">.</span> <span class="n">With</span> <span class="mi">20</span><span class="o">-</span><span class="mi">30</span> <span class="n">coins</span><span class="p">,</span> <span class="n">only</span> <span class="n">the</span> <span class="n">states</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span> <span class="n">guarantee</span> <span class="n">us</span> <span class="n">to</span> <span class="n">lose</span> <span class="k">if</span> <span class="n">we</span> <span class="n">play</span> <span class="n">first</span><span class="o">.</span> <span class="n">Of</span> <span class="n">course</span> <span class="n">we</span> <span class="n">can</span> <span class="n">test</span> <span class="n">larger</span> <span class="n">numbers</span> <span class="n">of</span> <span class="n">coins</span><span class="p">,</span> <span class="n">but</span> <span class="n">I</span><span class="s1">&#39;ll leave that as an exercise for the motivated reader. My full code is available below!</span>
 
-<span class="c1">##### Full Code</span>
-<span class="n">The</span> <span class="n">code</span> <span class="k">for</span> <span class="n">this</span> <span class="n">week</span> <span class="n">was</span> <span class="n">fun</span> <span class="n">to</span> <span class="n">write</span><span class="o">.</span> <span class="n">I</span> <span class="n">created</span> <span class="n">a</span> <span class="k">class</span> <span class="nc">called</span> <span class="sb">`GameState`</span> <span class="n">that</span> <span class="n">represents</span> <span class="n">the</span> <span class="n">game</span><span class="p">,</span> <span class="n">has</span> <span class="n">methods</span> <span class="n">to</span> <span class="k">yield</span> <span class="n">valid</span> <span class="n">moves</span><span class="p">,</span> <span class="n">calculate</span> <span class="n">expected</span> <span class="n">value</span><span class="p">,</span> <span class="k">return</span> <span class="n">the</span> <span class="n">best</span> <span class="n">move</span> <span class="n">to</span> <span class="n">make</span><span class="p">,</span> <span class="ow">and</span> <span class="n">more</span><span class="o">.</span> <span class="n">I</span> <span class="n">feel</span> <span class="n">like</span> <span class="n">I</span> <span class="n">could</span> <span class="n">have</span> <span class="n">kept</span> <span class="n">adding</span> <span class="n">more</span> <span class="ow">and</span> <span class="n">more</span> <span class="n">functionality</span> <span class="n">to</span> <span class="n">this</span> <span class="n">class</span><span class="p">,</span> <span class="n">but</span> <span class="n">I</span> <span class="n">tried</span> <span class="n">to</span> <span class="n">keep</span> <span class="n">it</span> <span class="n">relatively</span> <span class="n">focused</span> <span class="k">for</span> <span class="n">now</span><span class="o">.</span>
-
-<span class="sb">``</span><span class="err">`</span><span class="n">python</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<p>We use this list to answer the original question. With 20-30 coins, only the states (8, 13), (9, 15), and (11, 18) guarantee us to lose if we play first. Of course we can test larger numbers of coins, but I'll leave that as an exercise for the motivated reader. My full code is available below!</p>
+<h5>Full Code</h5>
+<p>The code for this week was fun to write. I created a class called <code>GameState</code> that represents the game, has methods to yield valid moves, calculate expected value, return the best move to make, and more. I feel like I could have kept adding more and more functionality to this class, but I tried to keep it relatively focused for now.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
 
 
