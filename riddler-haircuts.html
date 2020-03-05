@@ -84,7 +84,7 @@ What is the expected wait time for getting a haircut from Tiffany?</p>
 <h5>Solution</h5>
 <p><strong>Our average wait time is just a bit longer than 14 minutes.</strong> </p>
 <h5>Methodology</h5>
-<p>Work in progress! I started by simulating ten million haircuts (that's a lot of idle minutes spent waiting...), and will tackle the analytical result this week, time allowing. For now, enjoy the code below!</p>
+<p>I solved this problem in two ways: first by running a simulation, then by writing the probability density function analytically. Fortunately, my two results converged, and they both resulted in the final value of 14.0625. The simulation code is highly efficient, allowing you to run tens of millions of scenarios nearly instantly. </p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">trials</span> <span class="o">=</span> <span class="mi">10</span><span class="n">_000_000</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">trials</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
@@ -92,6 +92,12 @@ What is the expected wait time for getting a haircut from Tiffany?</p>
 </pre></div>
 
 
+<p>The analytical work, on the other hand, was much more complicated, and, forgive me, but I'll leave my scrapwork out of this week's writeup. Instead, I'll show the three components of the problem in separate charts and how they add up to a legitimate probability density function in the image below. Indeed we can use these density functions to calculate the exact value, and it was fun to see the progression of each of the three cases build up to the whole. Those three cases are:
+<em> <strong>A</strong> - the case in which the customer ahead of us always chooses Tiffany. We must wait until she finishes the current haircut, plus an additional 15 minutes for the next customer. This occurs 25% of the time.
+</em> <strong>B</strong> - the case in which the customer ahead of us doesn't care about the barber, but Tiffany becomes the first available. Our wait time is the same as in <strong>A</strong>, which is Tiffany's cut time plus an additional 15 minutes. This occurs 18.75% of the time, which is calculated by multiplying 75% (the likelihood that the customer ahead of us does <em>not</em> prefer Tiffany) and 25% (the odds that Tiffany finishes first among her three other colleagues.
+* <strong>C</strong> - finally, we tackle the best-case scenario, where the customer ahead of us doesn't prefer Tiffany and is able to be served by a different barber. Therefore, we only have to wait for Tiffany to finish her current cut before we can be seated. The complicating element here is that Tiffany must <em>not</em> finish before any of the other barbers, which makes the probability distribution slightly more complicated to evaluate.</p>
+<p>In any case, when we sum each of the possibilities together, we get the chart on the far right, which lets us calculate the probability of being seated within some range of times, such as "between 10 and 15 minutes" or "between 10:00 and 10:01 minutes".</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200228-riddler.png"></p>
 <h5>Full Code</h5>
 <p>Simulation code is below. It's fast! You can run 10 million scenarios in a snap of the fingers.</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -135,6 +141,70 @@ What is the expected wait time for getting a haircut from Tiffany?</p>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="mi">10</span><span class="n">_000_000</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+
+
+<p>And lastly, the code to generate the probability density functions and plot, which were coded somewhat manually based on my calculations.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Customer ahead of us prefers Tiffany, so we wait for her</span>
+<span class="sd">    to finish her current cut plus one more before our turn.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">15</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tiffany finishes first, so we have to wait for her finish</span>
+<span class="sd">    time plus the full time for another haircut ahead of us</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">15</span> <span class="o">**</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="mi">15</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">15</span><span class="p">))</span> <span class="o">**</span> <span class="mi">3</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tiffany doesn&#39;t finish first, and the customer ahead of us</span>
+<span class="sd">    didn&#39;t prefer her, so we can be served as soon as she&#39;s done.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">45</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">((</span><span class="mi">15</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">15</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">d</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sum the individual components by weight&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1875</span> <span class="o">+</span> <span class="n">c</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5625</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=-</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Case A: 25%</span><span class="se">\n</span><span class="s2">Customer prefers Tiffany&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Case B: 18.75%</span><span class="se">\n</span><span class="s2">No pref., Tiffany available&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Case B: 56.25</span><span class="si">%%</span><span class="se">\n</span><span class="s2">No pref., Another available&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Total: A + B + C</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10001</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1875</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5625</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;0.95&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1875</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;0.95&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5625</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;0.95&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;0.95&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.07</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div></p>
         </div>
       </div>
