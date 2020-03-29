@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Unstable Dice</h1>
+          <label class="text-muted">Mar 27, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>Rolling and re-rolling dice is our task for this week's <a href="https://fivethirtyeight.com/features/can-you-get-the-gloves-out-of-the-box/">Riddler Classic</a>. Each time we roll, we replace the sides of the dice with the values of our previous roll. This makes for a tricky probability space, but a very fun Python class to write and some markov chain analysis to crunch in order to solve it. Here's the full prompt.</p>
+<blockquote>
+You start with a fair 6-sided die and roll it six times, recording the results of each roll. You then write these numbers on the six faces of another, unlabeled fair die. For example, if your six rolls were 3, 5, 3, 6, 1 and 2, then your second die wouldn’t have a 4 on it; instead, it would have two 3s.
+<br><br>
+Next, you roll this second die six times. You take those six numbers and write them on the faces of yet another fair die, and you continue this process of generating a new die from the previous one.
+<br><br>
+Eventually, you’ll have a die with the same number on all six faces. What is the average number of rolls it will take to reach this state?
+<br><br>
+<strong>Extra credit:</strong> Instead of a standard 6-sided die, suppose you have an N-sided die, whose sides are numbered from 1 to N. What is the average number of rolls it would take until all N sides show the same number?
+</blockquote>
+
+<h5>Solution</h5>
+<p><strong>In the game starting with a fair, six-sided die, it takes an average of 9.66 rolls to reach a single number on all sides.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sides</th>
+<th>Expected Rolls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>2.0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3.85714</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5.77931</td>
+</tr>
+<tr>
+<td>5</td>
+<td>7.71198</td>
+</tr>
+<tr>
+<td>6</td>
+<td>9.65599</td>
+</tr>
+<tr>
+<td>7</td>
+<td>11.60815</td>
+</tr>
+<tr>
+<td>8</td>
+<td>13.566288</td>
+</tr>
+<tr>
+<td>9</td>
+<td>15.529088</td>
+</tr>
+</tbody>
+</table>
+<p>While I haven't explicitly derived a formula for an $N$-sided dice, it feels reasonable to speculate that the pattern of "two extra turns per additional side of the dice" could continue for some time, though it likely falls off in magnitude as we increase the number of sides substantially. I'll have to save the formal analysis for another time.</p>
+<h5>Methodology</h5>
+<p>Starting with a six-sided dice is computationally difficult, but solvable. The key challenge is calculating the many combinations of probabilities for the intermediate positions of the game. For example, when we start with a standard dice, we could end up with over 46,000 different roll permutations! Of course, many of those permutations can be treated the same for the sake of our game (e.g. [3, 3, 4, 4, 5, 5] is the same as [5, 4, 3, 3, 4, 5]), but grouping the probabilities is not easy.</p>
+<p>The workhorse of this week's puzzle is the <a href="https://en.wikipedia.org/wiki/Multinomial_distribution">Multinomial Distribution</a>. The Multinomial Distribution lets us calculate the probability of various combinations of observed dice throws. For example, it can tell us the probability of observing $x_1$ ones, $x_2$ twos, $x_3$ threes, and so on, from six throws of a standard dice.</p>
+<p>In a fairly simple case, suppose we have thrown the dice several times and now have two numbers remaining. Suppose those numbers are one and six, and we have 2 ones and 4 sixes on the sides of the dice. We can use the Multinomial Distribution to tell us the likelihood of observing different combinations of throws. In python, we use it like this.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">multinomial</span>
+
+<span class="c1"># a six-sided dice with 2 ones and 4 sixes on the sides</span>
+<span class="c1"># n is the number of sides; p is the probability of each number being rolled</span>
+<span class="n">dice</span> <span class="o">=</span> <span class="n">multinomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">/</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="o">/</span><span class="mi">6</span><span class="p">])</span>
+
+<span class="c1"># what is the probability of rolling 6 sixes? Use the probability mass function</span>
+<span class="n">dice</span><span class="o">.</span><span class="n">pmf</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>  <span class="c1"># 0.08779149519890264</span>
+
+<span class="c1"># what about rolling 6 ones?</span>
+<span class="n">dice</span><span class="o">.</span><span class="n">pmf</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>  <span class="c1"># 0.0013717421124828531</span>
+
+<span class="c1"># what about rolling 4 ones and 2 sixes?</span>
+<span class="n">dice</span><span class="o">.</span><span class="n">pmf</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>  <span class="c1"># 0.0823045267489711</span>
+</pre></div>
+
+
+<p>What we learn from this is that with this dice, we win the game roughly 9% of the time in one more turn. This represents the probability of rolling all 6 sixes plus the probability of rolling all six ones. Otherwise, we continue the game with the new number of ones and sixes according to our roll.</p>
+<p>To make this easier, I wrote a class in Python called <code>Dice</code>, that handles all the probability calculations behind the scenes. A new game is started by creating a <code>Dice</code> with six sides, where each value on the sides shows up once:</p>
+<div class="highlight"><pre><span></span><span class="c1"># create a six-sided dice with one of each number</span>
+<span class="n">Dice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># or we could create a six sided dice with 2 ones and 4 sixes, like before</span>
+<span class="c1"># the actual numbers don&#39;t matter - what matters is the number of unique values</span>
+<span class="n">Dice</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+
+<span class="c1"># we can calculate the probability of moving from one Dice to another easily</span>
+<span class="n">Dice</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span><span class="o">.</span><span class="n">transition_vector</span><span class="p">()</span>
+<span class="c1"># output is below, where Dice([1, 5]) is added to Dice([5, 1]) for simplicity</span>
+<span class="c1"># {&lt;Dice(6,)&gt;: 0.0891632373113855,</span>
+<span class="c1">#  &lt;Dice(1, 5)&gt;: 0.2798353909465022,</span>
+<span class="c1">#  &lt;Dice(2, 4)&gt;: 0.4115226337448561,</span>
+<span class="c1">#  &lt;Dice(3, 3)&gt;: 0.2194787379972568}</span>
+
+<span class="c1"># we can also calculate the number of steps expected before the game ends</span>
+<span class="n">Dice</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span>
+<span class="c1"># we expect to have to roll 6.58 more times before the game ends</span>
+<span class="c1"># 6.584840446909428</span>
+</pre></div>
+
+
+<p>Ultimately, to answer the question for a six-sided Dice, we use just one line:</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">Dice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span>
+<span class="mf">9.655991483885606</span>
+</pre></div>
+
+
+<h5>Full Code</h5>
+<p>Quite a bit of code for this week's solution. We have a utility function, <code>multinomial_domain</code> that lists all the possible permutations of dice rolls we could see. But the heavy lifting is done by the <code>Dice</code> class, which has methods for calculating roll probabilities, state transitions, a complete directed graph of nodes and edges, a transition matrix, and ultimately an <code>expected_value</code> method, which returns the number of expected rolls to end the game.</p>
+<p>At this point, the code works well for small dice, but for anything more than 10 sides, the brute force nature of calculating probabilities breaks down.</p>
+<div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Solution to the Riddler Classic from March 27, 2020</span>
+<span class="sd">https://fivethirtyeight.com/features/can-you-get-the-gloves-out-of-the-box/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">multinomial</span>
+
+
+<span class="k">def</span> <span class="nf">multinomial_domain</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">list</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields all lists of length `k` whose values sum to `n`. This comprises the</span>
+<span class="sd">    entire domain space of the multinomial distribution. For example, if we have</span>
+<span class="sd">    n=2 and k=3, we want to generate all lists of length 3 with values that sum</span>
+<span class="sd">    to 2, including all permutations which is</span>
+<span class="sd">    [[0, 0, 2], [0, 1, 1], [0, 2, 0], [1, 0, 1], [1, 1, 0], [2, 0, 0]]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int, the number of multinomial trials to run</span>
+<span class="sd">    k : int, the number of categories that could be chosen for each trial</span>
+
+<span class="sd">    Yields</span>
+<span class="sd">    ------</span>
+<span class="sd">    x : a list of integers</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; list(multinomial_domain(n=2, k=3))</span>
+<span class="sd">    [[0, 0, 2], [0, 1, 1], [0, 2, 0], [1, 0, 1], [1, 1, 0], [2, 0, 0]]</span>
+
+<span class="sd">    &gt;&gt;&gt; list(multinomial_domain(n=6, k=2))</span>
+<span class="sd">    [[0, 6], [1, 5], [2, 4], [3, 3], [4, 2], [5, 1], [6, 0]]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># we solve this recursively, so if we have only one slot remaining, then we</span>
+    <span class="c1"># fill it with whatever value is left. Otherwise, we loop backwards through</span>
+    <span class="c1"># all permutations calling this function to fill lists of smaller sizes</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">permutation</span> <span class="ow">in</span> <span class="n">multinomial_domain</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">value</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">+</span> <span class="n">permutation</span>
+
+
+<span class="k">class</span> <span class="nc">Dice</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Models an n-sided dice for the purposes of solving the Riddler Classic.</span>
+
+<span class="sd">    We construct a dice by specifying the number of unique values written on the</span>
+<span class="sd">    sides. For example, if we call Dice([1, 1, 1, 1, 1, 1]), then it means we</span>
+<span class="sd">    have a dice with six sides and each side has a unique value. Dice([2, 2, 2])</span>
+<span class="sd">    also represents a six-sided dice, but with only three unique values.</span>
+
+<span class="sd">    We track the number of unique values rather than the values themselves</span>
+<span class="sd">    because it lets us calculate transition probabilities from one state to the</span>
+<span class="sd">    next. A transition probability tells us the probability that we end up with</span>
+<span class="sd">    a Dice with X unique values, given that we start with a Dice with Y uniques.</span>
+
+<span class="sd">    Behind the scenes we model this dice using a multinomial distribution, where</span>
+<span class="sd">    each side of the dice has an equal likelihood (but each value&#39;s probability</span>
+<span class="sd">    is in proportion to the number of occurrences on the sides of the dice.)</span>
+
+<span class="sd">    For example, suppose we have a standard 6-sided Dice. We create a new Dice</span>
+<span class="sd">    instance by calling `Dice([1, 1, 1, 1, 1, 1])`. We want to solve for the</span>
+<span class="sd">    expected number of throws until the Dice only has one unique value remaining</span>
+<span class="sd">    which is a Dice([6]) instance.</span>
+
+<span class="sd">    We call `Dice([1, 1, 1, 1, 1, 1]).expected_value()`, which gives the result</span>
+<span class="sd">    of 9.655991483885606, meaning it takes 9.66 turns on average to reach the</span>
+<span class="sd">    end of the game.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    uniques : Tuple[int, ...] a tuple containing the number of unique values on</span>
+<span class="sd">        the sides of the dice. The sum of the values in `uniques` should match</span>
+<span class="sd">        the number of sides of the dice. For example, a six-sided dice with the</span>
+<span class="sd">        values [1, 2, 2, 4, 5, 5] would be passed as uniques=(1, 1, 2, 2)</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # unique values are sorted and zeros are dropped upon instantiation</span>
+<span class="sd">    &gt;&gt;&gt; Dice([2, 1, 2, 1, 0, 0]).uniques</span>
+<span class="sd">    (1, 1, 2, 2)</span>
+
+<span class="sd">    &gt;&gt;&gt; # two dice with the same unique sides are equal</span>
+<span class="sd">    &gt;&gt;&gt; a = Dice([1, 1, 2, 0, 1])</span>
+<span class="sd">    &gt;&gt;&gt; b = Dice([0, 2, 1, 1, 1])</span>
+<span class="sd">    &gt;&gt;&gt; a == b</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &gt;&gt;&gt; Dice([1, 1, 1, 1, 1, 1]).expected_value()</span>
+<span class="sd">    9.655991483885606</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uniques</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uniques</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">uniques</span> <span class="k">if</span> <span class="n">u</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_sides</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uniques</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unique_sides</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uniques</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span> <span class="o">=</span> <span class="n">multinomial</span><span class="p">(</span>
+            <span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_sides</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="n">u</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_sides</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">uniques</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Ensure that two Dice with the same sorted unique sides are equal&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uniques</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">uniques</span>
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Sort Dice objects by their `uniques` tuple values&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uniques</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">uniques</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The Dice hash is the same as the hash for the uniques tuple. We need to</span>
+<span class="sd">        define the hash for this object so it can be used as a dictionary key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uniques</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;String representation of the Dice object&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;&lt;Dice{self.uniques}&gt;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">domain_permutations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">list</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yields all permutations of the domain of this dice. For example, suppose</span>
+<span class="sd">        we have a six-sided dice with only two numbers left. We yield all valid</span>
+<span class="sd">        orderings of the rolls we could get</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">multinomial_domain</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_sides</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unique_sides</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">domain</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a set of sorted tuples that fully describe the possibility space</span>
+<span class="sd">        of rolling the Dice. For example, if we have a six-sided Dice with two</span>
+<span class="sd">        unique values on the sides, then the domain set is all permutations of</span>
+<span class="sd">        the numbers we could roll. We return Dice objects for each possibility.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; # a dice with two unique sides and six sides total</span>
+<span class="sd">        &gt;&gt;&gt; Dice((2, 4)).domain()</span>
+<span class="sd">        {&lt;Dice(1, 5)&gt;, &lt;Dice(3, 3)&gt;, &lt;Dice(6,)&gt;, &lt;Dice(2, 4)&gt;}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">Dice</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_permutations</span><span class="p">()}</span>
+
+    <span class="k">def</span> <span class="nf">transition_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a dictionary of the domain set and the transition probabilities</span>
+<span class="sd">        to each one. Keys are Dice objects, and values are floats that sum to 1.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; # a dice with two unique sides and six sides total</span>
+<span class="sd">        &gt;&gt;&gt; vector = Dice((2, 4)).transition_vector()</span>
+<span class="sd">        &gt;&gt;&gt; for key, probability in vector.items():</span>
+<span class="sd">        ...     print(f&quot;{key}: {probability:.6f}&quot;)</span>
+<span class="sd">        &lt;Dice(6,)&gt;: 0.089163</span>
+<span class="sd">        &lt;Dice(1, 5)&gt;: 0.279835</span>
+<span class="sd">        &lt;Dice(2, 4)&gt;: 0.411523</span>
+<span class="sd">        &lt;Dice(3, 3)&gt;: 0.219479</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vector</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_permutations</span><span class="p">():</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">Dice</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">vector</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vector</span>
+
+    <span class="k">def</span> <span class="nf">graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a directed graph mapping the transition from each Dice object to</span>
+<span class="sd">        other Dice objects. Edge weights are transition probabilities.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">_graph</span><span class="p">(</span><span class="n">dice</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">new_state</span><span class="p">,</span> <span class="n">probability</span> <span class="ow">in</span> <span class="n">dice</span><span class="o">.</span><span class="n">transition_vector</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">dice</span><span class="p">,</span> <span class="n">new_state</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">probability</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">G</span>
+
+        <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">new_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transition_vector</span><span class="p">():</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">_graph</span><span class="p">(</span><span class="n">new_state</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">G</span>
+
+    <span class="k">def</span> <span class="nf">transition_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a square transition matrix that defines transition probabilities</span>
+<span class="sd">        from each Dice to each other dice. The matrix is sorted from high unique</span>
+<span class="sd">        values to low unique values, meaning the right-most column is the ending</span>
+<span class="sd">        state. Rows sum to one. Also returns the node index as an array.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; values, idx = Dice((3, 3)).transition_matrix()</span>
+<span class="sd">        &gt;&gt;&gt; values</span>
+<span class="sd">        array([[0.40252058, 0.20897634, 0.05358368, 0.33491941],</span>
+<span class="sd">               [0.27983539, 0.41152263, 0.21947874, 0.08916324],</span>
+<span class="sd">               [0.1875    , 0.46875   , 0.3125    , 0.03125   ],</span>
+<span class="sd">               [0.        , 0.        , 0.        , 1.        ]])</span>
+<span class="sd">        &gt;&gt;&gt; idx</span>
+<span class="sd">        [&lt;Dice(1, 5)&gt;, &lt;Dice(2, 4)&gt;, &lt;Dice(3, 3)&gt;, &lt;Dice(6,)&gt;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span>
+        <span class="n">nodelist</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_array</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="n">nodelist</span><span class="p">),</span> <span class="n">nodelist</span>
+
+    <span class="k">def</span> <span class="nf">expected_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the expected number of throws before all sides of this dice have</span>
+<span class="sd">        the same value. Uses the Dice&#39;s directed graph to perform a markov chain</span>
+<span class="sd">        analysis of the time it takes to reach the end of the game.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; Dice((1, 1, 1, 1, 1, 1)).expected_value()</span>
+<span class="sd">        9.655991483885606</span>
+
+<span class="sd">        &gt;&gt;&gt; Dice((1, 5)).expected_value()</span>
+<span class="sd">        4.623000562655744</span>
+
+<span class="sd">        &gt;&gt;&gt; Dice((2, 4)).expected_value()</span>
+<span class="sd">        6.584840446909428</span>
+
+<span class="sd">        &gt;&gt;&gt; Dice((3, 3)).expected_value()</span>
+<span class="sd">        7.205027730889816</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unique_sides</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+
+        <span class="c1"># here we solve the expected number of rolls to end with a single-value</span>
+        <span class="c1"># dice using a transition matrix and some linear algebra</span>
+        <span class="n">M</span><span class="p">,</span> <span class="n">nodelist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transition_matrix</span><span class="p">()</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">M</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="n">nodelist</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)]</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
