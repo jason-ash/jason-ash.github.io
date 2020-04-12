@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Spam</h1>
+          <label class="text-muted">Apr 10, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>We're tracking spam messages in this week's <a href="https://fivethirtyeight.com/features/can-you-catch-the-free-t-shirt/">Riddler Classic</a>. Spammers post messages on the column's comment board, and they also reply to each other's messages. Over a three-day time period, how many spam messages and replies should we expect to see? It turns out there are some fascinating connections with continuously compounding interest rates, which we'll derive from the differential equation. I'll also write a simulation using numpy and poisson distributions to verify our analytical approach.</p>
+<blockquote>
+Last week’s Riddler column garnered six comments on Facebook. However, every single one of those comments was spam. Sometimes, spammers even reply to other spammers’ comments with yet more spam. This got me thinking.
+<br><br>
+Over the course of three days, suppose the probability of any spammer making a new comment on this week’s Riddler column over a very short time interval is proportional to the length of that time interval. (For those in the know, I’m saying that spammers follow a Poisson process.) On average, the column gets one brand-new comment of spam per day that is not a reply to any previous comments. Each spam comment or reply also gets its own spam reply at an average rate of one per day.
+<br><br>
+For example, after three days, I might have four comments that were not replies to any previous comments, and each of them might have a few replies (and their replies might have replies, which might have further replies, etc.).
+<br><br>
+After the three days are up, how many total spam posts (comments plus replies) can I expect to have?
+</blockquote>
+
+<h5>Solution</h5>
+<p><strong>Over a three-day period, we should expect just over 19 total spam messages, including original posts and replies.</strong> </p>
+<p>Why isn't the answer 7? At first glance, it might seem like we could estimate the spam messages by counting:</p>
+<ul>
+<li>Day 1: we expect one fresh spam message.</li>
+<li>Day 2: we expect one fresh spam message and one reply to the existing message. Three total.</li>
+<li>Day 3: we expect one fresh spam message and one reply each to our previous three. Seven total.</li>
+</ul>
+<p>However, this approach oversimplifies the continuous nature of the problem. I'll try to explain in the next section.</p>
+<h5>Analytical Approach</h5>
+<p>Instead of counting messages per day, we want to be slightly more nuanced. The process we're modeling is continuous, meaning there is a small probability of a message appearing at every instant over the three days. So instead of modeling days, we could model hours to be more accurate. Or instead of modeling hours, we could model minutes, and then seconds, and so on. Eventually, the intervals become infinitesimal (vanishingly small), and we think in terms of "continuous spam rates" rather than "messages per day".</p>
+<p>At any instant, our spam rate is equal to $s+1$, where $s$ is the number of spam messages we've already received. This means that if we currently have 5 messages, our new spam rate is 6 per day. It's as if each spam message creates a new "channel" for other spammers to reply to, which increases the total rate of spam we expect.</p>
+<p>We are dealing with instantaneous rates of change, so we can use notation like $\Delta s$ to indicate the rate of change of $s$. Our model can be written as: $\Delta s = \lambda(s+1)\Delta t$, meaning that the rate of spam ($\Delta s$) is equal to the base spam rate ($\lambda$) times the number of spam messages we've received plus one ($s + 1$) times the change in time ($\Delta t$).</p>
+<p>We can rewrite this relationship as a <a href="https://en.wikipedia.org/wiki/Differential_equation">differential equation</a>: $\frac{\delta s}{\delta t} = \lambda (s + 1)$. But instead of $\frac{\delta s}{\delta t}$, we want $\frac{\delta t}{\delta s}$, which represents the derivative of time with respect to spam, so we have $\frac{\delta t}{\delta s} = \frac{1}{\lambda (s + 1)}$, also written as $t'(s) = \frac{1}{\lambda (s + 1)}$.</p>
+<p>Now, to calculate $t$ we integrate $\frac{1}{\lambda (s + 1)}$, which, for constant $\lambda$ is equal to $\frac{ln(s+1)}{\lambda}$, which gives us $t=\frac{ln(s+1)}{\lambda}$. Solving for $s$ gives us $s=e^{\lambda t} - 1$. When $t=3$ (for a three day time period), we calculate an expected spam total of 19.0855.</p>
+<p><strong>It is not surprising that $e$ shows up in our answer. This problem is exactly like <a href="https://en.wikipedia.org/wiki/Compound_interest#Continuous_compounding">continuously compounding interest</a>, where the spam rate is the interest rate, and each spam message earns "interest" (i.e. attracts additional spam) continuously at a constant rate.</strong></p>
+<h5>Simulation</h5>
+<p>We can also simulate this process. While it is impossible to simulate a continuous process exactly, we can <a href="https://en.wikipedia.org/wiki/Discretization">discretize</a> the process into many small, finite steps. The more steps we have, the more accurate our model will be.</p>
+<p>Assume we want to model the likelihood of receiving a spam message or reply during each second of each of the three days. We will model 259,200 intervals (the number of seconds in three days.) During each second, the rate of spam we expect is equal to the number of messages we've received so far plus one, divided by the length of the interval (in days) $\frac{s+1}{\text{interval length}}$. During the first second, the probability we receive a spam message is $\frac{1}{86,400}$, or roughly 0.000012. In the simulation code, we flip a theoretical coin, and if it lands on heads (with probability 0.000012), we add one spam message to our total. Then the next interval will have a different spam rate, and we continue the process for all the intervals, adding the spam messages as we go.</p>
+<p>When the number of intervals is sufficiently large (e.g. 100 or more intervals per day), and the number of simulations is also large (e.g. 1000 or more), we find that the average number of spam messages converges to $e^{\lambda t} - 1$, or 19.0855.</p>
+<div class="highlight"><pre><span></span><span class="c1"># using the `model` function (source code below)</span>
+<span class="c1"># results will vary because of the random nature of the simulation</span>
+<span class="c1"># the output is an array of samples - the mean tells us the expected value</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">model</span><span class="p">(</span><span class="n">trials</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">intervals_per_day</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="mf">19.03231</span>
+</pre></div>
+
+
+<h5>Full Code</h5>
+<p>The code this week is a partly vectorized simulation function. We break the three-day time period into thousands of small intervals and simulate the spam messages received in each interval. It runs relatively quickly up to roughly one million trials and converges very closely to the analytical solution, $e^x-1$ for $x=3$.</p>
+<div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Solution to the Riddler Classic from April 10, 2020</span>
+<span class="sd">https://fivethirtyeight.com/features/can-you-catch-the-free-t-shirt/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span>
+    <span class="n">trials</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">spam_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">n_days</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">intervals_per_day</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solves the Riddler Classic via simulation. Breaks each day into intervals,</span>
+<span class="sd">    then draws from a poisson distribution for each interval, summing the total</span>
+<span class="sd">    spam messages over the course of n_days. The simulation is vectorized across</span>
+<span class="sd">    trials, and is quite fast for 1+ million trials.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trials : int, the number of simulations to run, e.g. 1000</span>
+<span class="sd">    spam_rate : float, default 1.0, the average number of spam messages received</span>
+<span class="sd">        over the course of a full day</span>
+<span class="sd">    n_days : int, default 3, the number of days to simulate</span>
+<span class="sd">    intervals_per_day : int, default 1000, the number of intervals each day is</span>
+<span class="sd">        broken into for the purposes of simulation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    spam : np.ndarray of the total number of spam received over the time period</span>
+<span class="sd">        for each trial; will have shape == (trials,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># we want to loop through each interval of the simulation, keeping track of</span>
+    <span class="c1"># how many spam messages we receive and what the current spam rate is (which</span>
+    <span class="c1"># goes up as we receive more spam.) At each interval, we randomly draw from</span>
+    <span class="c1"># a poisson distribution to determine how much more spam we receive.</span>
+    <span class="n">spam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">trials</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_days</span> <span class="o">*</span> <span class="n">intervals_per_day</span><span class="p">):</span>
+        <span class="n">lam</span> <span class="o">=</span> <span class="p">(</span><span class="n">spam</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">spam_rate</span> <span class="o">/</span> <span class="n">intervals_per_day</span>
+        <span class="n">spam</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">lam</span><span class="o">=</span><span class="n">lam</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">spam</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="mi">1</span><span class="n">_000_000</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Average spam: {results.mean():,.4f}&quot;</span><span class="p">)</span>  <span class="c1"># ~19.0512 depending on seed</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
