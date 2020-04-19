@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Game of Life</h1>
+          <label class="text-muted">Apr 17, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>In memory of John Conway, we explore a modified version of the famous "Game of Life" in this week's <a href="https://fivethirtyeight.com/features/can-you-solve-the-chess-mystery/">Riddler Classic</a>. I implemented the Game in python, which ended up being so much fun that many of the features aren't strictly required to solve the problem. Instead, they were amusing diversions that helped me explored this surprisingly nuanced game. It's probably just as Conway would have intended.</p>
+<blockquote>
+Riddler Nation was deeply saddened to hear of the loss of John Conway last week. It is only fitting that this week’s Classic is a spin on Conway’s Game of Life.
+<br><br>
+In the most common version of the game, there is an infinite grid of square cells, which are initially either alive or dead. Each square has eight neighbors — the eight squares that surround it. And after every step in time, or “tick,” all the cells are simultaneously updated according to the following rules:
+<ul>
+<li>A living cell with two or three living neighbors remains living.</li>
+<li>A living cell with any other number of living neighbors dies (due to under- or overpopulation).</li>
+<li>A dead cell with exactly three living neighbors comes alive (due to reproduction).</li>
+</ul>
+These relatively simple rules lead to some startlingly complex, emergent behaviors. For example, some formations of living cells are known as “oscillators,” which change form from one tick to the next, ultimately returning back to their original formation.
+<br><br>
+Now suppose we were to replace the infinite grid with a finite grid that has periodic boundary conditions, so that cells in the first row are neighbors with cells in the last row, and cells in the first column are neighbors with cells in the last column. If there are three rows and N columns, what is the smallest value of N that can support an oscillator?
+</blockquote>
+
+<h5>Solution</h5>
+<p><strong>The smallest grid with an oscillation has just three rows and four columns, and there are two variations.</strong> Each of these grids oscillates every other evolution, as shown in the gifs below.</p>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            ⬜⬜⬛⬛<br>⬜⬜⬛⬛<br>⬜⬜⬛⬛
+        </div>
+        <div class="col-sm">
+            ⬜⬛⬛⬜<br>⬜⬛⬛⬜<br>⬜⬛⬛⬜
+        </div>
+    </div>
+</div>
+
+<div class="container, mt-3">
+    <div class="row">
+        <div class="col-sm">
+            <img class="img-fluid mx-auto d-block" height=200 src="../images/20200417-riddler1.gif">
+        </div>
+        <div class="col-sm">
+            <img class="img-fluid mx-auto d-block" height=200 src="../images/20200417-riddler2.gif">
+        </div>
+    </div>
+</div>
+
+<h5>Methodology</h5>
+<p>One way of completing this puzzle was to build a "Game of Life" simulator, then test all the different starting grids we might expect. This turned out to be a fun programming challenge. I implemented the game using a class called <code>Grid</code>, which tracks alive and dead cells in an array and provides many different utility methods to evaluate the game.</p>
+<p>Each <code>Grid</code> object takes a starting array of cells, coded by zeros and ones. The <code>__repr__</code> object of each <code>Grid</code> returns a unicode representation of the alive (black) and dead (white) cells. For example, this code snippet creates a <code>Grid</code> with four alive cells.</p>
+<div class="highlight"><pre><span></span><span class="n">cells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">Grid</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span>
+</pre></div>
+
+
+<p>⬜⬛⬜<br>
+⬛⬜⬛<br>
+⬜⬛⬜<br></p>
+<p>There are also a few convenience constructors. For example, we can create a randomly-generated <code>Grid</code> by calling the <code>random</code> classmethod.</p>
+<div class="highlight"><pre><span></span><span class="n">Grid</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+
+
+<p>⬜⬛⬜⬜⬜⬛⬜⬜⬜⬛<br>
+⬜⬜⬜⬜⬛⬜⬛⬛⬛⬜<br>
+⬛⬜⬛⬛⬛⬛⬛⬛⬛⬛<br>
+⬜⬜⬛⬛⬛⬜⬛⬜⬜⬜<br>
+⬜⬜⬛⬛⬛⬛⬛⬜⬛⬛<br></p>
+<p>Once we have a Grid object, we can move forward in time using the <code>evolve</code> method. This method moves forward by <code>n</code> ticks and returns the updated <code>Grid</code>, following the well established rules of the Game.</p>
+<div class="highlight"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p>⬛⬜⬛⬜⬜⬜⬜⬜⬜⬛<br>
+⬜⬛⬛⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬛⬛⬜⬜⬜⬜⬜⬜⬛<br>
+⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬛⬛⬜⬜⬜⬜⬛⬛⬛⬛<br></p>
+<p>All of this is implemented behind the scenes, as it were, by using a <code>padded_cells</code> array that handles the wrapping logic specified in the problem. The <code>padded_cells</code> array links the top row of cells to the bottom, the left to the right, and each corner to its opposite corner. To calculate each cell's "score" (the number of live neighbors), we use the <code>convolve2d</code> function from <code>scipy</code>, which is typically used to scan images and group boxes of pixels together in a process called <a href="https://en.wikipedia.org/wiki/Convolution">convolution</a>. (It's commonly used in deep learning for image recognition in <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">Convolutional Neural Networks</a>.) Once we know each cell's "score", we can simulate whether it lives or dies in the next evolution.</p>
+<p>There are a few other convenience methods, like plotting the <code>Grid</code> and creating a .gif out of its evolutions.</p>
+<p>For example, it can be fun to view the evolution of a larger grid to see what patterns emerge. This code generates a 30x30 cell array and lets it run for 100 iterations. You can see several static clumps of cells, and a few oscillators - notably the <a href="https://www.conwaylife.com/wiki/Blinker">"blinker"</a>.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200417-riddler3.gif"></p>
+<p>However, my favorite feature, which has very little to do with the original problem, is a special constructor. You may have seen the <a href="https://xkcd.com/2293/">xkcd tribute to John Conway</a>. Calling <code>Grid.conway()</code> creates a Grid that follows this pattern.</p>
+<div class="highlight"><pre><span></span><span class="n">Grid</span><span class="o">.</span><span class="n">conway</span><span class="p">()</span>
+</pre></div>
+
+
+<p>⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬛⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬛⬜⬛⬜⬛⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬛⬜⬜⬛⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br>
+⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜<br></p>
+<p>And the .gif of this Grid's evolution matches the original comic. It was a fantastic tribute.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200417-riddler4.gif"></p>
+<h5>Full Code</h5>
+<p>This code technically solves the Riddler Classic, but I had much more fun trying to implement a more complete version of the Game of Life that accepts a grid of any size. It still implements the wrapping (see <code>Grid.padded_cells</code>), and also implements a few visualization methods, like plotting and creating .gifs.</p>
+<div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Solution to the Riddler Classic from April 17, 2020&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">gif</span>  <span class="c1"># https://github.com/maxhumber/gif, `pip install gif`</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">convolve2d</span>
+
+
+<span class="k">class</span> <span class="nc">Grid</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Grid object representing Conway&#39;s Game of Life. Can model the Riddler</span>
+<span class="sd">    variation of the game by passing `wrapped=True`, which will connect the</span>
+<span class="sd">    edges of the grid with the opposite sides, creating a continuous surface.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cells : np.ndarray with integer or boolean dtype, specifies the size of the</span>
+<span class="sd">            grid and alive cells (1) and dead cells (0)</span>
+<span class="sd">    wrapped : boolean, default True, indicates whether the Riddler wrapping</span>
+<span class="sd">              conditions apply to this Grid. If True, then the grid &quot;wraps&quot; so</span>
+<span class="sd">              edges connect to opposite edges and corners connect to opposite</span>
+<span class="sd">              corners. If False, the grid is assumed to be infinite and empty</span>
+<span class="sd">              outside of the array passed when the Grid is instantiated.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; cells = np.array([[0, 1, 1, 0, 0],</span>
+<span class="sd">    ...                   [0, 0, 0, 1, 1],</span>
+<span class="sd">    ...                   [1, 1, 0, 1, 0]])</span>
+<span class="sd">    &gt;&gt;&gt; Grid(cells)</span>
+<span class="sd">    ⬜⬛⬛⬜⬜</span>
+<span class="sd">    ⬜⬜⬜⬛⬛</span>
+<span class="sd">    ⬛⬛⬜⬛⬜</span>
+
+<span class="sd">    &gt;&gt;&gt; Grid(cells) == Grid(cells)</span>
+<span class="sd">    True</span>
+
+<span class="sd">    &gt;&gt;&gt; # initialize a random grid, but set a seed for reproducibility</span>
+<span class="sd">    &gt;&gt;&gt; grid = Grid.random((3, 5), random_state=42)</span>
+<span class="sd">    &gt;&gt;&gt; grid</span>
+<span class="sd">    ⬜⬛⬜⬜⬜</span>
+<span class="sd">    ⬛⬜⬜⬜⬛</span>
+<span class="sd">    ⬜⬜⬜⬜⬛</span>
+
+<span class="sd">    &gt;&gt;&gt; # iterate one step and return a new Grid object</span>
+<span class="sd">    &gt;&gt;&gt; grid.evolve(1)</span>
+<span class="sd">    ⬜⬜⬜⬜⬛</span>
+<span class="sd">    ⬛⬜⬜⬜⬛</span>
+<span class="sd">    ⬜⬜⬜⬜⬛</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cells</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">wrapped</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="n">cells</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">wrapped</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Represent each element of the grid as a &#39;pixel&#39;&quot;&quot;&quot;</span>
+        <span class="n">read_row</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;⬛&quot;</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="s2">&quot;⬜&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">row</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">read_row</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Two Grids are equal if they have the same `cells` array&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cells</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">cells</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">conway</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">wrapped</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Specific constructor that creates a Grid object in the shape of the xkcd</span>
+<span class="sd">        tribute to John Conway, found here: https://xkcd.com/2293/</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; Grid.conway()</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬛⬜⬛⬛⬛⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬛⬜⬛⬜⬛⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬛⬜⬜⬛⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span>
+            <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">17</span>
+        <span class="p">]</span>
+        <span class="n">cells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+        <span class="n">cells</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">Grid</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="n">wrapped</span><span class="o">=</span><span class="n">wrapped</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">wrapped</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a randomly-initialized Grid of a given size</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; grid = Grid.random((3, 5), random_state=42)</span>
+<span class="sd">        &gt;&gt;&gt; grid</span>
+<span class="sd">        ⬜⬛⬜⬜⬜</span>
+<span class="sd">        ⬛⬜⬜⬜⬛</span>
+<span class="sd">        ⬜⬜⬜⬜⬛</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Grid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">),</span> <span class="n">wrapped</span><span class="o">=</span><span class="n">wrapped</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">padded_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper attribute that adds a padding layer around the cells in the grid.</span>
+<span class="sd">        This padded  array is used later for calculating the score of each cell,</span>
+<span class="sd">        and also handles the wrapping methodology if applicable.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; grid = Grid.random((3, 5), random_state=123)</span>
+<span class="sd">        &gt;&gt;&gt; grid</span>
+<span class="sd">        ⬜⬛⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬛⬛⬜</span>
+<span class="sd">        ⬛⬛⬜⬛⬜</span>
+<span class="sd">        &gt;&gt;&gt; grid.padded_cells</span>
+<span class="sd">        array([[0, 1, 1, 0, 1, 0, 1],</span>
+<span class="sd">               [0, 0, 1, 0, 0, 0, 0],</span>
+<span class="sd">               [0, 0, 0, 1, 1, 0, 0],</span>
+<span class="sd">               [0, 1, 1, 0, 1, 0, 1],</span>
+<span class="sd">               [0, 0, 1, 0, 0, 0, 0]])</span>
+<span class="sd">        &gt;&gt;&gt; Grid(grid.padded_cells, wrapped=True)</span>
+<span class="sd">        ⬜⬛⬛⬜⬛⬜⬛</span>
+<span class="sd">        ⬜⬜⬛⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬛⬛⬜⬜</span>
+<span class="sd">        ⬜⬛⬛⬜⬛⬜⬛</span>
+<span class="sd">        ⬜⬜⬛⬜⬜⬜⬜</span>
+<span class="sd">        &gt;&gt;&gt; grid = Grid.random((3, 5), random_state=123, wrapped=False)</span>
+<span class="sd">        &gt;&gt;&gt; Grid(grid.padded_cells)</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬛⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬛⬛⬜⬜</span>
+<span class="sd">        ⬜⬛⬛⬜⬛⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜⬜⬜</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># first we create an array with an extra padding layer</span>
+        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">padded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">rows</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">cols</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># copy the original cell values into the middle</span>
+        <span class="n">padded</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span>
+
+        <span class="c1"># if we aren&#39;t wrapping the grid, just return this padded array</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">padded</span>
+
+        <span class="c1"># otherwise, handle wrapping conditions</span>
+        <span class="c1"># first, copy each edge onto the opposite (padded) side</span>
+        <span class="n">padded</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>     <span class="c1"># bottom to top</span>
+        <span class="n">padded</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>     <span class="c1"># top to bottom</span>
+        <span class="n">padded</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># right to left</span>
+        <span class="n">padded</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># left to right</span>
+
+        <span class="c1"># copy each corner to the opposite corner</span>
+        <span class="n">padded</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">padded</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">padded</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">padded</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">padded</span>
+
+    <span class="k">def</span> <span class="nf">cell_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the number of living neighbor cells for each cell on the grid.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; grid = Grid.random((3, 5), random_state=123)</span>
+<span class="sd">        &gt;&gt;&gt; grid</span>
+<span class="sd">        ⬜⬛⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬛⬛⬜</span>
+<span class="sd">        ⬛⬛⬜⬛⬜</span>
+<span class="sd">        &gt;&gt;&gt; grid.cell_score()</span>
+<span class="sd">        array([[3, 3, 5, 3, 3],</span>
+<span class="sd">               [3, 4, 4, 2, 3],</span>
+<span class="sd">               [2, 3, 5, 2, 3]])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># the convolution scanner is a 3x3 array of ones, expect a middle zero</span>
+        <span class="n">scanner</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">scanner</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">convolve2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">padded_cells</span><span class="p">,</span> <span class="n">scanner</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">evolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Move the simulation forward by n steps, default 1</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; grid = Grid.random((3, 5), random_state=123)</span>
+<span class="sd">        &gt;&gt;&gt; grid</span>
+<span class="sd">        ⬜⬛⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬛⬛⬜</span>
+<span class="sd">        ⬛⬛⬜⬛⬜</span>
+<span class="sd">        &gt;&gt;&gt; grid.evolve(1)</span>
+<span class="sd">        ⬛⬛⬜⬛⬛</span>
+<span class="sd">        ⬛⬜⬜⬛⬛</span>
+<span class="sd">        ⬛⬛⬜⬛⬛</span>
+<span class="sd">        &gt;&gt;&gt; grid.evolve(2)</span>
+<span class="sd">        ⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_evolve</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
+            <span class="s2">&quot;Iterate a single step&quot;</span>
+            <span class="n">scores</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">cell_score</span><span class="p">()</span>
+            <span class="n">evolution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">cells</span><span class="p">)</span>
+
+            <span class="c1"># live cells stay alive if they have exactly 2 or 3 alive neighbors</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">cells</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">scores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">scores</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="n">evolution</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># live cells die if they have any other number of neighbors</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">cells</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">scores</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">scores</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">evolution</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># dead cells spawn if they have exactly three live neighbors</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">cells</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">scores</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">evolution</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">return</span> <span class="n">Grid</span><span class="p">(</span><span class="n">evolution</span><span class="p">,</span> <span class="n">wrapped</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="p">)</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="n">_evolve</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">grid</span>
+
+    <span class="k">def</span> <span class="nf">period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If this Grid produces an identical grid after `n` evolutions, then</span>
+<span class="sd">        its period is equal to `n`. If it does not, then return -1.</span>
+
+<span class="sd">        `n` may be one for a grid that doesn&#39;t change after an evolution.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        limit : int, the maximum number of evolutions to search for a pattern</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; cells = np.zeros(shape=(4, 4), dtype=int)</span>
+<span class="sd">        &gt;&gt;&gt; cells[1:-1, 1:-1] = 1</span>
+<span class="sd">        &gt;&gt;&gt; grid = Grid(cells)</span>
+<span class="sd">        &gt;&gt;&gt; grid</span>
+<span class="sd">        ⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬛⬛⬜</span>
+<span class="sd">        ⬜⬛⬛⬜</span>
+<span class="sd">        ⬜⬜⬜⬜</span>
+<span class="sd">        &gt;&gt;&gt; grid.period()</span>
+<span class="sd">        1</span>
+
+<span class="sd">        &gt;&gt;&gt; cells = np.zeros(shape=(5, 5), dtype=int)</span>
+<span class="sd">        &gt;&gt;&gt; cells[2, 1:-1] = 1</span>
+<span class="sd">        &gt;&gt;&gt; grid = Grid(cells)</span>
+<span class="sd">        &gt;&gt;&gt; grid</span>
+<span class="sd">        ⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬛⬛⬛⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜</span>
+<span class="sd">        ⬜⬜⬜⬜⬜</span>
+<span class="sd">        &gt;&gt;&gt; grid.period()</span>
+<span class="sd">        2</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">limit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">i</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the grid in matplotlib&quot;&quot;&quot;</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;0.92&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Blues&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ax</span>
+
+    <span class="k">def</span> <span class="nf">create_gif</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a .gif file with each frame moving forward one evolution.</span>
+<span class="sd">        Adds a few extra frames of the starting position to the beginning.</span>
+<span class="sd">        Uses the `gif` library: https://github.com/maxhumber/gif</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frames : int, the number of evolutions to simulate</span>
+<span class="sd">        filename : str, the name of the file, e.g. &quot;life.gif&quot;</span>
+<span class="sd">        duration : int, the delay between frames, in microseconds</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@gif.frame</span>
+        <span class="k">def</span> <span class="nf">_plot</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">grid</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+
+        <span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="n">_plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">_plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">frames</span><span class="p">)]</span>
+        <span class="n">gif</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">images</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">grid_generator</span><span class="p">(</span><span class="n">columns</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Grid</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generator function that yields all permutations of Grids</span>
+<span class="sd">    that could be made with a (rows x columns) shape.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; list(grid_generator(2, 1))</span>
+<span class="sd">    [⬜⬜, ⬜⬛, ⬛⬜, ⬛⬛]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">generator</span> <span class="o">=</span> <span class="n">product</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="n">rows</span><span class="o">*</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">cells</span> <span class="ow">in</span> <span class="n">generator</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">Grid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cells</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
