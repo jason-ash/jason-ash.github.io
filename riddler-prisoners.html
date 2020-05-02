@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+  </script>
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@ashjasont" />
+  <meta name="twitter:site" content="@ashjasont" />
+  <meta name="twitter:image" content="https://www.jtash.com/images/20200501-riddler.png"/>
+  <meta name="twitter:description" content="This week's Riddler uses probability to design the ultimate jailbreak. Without communicating, what strategy should the prisoners use to maximize their odds of success?" />
+  <meta property="twitter:title" content="Riddler Prisoners" />
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Prisoners</h1>
+          <label class="text-muted">May 1, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This week's <a href="https://fivethirtyeight.com/features/can-you-flip-your-way-to-freedom/">Riddler</a> uses probability to design the ultimate jailbreak. Prisoners are given the opportunity to flip coins, and if all flipped coins are heads, each prisoner is released. Without communicating, what strategy should the prisoners use to maximize their odds of success? Here is the full problem text.</p>
+<blockquote>
+You are locked in the dungeon of a faraway castle with three fellow prisoners (i.e., there are four prisoners in total), each in a separate cell with no means of communication. But it just so happens that all of you are logicians (of course).
+<br><br>
+To entertain themselves, the guards have decided to give you all a single chance for immediate release. Each prisoner will be given a fair coin, which can either be fairly flipped one time or returned to the guards without being flipped. If all flipped coins come up heads, you will all be set free! But if any of the flipped coins comes up tails, or if no one chooses to flip a coin, you will all be doomed to spend the rest of your lives in the castle’s dungeon.
+<br><br>
+The only tools you and your fellow prisoners have to aid you are random number generators, which will give each prisoner a random number, uniformly and independently chosen between zero and one.
+<br><br>
+What are your chances of being released?
+<br><br>
+<i>Extra credit:</i> Instead of four prisoners, suppose there are N prisoners. Now what are your chances of being released?
+</blockquote>
+
+<h5>Solution</h5>
+<p><strong>The ideal strategy allows the four prisoners to escape 28.5% of the time.</strong> To achieve this outcome, each prisoner generates a random number. If the prisoner's random number is less than 0.34, the prisoner should flip a coin. Otherwise, the prisoner should return the coin unflipped. This strategy seeks to minimize the total number of coins flipped (because that gives the greatest odds that <em>all</em> coins flipped will be heads), while seeking to ensure that at least one coin is flipped.</p>
+<p>Why the threshold of 0.34? This maximizes the overall probability of success. The chart below shows how the odds of success (the lines) change for different threshold values on the x-axis. We see that the odds of success for a group of four prisoners is maximized when x = 0.34.</p>
+<p>We also see that larger groups of prisoners should choose smaller thresholds, because they want to keep the total number of coins low. Ultimately, large groups of N prisoners should expect roughly 25% odds of success.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200501-riddler.png"></p>
+<h5>Methodology</h5>
+<p>In a perfect world, with full communication, a group of prisoners would flip just one coin, giving overall odds of success of 50%. (For example, they would nominate the oldest prisoner to be the only one to flip a coin.) However, without the ability to communicate, the prisoners have to design a system to minimize the number of coins flipped without being so stingy that no coins are flipped. Fortunately, because our prisoners are all logicians, they can design a strategy that relies on perfect group behavior.</p>
+<p>To limit the number of coins, a prisoner only flips if their random number is less than some value, $p$. Then the total number of coins flipped is a <a href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial distribution</a>. For four prisoners and a threshold of $p$, the likelihood of k coins being flipped is:</p>
+<p>$$P(k\ \text{coins}\ |\ \text{threshold}=p)={N \choose k}p^k(1-p)^{N-k}$$</p>
+<p>So, for example, if $p=0.3$, the probability of 2 coins being flipped is </p>
+<p>$$P(2\ \text{coins}\ |\ \text{threshold}=0.3)={4 \choose 2}0.3^2(0.7)^{2} = 0.2646$$. </p>
+<p>In python, we do the same thing with the <code>binom</code> distribution from <code>scipy.stats</code>.</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">binom</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">binom</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="mf">0.2646</span>
+</pre></div>
+
+
+<p>We also know that if we flip 2 coins, the probability of both being heads is 25%. Therefore, if we set a threshold of 0.3, we flip 2 coins with probability 0.2646 and both of them are heads with probability 0.25. The probability of success is their product, 0.06615. Of course, we could have flipped 0, 1, 2, 3, or 4 coins, so we do the same calculation for each number. The only exception is that 0 coins is a guaranteed failure, so we can omit it. The sum of all possible numbers of coins is our final answer.</p>
+<p>Mathematically, we want to find the value of $p$ that maximizes this function, where $N$ is the number of prisoners.</p>
+<p>$$P(\text{success}\ |\ \text{threshold}=p)=\sum_{k=1}^{N} \frac{{N \choose k}p^k(1-p)^{N-k}}{2^k}$$</p>
+<p>Usually, we find the maximum of a function by taking its derivative and solving for the point where the derivative equals zero. However, this equation is somewhat unweildy. We can turn to a <a href="https://www.wolframalpha.com/input/?i=maximize+4p*%281-p%29%5E3%2F2+%2B+6p%5E2*%281-p%29%5E2%2F4+%2B+4p%5E3*%281-p%29%2F8+%2B+p%5E4%2F16">calculator</a> instead. We find that four prisoners maximize their odds of success when $p\approx0.342$.</p>
+<p>In python, I wrote a function that calculates the odds of success, given a threshold, $p$, and a number of prisoners, $N$. By calculating this function for many values of $p$, we generate the lines in the chart above, and can use any solver to identify the value of $p$ that maximizes the output. We can also change the value of $N$ to explore strategies for larger numbers of prisoners. These larger groups pursue similar strategies, but the threshold value, $p$, gets lower and lower. Ultimately, the probability of success for an infinitely large groups appears to converge to 25%.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">binom</span>
+
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">prisoners</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the probability that the prisoners will be released.</span>
+
+<span class="sd">    Solves the Riddler Classic from May 1, 2020:</span>
+<span class="sd">    fivethirtyeight.com/features/can-you-flip-your-way-to-freedom/</span>
+
+<span class="sd">    The prisoners will be released if every coin flipped by a</span>
+<span class="sd">    prisoner is heads. Each prisoner decides to flip a coin if</span>
+<span class="sd">    they draw a random number less than `threshold`; otherwise,</span>
+<span class="sd">    they will decide not to flip a coin. If no prisoners flip</span>
+<span class="sd">    a coin, which occurs when `threshold == 0`, then it results</span>
+<span class="sd">    in a failure.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # no prisoners flip coins; should be a failure</span>
+<span class="sd">    &gt;&gt;&gt; model(0.0)</span>
+<span class="sd">    0.0</span>
+
+<span class="sd">    &gt;&gt;&gt; # all prisoners flip coins; should be 2**-prisoners</span>
+<span class="sd">    &gt;&gt;&gt; model(1.0, prisoners=4)</span>
+<span class="sd">    0.0625</span>
+
+<span class="sd">    &gt;&gt;&gt; # one prisoner should always flip a coin</span>
+<span class="sd">    &gt;&gt;&gt; model(1.0, prisoners=1)</span>
+<span class="sd">    0.5</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># determine the number of coins that will be flipped based</span>
+    <span class="c1"># on the threshold value. This is a binomial distribution,</span>
+    <span class="c1"># with p=threshold and n=prisoners. As a shortcut, we omit</span>
+    <span class="c1"># the possibility of zero dice, because it would result in</span>
+    <span class="c1"># an automatic loss. For each number of coins we multiply</span>
+    <span class="c1"># by the probability of flipping all heads: 2 ** -k.</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">binom</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">prisoners</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="n">dist</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">prisoners</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span> 
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
