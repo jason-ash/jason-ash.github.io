@@ -22,7 +22,7 @@
 	  gtag('js', new Date());
 	  gtag('config', 'UA-122705782-1');
   </script>
-  
+    
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:creator" content="@ashjasont" />
@@ -100,8 +100,8 @@ What are your chances of being released?
 <p>To limit the number of coins, a prisoner only flips if their random number is less than some value, $p$. Then the total number of coins flipped is a <a href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial distribution</a>. For four prisoners and a threshold of $p$, the likelihood of k coins being flipped is:</p>
 <p>$$P(k\ \text{coins}\ |\ \text{threshold}=p)={N \choose k}p^k(1-p)^{N-k}$$</p>
 <p>So, for example, if $p=0.3$, the probability of 2 coins being flipped is </p>
-<p>$$P(2\ \text{coins}\ |\ \text{threshold}=0.3)={4 \choose 2}0.3^2(0.7)^{2} = 0.2646$$. </p>
-<p>In python, we do the same thing with the <code>binom</code> distribution from <code>scipy.stats</code>.</p>
+<p>$$P(2\ \text{coins}\ |\ \text{threshold}=0.3)={4 \choose 2}0.3^2(0.7)^{2} = 0.2646$$</p>
+<p>In python, we do the same thing with the <code>binom</code> distribution from <code>scipy.stats</code>. Here, the <code>pmf</code> method represents the probability mass function, which is the probability that a distribution takes a certain discrete value.</p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">binom</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">binom</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="mf">0.2646</span>
