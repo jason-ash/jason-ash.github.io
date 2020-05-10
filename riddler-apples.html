@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@ashjasont" />
+  <meta name="twitter:site" content="@ashjasont" />
+  <meta name="twitter:image" content="https://www.jtash.com/images/20200508-riddler.png"/>
+  <meta name="twitter:description" content="This was a challenging Riddler about a toddler's inefficient eating habits. How long will it take to eat an entire apple? Spoiler - it's likely to outlast the toddler's attention span by quite some time." />
+  <meta property="twitter:title" content="Riddler Apples" />
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Apples</h1>
+          <label class="text-muted">May 8, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This was a challenging <a href="https://fivethirtyeight.com/features/can-you-eat-an-apple-like-a-toddler/">Riddler</a> about a toddler's inefficient eating habits. Our picky toddler takes a bite from an Apple once every minute, and only if the randomly chosen spot has skin left on it. How long will it take to eat the entire apple? Spoiler - it's likely to outlast the toddler's attention span by quite some time. Here is the problem text with full details of this disastrously slow process.</p>
+<blockquote>
+A certain 2-year-old is eating his favorite snack: an apple. But he eats it in a very particular way. When he first receives the apple, and every minute thereafter, he rotates the apple to a random position and then looks down. If there’s any skin of the apple left in the spot where he plans to take a bite, then he will indeed take that bite. But if there’s no skin there (i.e., he’s already taken bites at that spot), he won’t take a bite and will rotate the apple for another minute. Once he has bitten off all the skin of the apple, he’s done eating.
+<br><br>
+Suppose the apple is a sphere with a radius of 4 centimeters, and that each bite of the apple is a circle of the sphere whose radius, as measured along the apple’s curved surface, is 1 centimeter. On average, how many minutes will it take this 2-year-old to eat the apple?
+</blockquote>
+
+<h5>Solution</h5>
+<p>This week's answer is not perfectly precise, as I used a monte carlo simulation. Furthermore, because of the complexity of the problem, I was only able to run 10,000 scenarios, which means there is likely some variance in my answer compared to the "true" result. In any case, I can say with confidence that the toddler will be eating this apple for quite some time: <strong>on average, it will take roughly 550 minutes (more than 9 hours), to completely finish the snack.</strong></p>
+<p>Of course, because the process is random, each apple will be eaten differently. I've illustrated one scenario in the gif below. The apple is projected onto 2-dimensions (just like a map of the globe). Each red dot represents a point of skin on the apple's surface. At each step, the toddler chooses a random location, takes a bite, and the points in a nearby circle turn yellow. This gif shows just the first 150 bites, and it's not nearly enough to finish the apple. In fact this particular simulation doesn't finish until the 557th bite!</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200508-riddler.gif"></p>
+<p>(I also found it fascinating to note how each bite is projected in two dimensions. Obviously each bite is a perfect circle on the 3-dimensional apple, but in this 2-dimensional projection, the bites can becomes distorted. Bites near the equator are nearly circular in shape, but bites near the poles become increasingly stretched out, owing to this particular method of projecting the globe into two dimensions. This is the exact same phenomena that makes Greenland look enormous on maps of the world.)</p>
+<p>In addition to this single scenario, we can also view the distribution of all 10,000 simulations. This chart shows a histogram of the number of bites it took for every apple to be eaten. The results range from roughly 200 minutes (3+ hours), to 1200 minutes (20 hours!)</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200508-riddler.png"></p>
+<h5>Methodology</h5>
+<p>This was a challenging problem, and the only way I could think to tackle it was to simulate the process. In addition, rather than modeling the apple as a continuous, smooth sphere, I modeled a network of "sensors" scattered randomly and uniformly across its surface. I tracked whether each sensor still contained skin, and the simulation ended once all sensors had been "eaten". With a large enough number of sensors, e.g. 50,000, there should be little accuracy lost compared to a continuous model, and counting the sensors simplifies the problem significantly.</p>
+<p>Before I dive into the details, I also found it helpful to list the steps needed to solve this problem. These are like "sub-problems" that each contribute to the overall solution. Each of these problems presented its own unique challenges.</p>
+<ol>
+<li>Choose a point randomly and uniformly on the apple's surface.</li>
+<li>Once a point is chosen, determine the area of the "bite".</li>
+<li>After each bite, track the total area of skin remaining.</li>
+</ol>
+<p>Let's review how to solve each of these.</p>
+<p><strong><em>Choose a random point on the apple's surface</em></strong></p>
+<p>A pitfall to avoid here is that many algorithms for choosing uniform points in two dimensions will not be uniform in three dimensions. As an example, suppose you start by generating a random latitude (-90° to 90°) and longitude (-180° to 180°), then plotting that point on the sphere. After many iterations, you will find that your points are concentrated near the poles, and not uniformly distributed across the sphere's surface. This happens because each ring of latitude (which is chosen with the same probability) is a different size on the sphere: the rings near the equator are much larger, and points will be more spread out than the rings near the poles, which are smaller and more dense.</p>
+<p>Fortunately, this problem is well known, and many <a href="https://mathworld.wolfram.com/SpherePointPicking.html">algorithms</a> exist to choose uniform points on the surface of a sphere. The next decision we have to make is what coordinate system we want to use. I chose cartesian coordinates, expessed as $(x, y, z)$, in particular because it makes the next step easier.</p>
+<p>In the python program I wrote, you can generate a random point on the surface of the apple easily. However, it's not quite as easy to imagine where those points are on the surface. I also included a method to be able to translate between cartesian and latitude/longitude systems.</p>
+<div class="highlight"><pre><span></span><span class="c1"># set a random seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># create a new Apple object</span>
+<span class="n">apple</span> <span class="o">=</span> <span class="n">Apple</span><span class="p">()</span>
+
+<span class="c1"># generate random points using cartesian coordinates (x, y, z)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">apple</span><span class="o">.</span><span class="n">uniform_cartesian_samples</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># array([[-3.41545755, -1.81930207, -1.01231898],</span>
+<span class="c1">#        [ 0.48038245,  3.28718639,  2.22792243]])</span>
+
+<span class="c1"># convert to latitude/longitude (values in radians)</span>
+<span class="n">coords</span> <span class="o">=</span> <span class="n">apple</span><span class="o">.</span><span class="n">cartesian_to_lat_lon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+<span class="c1"># array([[-2.65215412, -0.25586232],</span>
+<span class="c1">#        [ 1.42568564,  0.59074583]])</span>
+</pre></div>
+
+
+<p><strong><em>Determine the bite area</em></strong></p>
+<p>I chose to operate primarily in cartesian coordinates because it is easy to calculate "great circle distance". Great circle distance is the shortest distance between two points along the surface of the sphere. It's the path that an ant would take to walk from A to B. In this problem, a bite includes points up to 1cm away from the initial point. I wrote a method that returns all points within a certain radius, which will give us the points affected by a bite.</p>
+<div class="highlight"><pre><span></span><span class="c1"># set a random seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># create a new Apple object</span>
+<span class="n">apple</span> <span class="o">=</span> <span class="n">Apple</span><span class="p">()</span>
+
+<span class="c1"># select a random point to bite</span>
+<span class="n">bite_center</span> <span class="o">=</span> <span class="n">apple</span><span class="o">.</span><span class="n">random_sensor</span><span class="p">()</span>
+<span class="c1"># array([-3.22979111,  2.21487782, -0.81410417])</span>
+
+<span class="c1"># identify all the points within a 1cm radius</span>
+<span class="n">bite_points</span> <span class="o">=</span> <span class="n">apple</span><span class="o">.</span><span class="n">nearby_sensors</span><span class="p">(</span><span class="n">bite_center</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="c1"># array([[-3.13397650e+00,  2.47674898e+00, -2.09537066e-01],</span>
+<span class="c1">#        [-2.96055610e+00,  2.67557705e+00, -2.76396469e-01],</span>
+<span class="c1">#        [-3.40621913e+00,  1.98721351e+00, -6.69816170e-01],</span>
+<span class="c1">#        ...</span>
+<span class="c1">#        [-2.81781602e+00,  2.32745616e+00, -1.62568777e+00],</span>
+<span class="c1">#        [-3.49884821e+00,  1.82905212e+00, -6.42362473e-01],</span>
+<span class="c1">#        [-2.86722633e+00,  2.76529043e+00, -3.63568444e-01]])</span>
+</pre></div>
+
+
+<p><strong><em>Track the total area of skin remaining</em></strong></p>
+<p>Now that we have a way to choose random points and calculate the size of a bite, we need a way to track the status of each sensor. One way to do this is to keep a <code>set</code> of sensors on the apple's surface that still have skin. Every time we take a bite, some sensors may be removed from this set if they are included in the bite. Once the set has zero elements (no more skin on the apple), then the simulation ends. In python, the <code>eat</code> method performs one simulation and returns the number of bites it took to eat the apple.</p>
+<div class="highlight"><pre><span></span><span class="c1"># set a random seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># create an Apple object with 50,000 points tracked on its surface</span>
+<span class="n">apple</span> <span class="o">=</span> <span class="n">Apple</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">n_sensors</span><span class="o">=</span><span class="mi">50000</span><span class="p">)</span>
+
+<span class="c1"># simulate one apple being eaten - returns the number of bites</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">apple</span><span class="o">.</span><span class="n">eat</span><span class="p">()</span>  <span class="c1"># returns 577 - nearly 10 hours to eat!</span>
+</pre></div>
+
+
+<h5>Full Code</h5>
+<p>This week's solution is brute force and inefficient. It took several hours to generate 10,000 simulations. However, I think the logical flow of the program makes sense, and could be improved in the future. I created a <code>Sphere</code> class that has methods related to spheres, and an <code>Apple</code> class that inherits these methods in order to solve the problem. In particular there are methods for each of the steps above, like choosing random points, converting between coordinate systems, and simulating an apple being eaten.</p>
+<div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Classes and functions to solve the Riddler Classic from May 8, 2020&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="k">class</span> <span class="nc">Sphere</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is used to model various properties of a sphere. For example, it</span>
+<span class="sd">    contains methods to calculate surface area, generate random, uniformly dist-</span>
+<span class="sd">    ributed points on the sphere&#39;s surface, calculate great circle distance bet-</span>
+<span class="sd">    ween points, and convert between coordinate systems such as cartesian, lati-</span>
+<span class="sd">    tude/longitude, etc.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; sphere = Sphere(radius=4.0)</span>
+<span class="sd">    &gt;&gt;&gt; sphere</span>
+<span class="sd">    &lt;Sphere(radius=4.0)&gt;</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(42)</span>
+<span class="sd">    &gt;&gt;&gt; points = sphere.uniform_cartesian_samples(2)</span>
+<span class="sd">    &gt;&gt;&gt; points</span>
+<span class="sd">    array([[ 2.40000818, -0.6680612 ,  3.12948158],</span>
+<span class="sd">           [ 3.90868531, -0.60092837, -0.60088624]])</span>
+
+<span class="sd">    &gt;&gt;&gt; sphere.cartesian_to_lat_lon(points)</span>
+<span class="sd">    array([[-0.27148532,  0.89846272],</span>
+<span class="sd">           [-0.1525474 , -0.15079237]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;&lt;Sphere(radius={self.radius:,.1f})&gt;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">uniform_cartesian_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an array of uniformly distributed points on the surface of this</span>
+<span class="sd">        sphere, expressed as cartesian coordinates, (x, y, z). The output array</span>
+<span class="sd">        will have shape (n_samples, 3).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># we generate these points by sampling from a standard normal</span>
+        <span class="c1"># distribution for x, y, z, then normalizing each vector</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="p">(</span><span class="n">points</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="n">points</span> <span class="o">/</span> <span class="n">factor</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">great_circle_distance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the great circle distance between a single point and an array of</span>
+<span class="sd">        points. Points should be expressed in cartesian coordinates, (x, y, z).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># ensure factor is between -1 and 1 before passing to arccos</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="n">points</span> <span class="err">@</span> <span class="n">point</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">a_min</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">a_max</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">cartesian_to_lat_lon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts an array of cartesian points to an array of latitude/longitude.</span>
+<span class="sd">        The input array should have shape (n_samples, 3), and the output array</span>
+<span class="sd">        will have shape (n_sample, 2).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">latitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+        <span class="n">longitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">longitude</span><span class="p">,</span> <span class="n">latitude</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+
+<span class="k">class</span> <span class="nc">Apple</span><span class="p">(</span><span class="n">Sphere</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class represents an Apple as a sphere with radius r. This class will be</span>
+<span class="sd">    used to solve the Riddler Classic from May 8, 2020, found here:</span>
+<span class="sd">    fivethirtyeight.com/features/can-you-eat-an-apple-like-a-toddler/</span>
+
+<span class="sd">    The basic approach is to model the Apple as a sphere with a fixed number of</span>
+<span class="sd">    discrete &quot;sensor&quot; points spread uniformly and randomly across its surface.</span>
+<span class="sd">    The sensors are used to track whether that particular point on the Apple</span>
+<span class="sd">    still contains skin. With enough sensors, we approach a continuous model of</span>
+<span class="sd">    the Apple&#39;s surface.</span>
+
+<span class="sd">    Ultimately, to answer the Riddler, call the `eat` method, which will run a</span>
+<span class="sd">    monte carlo simulation of taking bites until all skin has been eaten.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; np.random.seed(42)</span>
+
+<span class="sd">    &gt;&gt;&gt; apple = Apple(radius=4)</span>
+<span class="sd">    &gt;&gt;&gt; apple</span>
+<span class="sd">    &lt;Apple(radius=4.0, n_sensors=10,000)&gt;</span>
+
+<span class="sd">    &gt;&gt;&gt; apple.sensors[:5]</span>
+<span class="sd">    array([[ 2.40000818, -0.6680612 ,  3.12948158],</span>
+<span class="sd">           [ 3.90868531, -0.60092837, -0.60088624],</span>
+<span class="sd">           [ 3.47558777,  1.68899767, -1.03323594],</span>
+<span class="sd">           [ 2.54700647, -2.17547878, -2.18633257],</span>
+<span class="sd">           [ 0.37406549, -2.95786657, -2.66666465]])</span>
+
+<span class="sd">    &gt;&gt;&gt; apple.random_sensor()</span>
+<span class="sd">    array([-3.22979111,  2.21487782, -0.81410417])</span>
+
+<span class="sd">    &gt;&gt;&gt; # run a single simulation of the bites it takes to finish the apple</span>
+<span class="sd">    &gt;&gt;&gt; apple.eat()</span>
+<span class="sd">    425</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">,</span> <span class="n">n_sensors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_sensors</span> <span class="o">=</span> <span class="n">n_sensors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sensors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uniform_cartesian_samples</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="n">n_sensors</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;&lt;Apple(&quot;</span>
+            <span class="n">f</span><span class="s2">&quot;radius={self.radius:,.1f}, &quot;</span>
+            <span class="n">f</span><span class="s2">&quot;n_sensors={self.n_sensors:,.0f})&gt;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">random_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a randomly selected sensor from the surface of the Apple&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensors</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_sensors</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">nearby_sensors</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns all sensors within a given radius of a point, measured along the</span>
+<span class="sd">        surface of the Apple (i.e. the great circle distance).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">great_circle_distance</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensors</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensors</span><span class="p">[</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="n">radius</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">eat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bite_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solves the Riddler by simulating eating this Apple. Start with a fresh</span>
+<span class="sd">        Apple, where every &quot;sensor&quot; on the Apple&#39;s surface contains skin. Then</span>
+<span class="sd">        we simulate taking a bite with a given radius, measured on the Apple&#39;s</span>
+<span class="sd">        surface. Each sensor within the bite radius is removed from the set of</span>
+<span class="sd">        sensors containing skin. Continue this process until no skin remains.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">skin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">sensor</span><span class="p">)</span> <span class="k">for</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensors</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">skin</span><span class="p">:</span>  <span class="c1"># keep going if at least one sensor has skin remaining</span>
+            <span class="n">location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_sensor</span><span class="p">()</span>
+            <span class="n">eaten</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nearby_sensors</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="n">location</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">bite_radius</span><span class="p">)</span>
+            <span class="n">skin</span> <span class="o">-=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">sensor</span><span class="p">)</span> <span class="k">for</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="n">eaten</span><span class="p">)</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">n</span>
+
+    <span class="k">def</span> <span class="nf">write_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Run simulations and write to a file until KeyboardInterrupt&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">trial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eat</span><span class="p">()</span>
+                    <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;{trial}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+
+    <span class="c1"># these simulations are quite slow: about 2 per second. As a result, I&#39;ll</span>
+    <span class="c1"># write the results to a file and run them in the background for a while.</span>
+    <span class="n">apple</span> <span class="o">=</span> <span class="n">Apple</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">n_sensors</span><span class="o">=</span><span class="mi">25000</span><span class="p">)</span>
+    <span class="n">apple</span><span class="o">.</span><span class="n">write_results</span><span class="p">(</span><span class="s2">&quot;20200508-riddler-results.txt&quot;</span><span class="p">)</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
