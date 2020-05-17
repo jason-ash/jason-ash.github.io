@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@ashjasont" />
+  <meta name="twitter:site" content="@ashjasont" />
+  <meta name="twitter:image" content="https://www.jtash.com/images/20200515-riddler1.png"/>
+  <meta name="twitter:description" content="This week's Riddler asks us to determine the best dice-rolling strategy for our weekly Dungeons and Dragons game. With the option to roll once, or roll multiple times with various combinations of maximums and minimums, how can we optimize the odds of rolling the number we want?" />
+  <meta property="twitter:title" content="Riddler Dungeon Dice" />
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Dungeon Dice</h1>
+          <label class="text-muted">May 15, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This week's <a href="https://fivethirtyeight.com/features/can-you-find-the-best-dungeons-dragons-strategy/">Riddler</a> asks us to determine the best dice-rolling strategy for our weekly Dungeons and Dragons game. With the option to roll once, or roll multiple times with various combinations of maximums and minimums, how can we optimize the odds of rolling the number we want?</p>
+<blockquote>
+The fifth edition of Dungeons & Dragons introduced a system of “advantage and disadvantage.” When you roll a die “with advantage,” you roll the die twice and keep the higher result. Rolling “with disadvantage” is similar, except you keep the lower result instead. The rules further specify that when a player rolls with both advantage and disadvantage, they cancel out, and the player rolls a single die. Yawn!
+<br><br>
+There are two other, more mathematically interesting ways that advantage and disadvantage could be combined. First, you could have “advantage of disadvantage,” meaning you roll twice with disadvantage and then keep the higher result. Or, you could have “disadvantage of advantage,” meaning you roll twice with advantage and then keep the lower result. With a fair 20-sided die, which situation produces the highest expected roll: advantage of disadvantage, disadvantage of advantage or rolling a single die?
+<br><br>
+Extra Credit: Instead of maximizing your expected roll, suppose you need to roll N or better with your 20-sided die. For each value of N, is it better to use advantage of disadvantage, disadvantage of advantage or rolling a single die?
+</blockquote>
+
+<h5>Solution</h5>
+<p>There are a few questions we have to answer this week. First, which of the three rolls produces the highest expected value? Rolling "disadvantage of advantage" produces an expected roll of 11.17 - the highest among our three options. Here, we roll 4 dice, taking the maximum of each group of two, then the minimum of those results.</p>
+<p>For the extra credit, it is easiest to view the results in a table. Below, the bold number in each row represents the highest odds of rolling at least that value. If we're trying to roll 14 or more, we should choose a single dice. Otherwise, we should choose the "disadvantage of advantage" technique.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Metric</th>
+<th align="right">Single Roll</th>
+<th align="right">Advantage of Disadvantage</th>
+<th align="right">Disadvantage of Advantage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Expected Value</td>
+<td align="right">10.5</td>
+<td align="right">9.8333375</td>
+<td align="right"><strong>11.1666625</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 1 or greater</td>
+<td align="right">100%</td>
+<td align="right">100%</td>
+<td align="right"><strong>100%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 2 or greater</td>
+<td align="right">95%</td>
+<td align="right">99.0%</td>
+<td align="right"><strong>99.5%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 3 or greater</td>
+<td align="right">90%</td>
+<td align="right">96.4%</td>
+<td align="right"><strong>98.0%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 4 or greater</td>
+<td align="right">85%</td>
+<td align="right">92.3%</td>
+<td align="right"><strong>95.6%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 5 or greater</td>
+<td align="right">80%</td>
+<td align="right">87.0%</td>
+<td align="right"><strong>92.2%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 6 or greater</td>
+<td align="right">75%</td>
+<td align="right">80.9%</td>
+<td align="right"><strong>87.9%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 7 or greater</td>
+<td align="right">70%</td>
+<td align="right">74.0%</td>
+<td align="right"><strong>82.8%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 8 or greater</td>
+<td align="right">65%</td>
+<td align="right">66.6%</td>
+<td align="right"><strong>77.0%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 9 or greater</td>
+<td align="right">60%</td>
+<td align="right">59.0%</td>
+<td align="right"><strong>70.1%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 10 or greater</td>
+<td align="right">55%</td>
+<td align="right">51.3%</td>
+<td align="right"><strong>63.6%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 11 or greater</td>
+<td align="right">50%</td>
+<td align="right">43.8%</td>
+<td align="right"><strong>56.3%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 12 or greater</td>
+<td align="right">45%</td>
+<td align="right">36.4%</td>
+<td align="right"><strong>48.7%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 13 or greater</td>
+<td align="right">40%</td>
+<td align="right">29.4%</td>
+<td align="right"><strong>41.0%</strong></td>
+</tr>
+<tr>
+<td align="left">Roll 14 or greater</td>
+<td align="right"><strong>35%</strong></td>
+<td align="right">23.0%</td>
+<td align="right">33.4%</td>
+</tr>
+<tr>
+<td align="left">Roll 15 or greater</td>
+<td align="right"><strong>30%</strong></td>
+<td align="right">17.2%</td>
+<td align="right">26.0%</td>
+</tr>
+<tr>
+<td align="left">Roll 16 or greater</td>
+<td align="right"><strong>25%</strong></td>
+<td align="right">12.1%</td>
+<td align="right">19.1%</td>
+</tr>
+<tr>
+<td align="left">Roll 17 or greater</td>
+<td align="right"><strong>20%</strong></td>
+<td align="right">7.8%</td>
+<td align="right">13.0%</td>
+</tr>
+<tr>
+<td align="left">Roll 18 or greater</td>
+<td align="right"><strong>15%</strong></td>
+<td align="right">4.4%</td>
+<td align="right">7.7%</td>
+</tr>
+<tr>
+<td align="left">Roll 19 or greater</td>
+<td align="right"><strong>10%</strong></td>
+<td align="right">2.0%</td>
+<td align="right">3.6%</td>
+</tr>
+<tr>
+<td align="left">Roll 20 or greater</td>
+<td align="right"><strong>5%</strong></td>
+<td align="right">0.5%</td>
+<td align="right">1.0%</td>
+</tr>
+</tbody>
+</table>
+<p>We can also visualize these results. The first chart shows the probability mass function - the probability of rolling exactly N. Each of the sub-charts' bars sums to 100%. We would use this chart to select the type of roll that gives us the best chance of rolling exactly N.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200515-riddler1.png"></p>
+<p>And for the extra credit, we can visualize the probabilty of rolling at least N. Each sub-chart starts at 100%, because a roll is guaranteed to produce at least 1. Then each type of roll decreases from there, with the curves differing slightly by the type of roll. For situations where we need a number of 14 or above, we should roll a single dice for the best odds. Otherwise, we should roll "disadvantage of advantage".</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200515-riddler2.png"></p>
+<h5>Methodology</h5>
+<p>There are lots of ways to solve this week's Riddler. I used python, but pen and paper, spreadsheets, or other software would work just as well. Here are a few functions that I used.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span><span class="p">,</span> <span class="n">product</span>
+
+
+<span class="c1"># here is an example of calculating the &quot;advantage&quot; roll. We simulate all</span>
+<span class="c1"># combinations of rolls: (1, 1), (1, 2), ..., (20, 19), (20, 20), then we</span>
+<span class="c1"># calculate the outcome by taking the maximum. We group the results by the</span>
+<span class="c1"># outcomes and sum the occurrences of each. We get a result that looks like</span>
+<span class="c1"># {1: 1, 2: 3, 3: 5, ..., 19: 37, 20: 39}.</span>
+<span class="n">advantage</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">advantage</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">advantage</span><span class="p">))}</span>
+
+
+<span class="c1"># here is an example of calculating the &quot;disadvantage of advantage&quot; roll,</span>
+<span class="c1"># abbreviated as &quot;d_upon_a&quot;. We simulate rolling four dice, taking the max</span>
+<span class="c1"># of each group of two, then the min of those. As before, we group the</span>
+<span class="c1"># results by the number we get, counting the number of occurrences. We get</span>
+<span class="c1"># a result that looks like {1: 799, 2: 2385, ..., 19: 4255, 20: 1521}.</span>
+<span class="n">d_upon_a</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">:]))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">d_upon_a</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">d_upon_a</span><span class="p">))}</span>
+
+
+<span class="c1"># then, given these dictionaries, we can calculate things like expected value.</span>
+<span class="c1"># if we call &gt;&gt;&gt; expected_value(advantage), it returns 13.825.</span>
+<span class="k">def</span> <span class="nf">expected_value</span><span class="p">(</span><span class="n">rolls</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns the expected value of a dictionary of rolls&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">rolls</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rolls</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
