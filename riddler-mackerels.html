@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:creator" content="@ashjasont" />
+  <meta name="twitter:site" content="@ashjasont" />
+  <meta name="twitter:description" content="This week's Riddler starts with a peculiar fact - 'Ohio' doesn't share any letters with the word 'mackerel', and it's the only state for which that is true. How many other state-word combinations can we find, and which states match with the longest words?" />
+  <meta property="twitter:title" content="Riddler Mackerels" />
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Mackerels</h1>
+          <label class="text-muted">May 22, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>This week's <a href="https://fivethirtyeight.com/features/somethings-fishy-in-the-state-of-the-riddler/">Riddler</a> starts with a peculiar fact - "Ohio" doesn't share any letters with the word "mackerel", and it's the only state for which that is true. How many other state/word combinations can we find, and which states match with the longest words? We'll use python's super efficient sets, lists, and dictionaries to crunch millions of combinations in under two seconds to find the answer.</p>
+<blockquote>
+Ohio is the only state whose name doesn’t share any letters with the word “mackerel.” It’s strange, but it’s true.
+<br><br>
+But that isn’t the only pairing of a state and a word you can say that about — it’s not even the only fish! Kentucky has “goldfish” to itself, Montana has “jellyfish” and Delaware has “monkfish,” just to name a few.
+<br><br>
+What is the longest “mackerel?” That is, what is the longest word that doesn’t share any letters with exactly one state? (If multiple “mackerels” are tied for being the longest, can you find them all?)
+<br><br>
+<strong>Extra credit:</strong> Which state has the most “mackerels?” That is, which state has the most words for which it is the only state without any letters in common with those words?
+</blockquote>
+
+<h5>Solution</h5>
+<p>Fortunately I have a <a href="https://www.jtash.com/riddler-state-superstrings">list of the US states</a> handy from a prior Riddler, so that should save a bit of time :)</p>
+<p>First, a comment on the word list: it contains 263,533 words, including such vernacular staples as "aa" (a form of lava flow), and "zzz" (a snoring sound), which are both valid in Scrabble. If there's a better validation of a word than its inclusion in the Scrabble dictionary, I'm not aware of it!</p>
+<p>Of those 263,533 words, the longest "mackerel" is a tie between the 23-letter powerhouses <strong>counterproductivenesses</strong>, which belongs to Alabama, and <strong>hydrochlorofluorocarbon</strong>, which belongs to Mississippi. (Sorry <em>pneumonoultramicroscopicsilicovolcanoconiosis</em>, your 45 letters were claimed by all 50 states.)</p>
+<p>As for the extra credit, the mackereliest (not a valid scrabble word) state is... <strong>Ohio!</strong> It is the proud owner of 11,342 mackerels, ranging from "man" to "untranslatablenesses" (much like some of the longest words on this list.)</p>
+<h5>Methodology</h5>
+<p>Like <a href="https://www.jtash.com/riddler-spelling-hexagons">other word puzzles</a> we've seen before, I was amazed at the power of my computer to solve this problem using brute force. The brute force approach tests the overlap between each word (263k) and each state (50) for more than 13 million comparisons in total. Fortunately, on my computer, these comparisons took less than two seconds! Here's how to solve it with efficient python code.</p>
+<p>First, the setup: we need to download the wordlist. I'll use <code>urllib</code> to request the words and parse them into a list.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+
+<span class="k">def</span> <span class="nf">get_words</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://norvig.com/ngrams/word.list&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Downloads and returns a set of words from the web&quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>For the actual work, I took advantage of a few data structures in python that are well suited to this task: sets, lists, and dictionaries. For example, instead of comparing "Alabama" with "ambulance", it is much faster to compare the <code>set</code> of letters in each word. Sets are data containers with unique elements, so the set of letters in "alabama" is <code>{'a', 'b', 'l', 'm'}</code>. We can quickly test whether sets have any overlap in a lightning fast built-in function called <code>isdisjoint</code>.</p>
+<div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s2">&quot;alabama&quot;</span><span class="p">)</span>
+<span class="c1"># {&#39;a&#39;, &#39;b&#39;, &#39;l&#39;, &#39;m&#39;}</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s2">&quot;ambulance&quot;</span><span class="p">)</span>
+<span class="c1"># {&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;e&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;u&#39;}</span>
+
+<span class="c1"># isdisjoint returns a boolean indicating if the sets have any overlap</span>
+<span class="c1"># we should expect False here, because they share at least one letter.</span>
+<span class="nb">set</span><span class="p">(</span><span class="s2">&quot;alabama&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="s2">&quot;ambulance&quot;</span><span class="p">))</span>
+<span class="c1"># False</span>
+
+<span class="c1"># verify that &quot;ohio&quot; doesn&#39;t share letters with &quot;mackerel&quot;</span>
+<span class="nb">set</span><span class="p">(</span><span class="s2">&quot;ohio&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="s2">&quot;mackerel&quot;</span><span class="p">))</span>
+<span class="c1"># True</span>
+</pre></div>
+
+
+<p>Because we want to test every state for every word, it makes sense to store the sets of letters for each state. This saves a bit of time because we only convert the state names into sets of letters once. If we didn't do this small optimization, the program would take roughly four seconds instead of two. Still a small number, but worth a 50% speedup!</p>
+<div class="highlight"><pre><span></span><span class="c1"># STATES is a list of states [&quot;Alabama&quot;, &quot;Alaska&quot;, ...]</span>
+<span class="c1"># create sets of letters: case sensitive, so we call .lower(), and remove spaces</span>
+<span class="n">STATES</span> <span class="o">=</span> <span class="p">{</span><span class="n">state</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">STATES</span><span class="p">}</span>
+</pre></div>
+
+
+<p>Now, for a given word we want to find all the states that don't share any letters with it. If the result of <code>disjoint_states</code> is a list with a single state, then we know we've found a "mackerel". All that remains is to loop through the entire word list and filter for the words that only match with a single state, which we do in <code>get_mackerels</code>.</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">disjoint_states</span><span class="p">(</span><span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of states that share no letters with the given word.</span>
+<span class="sd">    If no states meet the criteria, then returns an empty list, [].</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; disjoint_states(&quot;mackerel&quot;)</span>
+<span class="sd">    [&#39;Ohio&#39;]</span>
+
+<span class="sd">    &gt;&gt;&gt; disjoint_states(&quot;abcdefghijklmnopqrstuvwxyz&quot;)</span>
+<span class="sd">    []</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">word_letters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">state</span> <span class="k">for</span> <span class="n">state</span><span class="p">,</span> <span class="n">state_letters</span> <span class="ow">in</span> <span class="n">STATES</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">word_letters</span><span class="o">.</span><span class="n">isdisjoint</span><span class="p">(</span><span class="n">state_letters</span><span class="p">)</span>
+    <span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">get_mackerels</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dictionary of &quot;mackerels&quot; - words that share letters with only one</span>
+<span class="sd">    state and no others. Output will be {word: state} for all mackerel words.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># loop through the whole word list - it is still pretty quick for 250k words</span>
+    <span class="n">mackerels</span> <span class="o">=</span> <span class="p">{</span><span class="n">word</span><span class="p">:</span> <span class="n">disjoint_states</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">get_words</span><span class="p">()}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">word</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">mackerels</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+
+
+<p>These functions create a dictionary of <code>{word: state}</code>, for the words that have no overlap with a single state. The puzzle asked for the longest of these words, so we need to do a little post-processing. Here we take the dictionary and sort it by the longest word. This snippet shows the top-10 longest words and the single state with which they have no overlap.</p>
+<div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">get_mackerels</span><span class="p">()</span>  <span class="c1"># returns a dictionary of words and their states</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+<span class="c1"># [(&#39;counterproductivenesses&#39;, &#39;Alabama&#39;),</span>
+<span class="c1">#  (&#39;hydrochlorofluorocarbon&#39;, &#39;Mississippi&#39;),</span>
+<span class="c1">#  (&#39;counterproductiveness&#39;, &#39;Alabama&#39;),</span>
+<span class="c1">#  (&#39;unconscientiousnesses&#39;, &#39;Alabama&#39;),</span>
+<span class="c1">#  (&#39;counterconditionings&#39;, &#39;Alabama&#39;),</span>
+<span class="c1">#  (&#39;deoxycorticosterones&#39;, &#39;Alabama&#39;),</span>
+<span class="c1">#  (&#39;expressionlessnesses&#39;, &#39;Utah&#39;),</span>
+<span class="c1">#  (&#39;hyperconsciousnesses&#39;, &#39;Alabama&#39;),</span>
+<span class="c1">#  (&#39;hypersensitivenesses&#39;, &#39;Alabama&#39;),</span>
+<span class="c1">#  (&#39;incompressiblenesses&#39;, &#39;Utah&#39;)]</span>
+</pre></div>
+
+
+<p>And lastly, to answer the extra credit, we want to count the number of times each state shows up in our dictionary. We run through the states in the dictionary, grouping them together and summing the number of occurrences for each. Lastly, we sort the results by the highest count, and show the top-10 results.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
+
+<span class="n">extra_credit</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">values</span><span class="p">()))}</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+<span class="c1"># [(&#39;Ohio&#39;, 11342),</span>
+<span class="c1">#  (&#39;Alabama&#39;, 8274),</span>
+<span class="c1">#  (&#39;Utah&#39;, 6619),</span>
+<span class="c1">#  (&#39;Mississippi&#39;, 4863),</span>
+<span class="c1">#  (&#39;Hawaii&#39;, 1763),</span>
+<span class="c1">#  (&#39;Kentucky&#39;, 1580),</span>
+<span class="c1">#  (&#39;Wyoming&#39;, 1364),</span>
+<span class="c1">#  (&#39;Tennessee&#39;, 1339),</span>
+<span class="c1">#  (&#39;Alaska&#39;, 1261),</span>
+<span class="c1">#  (&#39;Nevada&#39;, 1229)]</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
