@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@ashjasont" />
+  <meta name="twitter:site" content="@ashjasont" />
+  <meta name="twitter:image" content="https://www.jtash.com/images/20200529-riddler.png"/>
+  <meta name="twitter:description" content="Suppose everyone in the United States wanted to join the same video call? If each of the 330 million participants joins and drops at a random time, how likely is it that at least one person overlaps with everyone else?" />
+  <meta property="twitter:title" content="Riddler Video Call" />
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Video Call</h1>
+          <label class="text-muted">May 29, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>Suppose everyone in the United States wanted to join the same video call? If each of the 330 million participants joins and drops at a random time, how likely is it that at least one person overlaps with everyone else? This problem easily exceeds the limits of a practical simulation, but we'll write some code to develop intuition about the results before attempting to solve it analytically. Here's the full problem text from this week's <a href="https://fivethirtyeight.com/features/can-you-join-the-worlds-biggest-zoom-call/">Riddler</a>.</p>
+<blockquote>
+One Friday morning, suppose everyone in the U.S. (about 330 million people) joins a single Zoom meeting between 8 a.m. and 9 a.m. — to discuss the latest Riddler column, of course. This being a virtual meeting, many people will join late and leave early.
+<br><br>
+In fact, the attendees all follow the same steps in determining when to join and leave the meeting. Each person independently picks two random times between 8 a.m. and 9 a.m. — not rounded to the nearest minute, mind you, but any time within that range. They then join the meeting at the earlier time and leave the meeting at the later time.
+<br><br>
+What is the probability that at least one attendee is on the call with everyone else (i.e., the attendee’s time on the call overlaps with every other person’s time on the call)?
+<br><br>
+<strong>Extra credit:</strong> What is the probability that at least two attendees are on the call with everyone else?
+</blockquote>
+
+<h5>Solution</h5>
+<p>This is a challenging problem, in part because it exceeds the limits of a simulation that could run in reasonable time, and also because the underlying probability distributions are a little tricky. I've taken my best shot, but no guarantees this week!</p>
+<p><strong>It looks like the probability of at least one person overlapping everyone else is roughly 48%. For two or more attendeeds overlapping, the odds drop to roughly 18-20%.</strong></p>
+<p>The following image helped me think about the probability distributions involved. Each blue bar represents one participant's time on the call, and we quickly build a stack of participants joining and dropping over time. However, we are especially interested in two participants: the person that <em>leaves the call first</em>, and the person that <em>arrives to the call last</em>.</p>
+<p>These two people set the boundary on the minimum overlap time. In order to overlap with everyone, at least one person must <em>join</em> the call before the first person leaves, and must <em>stay</em> on the call until the last person joins. If those two conditions are met, then we're guaranteed to have at least one overlap.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200529-riddler.png"></p>
+<h5>Methdology</h5>
+<p>From here, it gets more difficult! We need to do a few things:</p>
+<ol>
+<li>Find the probability distribution for the time the first person leaves the call, and for the time the last person joins the call.</li>
+<li>Find the probability that any participant started before the first person left, and stayed until after the last person arrived. This depends on the values we got from (1).</li>
+</ol>
+<p>First, we know that each participant draws two random variables for the start and end time. The start time is the minimum of these values, $\text{min}(x_0, x_1)$, and the end time is the maximum, $\text{max}(x_0, x_1)$.</p>
+<p>What is the distribution of the start times for an individual participant? We want to find $P(\text{min}(x_0, x_1) &lt; x)$. Because the values are drawn independently, we know that this is the same as $P(x_0<x) \times P(x_1<x)$. This evaluates to $x^2$, which is the <a href="https://en.wikipedia.org/wiki/Cumulative_distribution_function">cumulative distribution function</a> for this random variable. The <a href="https://en.wikipedia.org/wiki/Probability_density_function">probability density function</a> is the derivative, which is $2x$. </p>
+<p>Now, what is the distribution of the time of the first departure for anyone on the call? This is $P(\text{min}(\text{all end times}) &lt; x)$. I'll spare the details here, but we get a cumulative distribution function of $1 - (1 - x^2) ^ n$, where $n$ is the number of participants on the call. Taking the derivative here, we see that $f(x) = 2nx(1 - x^2)^{n-1}$. This means we can calculate the distribution of the first departure from the call.</p>
+<p>With this probability distribution, we can calculate the expected time of the first departure. With 10 participants, it's roughly equal to 0.27, meaning 27% of the way into the call. With 100 participants, it's roughly 8.8%, and with 1000, it's 2.8%. With 330 million participants, the first departure time is <em>extremely</em> early.</p>
+<p>If we have a value for the first departure time, we can calculate the odds that someone arrives before this time. Call the first departure time $\epsilon$. Because of the symmetry of this problem, we know that the first departure time and the last arrival can be represented by the same value of $\epsilon$.</p>
+<p>For at least one participant to arrive before $\epsilon$ and depart after $1 - \epsilon$ we can use $1 - (1 - \epsilon^2)^n$. For 330 million participants, with an extremely small $\epsilon$ and extremely large $n$, we get roughly 48% odds that at least one person will overlap everyone else.</p>
+<p>What's fascinating about this problem is that it appears the answer is the same regardless of the number of people on the call, whether it's 10, 100, 1000, or 100 million. They all appear to have the same value around 48%.</p>
+<p>The extra credit analytical solution will have to wait for another time. Howver, my small-scale simulations showed values between 18-20% for any number of participants I tested. As a result, I'm assuming those values will hold, as they did before, for any number of people on the call.</p>
+<h5>Sample Simulation</h5>
+<p>While it's impractical to simulate the entire 330-million-person call, I found that simulations with smaller values (100,000 to 50 million or more) consistently yielded values around 48% for at least one overlap, and around 18-20% for at least two overlaps.</p>
+<p>I also had some fun this week playing with <a href="https://dask.org/">dask</a> to run large simulations on my machine. Dask lets you create a "local cluster" on your computer that can parallelize certain operations and run them much faster than you could on a single thread.</p>
+<p>The code below creates a dask local cluster, then runs a large batch of simulations that align with the analytical results above.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dask</span> <span class="kn">import</span> <span class="n">array</span> <span class="k">as</span> <span class="n">da</span>
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="c1"># start a local cluster using all CPU threads</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">trials</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">participants</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the number of participants on a call who overlap</span>
+<span class="sd">    with every other participant. This is solved efficiently</span>
+<span class="sd">    using dask arrays for parallel simulations:</span>
+
+<span class="sd">    1. Generate each person&#39;s start and end times. The start</span>
+<span class="sd">       time is the min and the end time is the max.</span>
+<span class="sd">    2. For a group of participants, find the latest start</span>
+<span class="sd">       time and the earliest end time.</span>
+<span class="sd">    3. Identify any participants that have a starting time</span>
+<span class="sd">       before than the earliest end time and an end time</span>
+<span class="sd">       after the latest start time.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result : an array of the number of participants in each</span>
+<span class="sd">        trial who overlap every other participant.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">trials</span><span class="p">,</span> <span class="n">participants</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="n">latest_start</span> <span class="o">=</span> <span class="n">times</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">earliest_end</span> <span class="o">=</span> <span class="n">times</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># check if any participants arrive before the first person</span>
+    <span class="c1"># leaves and leave after the last person arrives.</span>
+    <span class="n">cond1</span> <span class="o">=</span> <span class="n">times</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">&lt;</span> <span class="n">earliest_end</span>
+    <span class="n">cond2</span> <span class="o">=</span> <span class="n">times</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">&gt;</span> <span class="n">latest_start</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">cond1</span> <span class="o">&amp;</span> <span class="n">cond2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="c1"># results here is a delayed object. Call `compute() for values</span>
+<span class="c1"># here we run 1000 trials with 10 million participants</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">trials</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">participants</span><span class="o">=</span><span class="mi">10000000</span><span class="p">)</span>
+<span class="n">results</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
