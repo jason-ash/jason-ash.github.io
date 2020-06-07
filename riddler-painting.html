@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@ashjasont" />
+  <meta name="twitter:site" content="@ashjasont" />
+  <meta name="twitter:image" content="https://www.jtash.com/images/20200605-riddler.png"/>
+  <meta name="twitter:description" content="We are carefully coloring a poster in this week's Riddler. We'll use numpy for a computational approach that minimizes the standard deviation of our coloring scheme." />
+  <meta property="twitter:title" content="Riddler Painting" />
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Painting</h1>
+          <label class="text-muted">Jun 5, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>We are carefully coloring a poster in this week's <a href="https://fivethirtyeight.com/features/can-you-pinpoint-the-planet/">Riddler</a>. We want to draw horizontal lines with a marker in order to fill the poster with ink as evenly as possible. How far apart should each marker line be? We'll use numpy for a computational approach that minimizes the standard deviation of our coloring scheme.</p>
+<blockquote>
+Some friends have invited you to a protest, and you’ll be making a sign with large lettering. You’re filling in the sign’s letters by drawing horizontal lines with a marker. The marker has a flat circular tip with a radius of 1 centimeter, and you’re holding the marker so that it’s upright, perpendicular to the sign.
+<br><br>
+Since the diameter of the marker’s tip is 2 centimeters, you decide to fill in the letters by drawing lines every 2 centimeters. However, this is the pattern you get:
+<br><br>
+<img src="https://fivethirtyeight.com/wp-content/uploads/2020/06/poster.png" width=300 />
+<br><br>
+The shading doesn’t look very uniform — each stroke is indeed 2 centimeters wide, but there appear to be gaps between the strokes. Of course, if you drew many, many lines all bunched together, you’d have a rather uniform shading.
+<br><br>
+But you don’t have all day to make this sign. If the lines can’t overlap by more than 1 centimeter — half the diameter of the marker tip — what should this overlap be, in order to achieve a shading that’s as uniform as possible? And how uniform will this shading be, say, as measured by the standard deviation in relative ink on the sign?
+</blockquote>
+
+<h5>Solution</h5>
+<p><strong>The ideal spacing between marker strokes is roughly 1.7cm. Assuming you could be that precise, the standard deviation of ink should be roughly 0.217.</strong> I made the following assumptions in order to calculate this result.</p>
+<ol>
+<li>The top and bottom strokes are set 1cm away from the edge so you're still coloring within the lines. Each stroke between those will be spaced $x$ centimeters apart, where we try to solve for the value of $x$ that minimizes the overall standard deviation.</li>
+<li>Somewhat arbitrarily, I've chosen 15 marker strokes between the top and bottom. This affects the standard deviation value I calculated, but shouldn't affect the ideal spacing.</li>
+<li>I assumed ink is perfectly additive: if you color a section of the poster twice, the total ink on that spot is the sum of ink from both marker strokes with no loss.</li>
+<li>The amount of ink deposited by a marker stroke is equal to the cross sectional area of the marker tip, which is a circle.</li>
+<li>The standard deviation of a particular spacing is equal to the standard deviation of marker ink along a vertical slice of the poster.</li>
+</ol>
+<p>The chart below illustrates how the standard deviation changes as a function of the marker spacing. The dark wavy line in the middle represents the standard deviation for a given spacing on the x-axis. This line is minimized when spacing is 1.7cm, and is maximized at 1.07cm. The insets in the chart show a vertical cross section of ink for a slice of the poster. Standard deviation at each point is calculated based on the values in the inset charts. We can see that the values of the upper right inset chart are more consistent overall, which is reflected in the lower standard deviation. The other inset chart has more variance in the ink values, so its standard deviation is higher.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200605-riddler.png"></p>
+<h5>Full Code</h5>
+<p>I took a purely computer-based approach to solve this week's problem. While it's probably possible to write the equation for the lines in my chart above, it gets complicated quickly. Instead, I used <code>numpy</code> to simulate one million points across a vertical slice of the poster and tally the ink at each point on the slice. </p>
+<p>I assumed the marker leaves ink on the poster in proportion to the slice of marker tip at each point. So the <code>cross_section</code> function is essentially the equation for a circle. The <code>ink_weight</code> function returns the array for the inset charts above, which is the basis for calculating the standard deviations. I added a quick plotting method called <code>plot_ink</code> as well to visualize any given spacing.</p>
+<p>Finally, I used a list comprehension to calculate the standard deviation for 500 different spacing values from 1.0 to 2.0, and found the minimum at roughly 1.7cm.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">cross_section</span><span class="p">(</span>
+   <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+   <span class="n">center</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+   <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the length of the cross section of a circle at a position, x,</span>
+<span class="sd">    centered at a given point with a given radius. If x == center, then this</span>
+<span class="sd">    returns the diameter of the circle. If x == center + radius, then this</span>
+<span class="sd">    returns zero.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; cross_section(x=np.array([1.0]), center=np.array([1.0]))</span>
+<span class="sd">    array([[2.]])</span>
+
+<span class="sd">    &gt;&gt;&gt; cross_section(x=np.array([0.0]), center=np.array([1.0]))</span>
+<span class="sd">    array([[0.]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">center</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+
+<span class="k">def</span> <span class="nf">ink_weight</span><span class="p">(</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">strokes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an array of values with shape (points,) that represents the total</span>
+<span class="sd">    ink weight of that slice of the poster. It&#39;s essentially a vertical slice</span>
+<span class="sd">    of the ink on the poster from top to bottom, which sums the amount of ink</span>
+<span class="sd">    from each marker stroke.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spacing : float, must be in the range [radius, 2*radius].</span>
+<span class="sd">    strokes : int, the number of marker strokes used on the poster</span>
+<span class="sd">    radius : float, default 1.0, the radius of the marker</span>
+<span class="sd">    points : int, the number of points to measure; more points gives a more</span>
+<span class="sd">        accurate answer, but may take slightly longer to compute</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    x : np.ndarray, an array of the x-coordinates of the ink_weight array</span>
+<span class="sd">    ink_weight : np.ndarray, an array of total marker weight from each stroke</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError, if the spacing arguments is not within an acceptable range</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># raise an error if spacings are closer than 1cm (not allowed)</span>
+    <span class="k">if</span> <span class="n">spacing</span> <span class="o">&lt;</span> <span class="n">radius</span> <span class="ow">or</span> <span class="n">spacing</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">radius</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;Spacing must be between {radius} and {2 * radius}; &quot;</span>
+            <span class="n">f</span><span class="s2">&quot; you provided {spacing}.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">+</span> <span class="n">spacing</span> <span class="o">*</span> <span class="n">strokes</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">radius</span> <span class="o">+</span> <span class="n">spacing</span> <span class="o">*</span> <span class="p">(</span><span class="n">strokes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">spacing</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">cross_section</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">centers</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">weights</span>
+
+
+<span class="k">def</span> <span class="nf">plot_ink</span><span class="p">(</span>
+    <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">strokes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">points</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">,</span>
+    <span class="n">output</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot the slice of ink weight on the poster</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    spacing : float, must be in the range [radius, 2*radius].</span>
+<span class="sd">    strokes : int, the number of marker strokes used on the poster</span>
+<span class="sd">    radius : float, default 1.0, the radius of the marker</span>
+<span class="sd">    points : int, the number of points to measure; more points gives a more</span>
+<span class="sd">        accurate answer, but may take slightly longer to compute</span>
+<span class="sd">    output : Optional[str], default None, if provided, the string name that</span>
+<span class="sd">        should be used to save the file, e.g. &quot;path/to/plot.png&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">weight</span> <span class="o">=</span> <span class="n">ink_weight</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">strokes</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;0.2&quot;</span><span class="p">)</span> 
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
