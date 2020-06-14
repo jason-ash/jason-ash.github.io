@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@ashjasont" />
+  <meta name="twitter:site" content="@ashjasont" />
+  <meta name="twitter:image" content="https://www.jtash.com/images/20200612-riddler.png"/>
+  <meta name="twitter:description" content="We're studying simulated petri dishes in this week's Riddler! We want to figure out how likely a colony of bacteria is to survive, given what we know about how often its cells divide." />
+  <meta property="twitter:title" content="Riddler Bacteria" />
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Bacteria</h1>
+          <label class="text-muted">Jun 12, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>We're studying simulated petri dishes in this week's <a href="https://fivethirtyeight.com/features/how-long-will-the-bacterial-colony-last/">Riddler</a>! We want to figure out how likely a colony of bacteria is to survive, given what we know about how often its cells divide. This is a classic problem that can be modeled with a stochastic process, but we'll try a different approach with very large markov transition matrices built in python and numpy.</p>
+<blockquote>
+You are studying a new strain of bacteria, Riddlerium classicum (or R. classicum, as the researchers call it). Each R. classicum bacterium will do one of two things: split into two copies of itself or die. There is an 80 percent chance of the former and a 20 percent chance of the latter.
+<br><br>
+If you start with a single R. classicum bacterium, what is the probability that it will lead to an everlasting colony (i.e., the colony will theoretically persist for an infinite amount of time)?
+<br><br>
+<strong>Extra credit:</strong> Suppose that, instead of 80 percent, each bacterium divides with probability p. Now what’s the probability that a single bacterium will lead to an everlasting colony?
+</blockquote>
+
+<h5>Solution</h5>
+<p><strong>With its 80% doubling rate, the <em>R. classicum</em> bacteria has a 75% chance to survive indefinitely.</strong> (It's unclear if its sibling bacteria, <em>Riddler Expressum</em>, would be so resilient...)</p>
+<p>The survival rate is highly dependend on the doubling rate, as the chart below shows. For doubling rates less than 50%, a colony of bacteria will surely go extinct, but for doubling rates above 50%, the survival odds improve substantially.</p>
+<p><img class="img-fluid mx-auto d-block" src="../images/20200612-riddler.png"></p>
+<p>This class of problem, called a "birth-death process", can get very complicated, but for this simple case of cells doubling or dying, there is a formula for the survival rate as a function of $p$: </p>
+<p>$$\text{Survival Rate}(p) = max(0, 1 - \frac{1 - p}{p})$$</p>
+<p>This tells us that the survival rate for a colony with an 80% doubling rate is $1 - \frac{0.2}{0.8}$, or 75%. It also tells us that it's impossible for a colony of bacteria to survive if the doubling rate is less than 50%.</p>
+<h5>Methodology</h5>
+<p>Birth-death problems can get pretty gnarly, but this particular version is one of the simpler cases: a cell may only divide or die, and cells can't leave or enter the closed system. In continuous time, the colony can be modeled using a <em>stochastic process</em>, which is a mathematical model that lets us simulate the behavior of systems which behave randomly over time.</p>
+<blockquote>
+<p><strong>Small plug:</strong> I've actually been working on an open source python library to model stochastic processes in the financial markets, called <code>pyesg</code>. This library lets you simulate random processes like stocks, interest rates, or energy prices, which you could use to simulate investment portfolios, decide which mortgage to choose, or plan for market downturns. <a href="https://github.com/jason-ash/pyesg">Check it out on github!</a></p>
+</blockquote>
+<p>There's also another way to model this process. We can model time in discrete steps, simulating whether each cell in the colony divides or dies, and track the population size over time. For example, a starting population of 6 could become a population of ${0,\ 2,\ 4,\ 6,\ 8,\ 10,\, 12}$, based on which cells divide or die. The odds of each new population are called transition probabilities. We want to create a matrix of these transition probabilities to be able to determine the long term behavior of the system, which is a technique I've used on <a href="https://www.jtash.com/riddler-delirious-ducks">many</a> <a href="https://www.jtash.com/riddler-card-collecting">prior</a> <a href="https://www.jtash.com/riddler-baseball">Riddler</a> <a href="https://www.jtash.com/riddler-unstable-dice">puzzles</a>.</p>
+<p>The difference here is that the colony population can theoretically grow to infinite size, and the typical markov chain transition matrix approach only works for finite-sized matrices. While it might seem like this is a dead end, we can work around it.</p>
+<p>We are interested in three possible states: permanent colony extinction (☠), indefinite colony survival, or a transient state between the two. Rather than trying to model an infinite population, we'll assume that a sufficiently large population, e.g. 500 or 1000 cells, eventually leads to survival. In other words, with a large enough finite matrix, our answer should approach the true answer.</p>
+<p>In my experiments, a matrix with size 500 seemed to converge nicely to the true result, and was quick to compute. Ultimately, the <code>survival_probability</code> function tells us how likely it is for a colony to reach a given size before going extinct. For example, here's the calculation for the original problem, with the 80% doubling rate.</p>
+<div class="highlight"><pre><span></span><span class="n">survival_probability</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="c1"># 0.7500000000000211</span>
+</pre></div>
+
+
+<h5>Full Code</h5>
+<p>This week's code is almost entirely linear-algebra-as-code. There's a function that generates a markov transition matrix of any size, and a function that uses the transition matrix to calculate the expected probability that the colony survives indefinitely.</p>
+<p>My chart was made by calling the <code>survival_probability</code> function in a list comprehension to evaluate the surivival probabilities at many values between 0 and 1.0.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">binom</span>
+
+
+<span class="k">def</span> <span class="nf">transition_matrix</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a transition matrix for a maximum population of size n, where</span>
+<span class="sd">    the population can take even number values from 0 to n or ∞. The matrix</span>
+<span class="sd">    will have size (n // 2 + 3, n // 2 + 3), where each row represents the</span>
+<span class="sd">    transition probability from state X to state Y, and the absorbing states</span>
+<span class="sd">    are either 0 (extinction) or ∞ (everlasting survival). As n -&gt; ∞, we can</span>
+<span class="sd">    create better estimates of the true rate of everlasting survival.</span>
+
+<span class="sd">    The matrix is ordered by: [1, n, n - 2, n - 4, ..., 0, ∞], where each</span>
+<span class="sd">    value represents a possible population size, and this particular ordering</span>
+<span class="sd">    (called the canonical form) makes some of the linear algebra easier later</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int, the maximum population size to model</span>
+<span class="sd">    p : float, the probability of dividing into two cells</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    M : np.ndarray, the transition matrix with size (n // 2 + 3, n // 2 + 3)</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; transition_matrix(n=4)</span>
+<span class="sd">    array([[0.    , 0.    , 0.8   , 0.2   , 0.    ],</span>
+<span class="sd">           [0.    , 0.1536, 0.0256, 0.0016, 0.8192],</span>
+<span class="sd">           [0.    , 0.64  , 0.32  , 0.04  , 0.    ],</span>
+<span class="sd">           [0.    , 0.    , 0.    , 1.    , 0.    ],</span>
+<span class="sd">           [0.    , 0.    , 0.    , 0.    , 1.    ]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create the transition matrix one row at a time, from n == 2 to n == n</span>
+    <span class="c1"># then stack each of those on top of two absorbing states at 0 and ∞.</span>
+    <span class="c1"># for transitions to values greater than n we group them into the ∞ row.</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">pmf</span> <span class="o">=</span> <span class="n">binom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>        
+        <span class="n">M</span><span class="p">[</span><span class="o">-</span><span class="n">x</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pmf</span><span class="p">[</span><span class="o">-</span><span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span>
+        <span class="n">M</span><span class="p">[</span><span class="o">-</span><span class="n">x</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pmf</span><span class="p">[:</span><span class="o">-</span><span class="n">n</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="n">M</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">M</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">M</span><span class="p">[[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+    <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">p</span>
+    <span class="k">return</span> <span class="n">M</span>
+
+
+<span class="k">def</span> <span class="nf">survival_probability</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the survival probability for a population with a max size of n,</span>
+<span class="sd">    which represents the probability that a cell colony starting with one</span>
+<span class="sd">    cell will eventually survive or become extinct.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : int, the maximum population size to model</span>
+<span class="sd">    p : float, the probability of dividing into two cells</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result : float, the probability of the colony surviving indefinitely</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; survival_probability(n=6)</span>
+<span class="sd">    0.7500074825177829</span>
+
+<span class="sd">    &gt;&gt;&gt; survival_probability(n=500)</span>
+<span class="sd">    0.7500000000000211</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">transition_matrix</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">M</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">M</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">Q</span> <span class="err">@</span> <span class="n">R</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
