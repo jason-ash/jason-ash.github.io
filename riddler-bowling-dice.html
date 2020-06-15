@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:creator" content="@ashjasont" />
+  <meta name="twitter:site" content="@ashjasont" />
+  <meta name="twitter:description" content="I can never resist a good dice problem, and this week's Riddler Express is no different. In a technique called bowling, you can try to throw a dice so it lands on one of four sides, rather than six. How could we use this to our advantage in a simplified game of craps?" />
+  <meta property="twitter:title" content="Riddler Bowling Dice" />
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Bowling Dice</h1>
+          <label class="text-muted">Jun 12, 2020</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>I can never resist a good dice problem, and this week's <a href="https://fivethirtyeight.com/features/how-long-will-the-bacterial-colony-last/">Riddler Express</a> is no different. In a technique called "bowling", you can try to throw a dice so it lands on one of four sides, rather than six. How could we use this to our advantage in a simplified game of craps? We'll solve this with a bit of dynamic programming - my favorite!</p>
+<blockquote>
+There’s a technique for rolling dice called “bowling,” in which you place your index finger and thumb on two opposite sides of the die and roll it along the table. If done correctly, the die will never land on the faces on which you were holding the die, leaving you with a 25 percent chance of landing on each of the remaining four faces.
+<br><br>
+You’d like to apply this technique to improve your chances of winning a simplified game of craps, in which your goal is simply to roll a 7 or 11 using two dice. With a standard rolling technique, your chances of rolling a 7 or 11 are 2/9, or about 22.2 percent.
+<br><br>
+Now suppose you’re using your bowling technique, and you roll the dice one at a time (i.e., you know the outcome of the first die before rolling the second). If you play to maximize your chances of rolling a 7 or 11, what will be your chances of winning?
+<br><br>
+<strong>Extra credit:</strong> Suppose you get one point for rolling a 7 or 11, but now you lose a point for rolling a 2, 3 or 12. With a standard rolling technique, you’d average 1/9 of a point. But if you “bowl” to maximize your expected score, what will that average be?
+</blockquote>
+
+<h5>Solution</h5>
+<p><strong>With proper technique, your expected odds of rolling 7 or 11 are 37.5%. If you lose points for rolling a 2, 3, or 12, your expected value falls to 31.25%.</strong> Both results are substantially higher than the standard odds from the prompt, which means bowling is a significant advantage.</p>
+<p>In the game with no losing rolls, the best numbers to start with are 5 and 6. Each of these gives a 50% chance of winning once thrown, compared to a 25% chance of winning with starting values of 1, 2, 3, or 4. Therefore, we should start by placing our fingers on the 3 and 4 sides of the dice, which gives us the best chances of rolling a 5 or 6.</p>
+<p>If we roll a 5 first, we should use the same technique, and roll for 1, 2, 5, or 6. This will win 50% of the time, either with a 2 (for 7 total) or a 6 (for 11 total). If we roll a 6 first, we also have 50% odds of winning, by rolling a 1 or a 5. Averaged out, we have a 37.5% chance of winning.</p>
+<p>When we factor in losing numbers, we want to change strategy. Low numbers hurt us, so we want to roll with the 1 and 6 covered, for possible values of 2, 3, 4, or 5. A 5 is the best outcome again, giving us 50% odds of winning, while 2, 3, or 4 give us a 25% chance to win. Averaged out, we have a 31.25% expected value.</p>
+<h5>Methodology</h5>
+<p>We want to work this problem backwards, from end to start. This technique is called dynamic programming, which I've used to solve <a href="https://www.jtash.com/riddler-guess-who">several</a> <a href="https://www.jtash.com/riddler-pennies">prior</a> <a href="https://www.jtash.com/riddler-flips">puzzles</a>.</p>
+<p>We want to determine what strategy to use, conditioned on the fact that we roll a particular starting number. For example, if our first number is 5, then we know how likely we will be to win or lose for each of the bowling arrangements. We do this for each possible starting number until we have a table like this (the expected value here is for the extra credit, with both winning and losing numbers.)</p>
+<table>
+<thead>
+<tr>
+<th align="center">First Roll</th>
+<th align="center">Bowling Dice</th>
+<th align="center">Expected Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">1</td>
+<td 2_="2," 3_="3," 4_="4," 5 align="center"></td>
+<td align="center">-0.25</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td 1_="1," 3_="3," 4_="4," 6 align="center"></td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td 1_="1," 2_="2," 5_="5," 6 align="center"></td>
+<td align="center">-0.25</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td 2_="2," 3_="3," 4_="4," 5 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td 1_="1," 3_="3," 4_="4," 6 align="center"></td>
+<td align="center">-0.25</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td 1_="1," 2_="2," 5_="5," 6 align="center"></td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td 2_="2," 3_="3," 4_="4," 5 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td 1_="1," 3_="3," 4_="4," 6 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td 1_="1," 2_="2," 5_="5," 6 align="center"></td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td 2_="2," 3_="3," 4_="4," 5 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td 1_="1," 3_="3," 4_="4," 6 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td 1_="1," 2_="2," 5_="5," 6 align="center"></td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td 2_="2," 3_="3," 4_="4," 5 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td 1_="1," 3_="3," 4_="4," 6 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td 1_="1," 2_="2," 5_="5," 6 align="center"></td>
+<td align="center">0.5</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td 2_="2," 3_="3," 4_="4," 5 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td 1_="1," 3_="3," 4_="4," 6 align="center"></td>
+<td align="center">0.0</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td 1_="1," 2_="2," 5_="5," 6 align="center"></td>
+<td align="center">0.25</td>
+</tr>
+</tbody>
+</table>
+<p>Importantly, we get to choose how to roll after we've seen the first number. This means we can choose the type of roll that gives the highest expected value. With a starting roll of 5, for example, we should choose to roll the {1, 2, 5, 6}, which wins 50% of the time. On the other hand, with a starting roll of 1, we should chose to roll the {1, 3, 4, 6} for an expected value of 0.</p>
+<p>Now that we know 5 is a great starting roll, and 1 is not so great, we can choose the first roll that gives us the best chances of seeing a 5 and the lowest chances of seeing a 1. This means we should start the game by rolling for {2, 3, 4, 5}. If we do, our expected win percent is 31.25%.</p>
+<p>These problems are often very fun to program, and can be extended to any number of rolls. The <code>expected_value</code> function takes a number of rolls and sets of winning and losing numbers and returns the expected value for optimal play. We can see the results from above verified in code, and we can even try something more complicated, like 4 rolls and different winning and losing numbers, or 15 rolls with a target of 50!</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="c1"># expected value of two sequential rolls with no losing numbers</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">expected_value</span><span class="p">(</span><span class="n">n_rolls</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">winners</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="n">losers</span><span class="o">=</span><span class="p">())</span>
+<span class="mf">0.375</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># expected value of two sequential rolls with a few losing numbers</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">expected_value</span><span class="p">(</span><span class="n">n_rolls</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">winners</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="n">losers</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="mf">0.3125</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># something more complicated: four rolls and doubled-targets</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">expected_value</span><span class="p">(</span><span class="n">n_rolls</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">winners</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">22</span><span class="p">),</span> <span class="n">losers</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span>
+<span class="mf">0.2265625</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># what if we want to hit 50 after 15 rolls?</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">expected_value</span><span class="p">(</span><span class="n">n_rolls</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">winners</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,),</span> <span class="n">losers</span><span class="o">=</span><span class="p">())</span>
+<span class="mf">0.1427854159846902</span>
+</pre></div>
+
+
+<h5>Full Code</h5>
+<p>This problem can be solved with a single function. Essentially we play the game from end to start, assuming we make the optimal decision for each roll. Finally, we return the expected win percentage.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+
+<span class="nd">@lru_cache</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">expected_value</span><span class="p">(</span>
+    <span class="n">n_rolls</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">winners</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span>
+    <span class="n">losers</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the expected value of the simplified craps game, where we use</span>
+<span class="sd">    the bowling technique for a number of rolls in a row, and win or lose</span>
+<span class="sd">    depending on the total of the dice once they&#39;ve been rolled.</span>
+
+<span class="sd">    Using the bowling technique, we &quot;guarantee&quot; the dice will land on one</span>
+<span class="sd">    of four sides, rather than one of six. On a normal dice, the opposite</span>
+<span class="sd">    sides add up to seven, so the three bowling options are to roll with</span>
+<span class="sd">    sides {2, 3, 4, 5}, {1, 3, 4, 6}, or {1, 2, 5, 6}.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_rolls : int, the number of dice to roll. We roll sequentially</span>
+<span class="sd">    winners : Tuple[int], the winning numbers, each worth 1 point</span>
+<span class="sd">    losers : Tuple[int], the losing numbers, each worth -1 point</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # verify a simple example with one roll</span>
+<span class="sd">    &gt;&gt;&gt; expected_value(n_rolls=1, winners=(5, 6), losers=(1,))</span>
+<span class="sd">    0.25</span>
+
+<span class="sd">    &gt;&gt;&gt; # expected value with two rolls and no losing numbers</span>
+<span class="sd">    &gt;&gt;&gt; expected_value(n_rolls=2, winners=(7, 11), losers=())</span>
+<span class="sd">    0.375</span>
+
+<span class="sd">    &gt;&gt;&gt; # expected value with two rolls and some losing numbers</span>
+<span class="sd">    &gt;&gt;&gt; expected_value(n_rolls=2, winners=(7, 11), losers=(2, 3, 12))</span>
+<span class="sd">    0.3125</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># these are the rolling options available to us at every step</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="c1"># with just one roll remaining, we choose the best option</span>
+    <span class="k">if</span> <span class="n">n_rolls</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">totals</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="n">n</span> <span class="ow">in</span> <span class="n">winners</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">option</span><span class="p">)</span>
+            <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">n</span> <span class="ow">in</span> <span class="n">losers</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">option</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">options</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">totals</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+
+    <span class="c1"># if we have more than one roll remaining, we want to &quot;try&quot; each</span>
+    <span class="c1"># option to see which produces the best outcome, recursively.</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span>
+        <span class="nb">sum</span><span class="p">(</span><span class="n">expected_value</span><span class="p">(</span>
+            <span class="n">n_rolls</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">n</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">winners</span><span class="p">),</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">n</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">losers</span><span class="p">),</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">option</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">options</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2020 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
