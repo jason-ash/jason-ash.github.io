@@ -142,7 +142,7 @@ If we both play optimally, what starting numbers of pennies (again, between 20 a
 <li>Out of all possible moves, choose the best one - the one that produces an expected value of 1 - if possible. Otherwise, mark the state as losing.</li>
 </ol>
 <p>If we continue this process by hand, we can build a small diagram of optimal decisions, shown below. Each state has a color: red states are losing, and green states are winning. To simplify the states, I've used a generic $n$ to represent some positions. (0, $n$) represents a state with a zero in one pile and any number of coins in the other. Similarly ($n$, $n$) represents a state with an equal number of coins in both piles. For example, we showed that no move from (1, 2) can win the game, because (1, 2) only connects to (0, $n$) and ($n$, $n$), which are winning states for our opponent.</p>
-<p>Suppose we start at (3, 7) on our turn. Our best move is to remove 2 coins from pile $b$, putting our opponent in the unwinnable state (3, 5). The opponent may choose to remove one coin from pile $b$, giving us the state (3, 4). We will remve 2 coins from both piles, giving our opponent the unwinnable (1, 2) state, from which we've shown we will eventually win. </p>
+<p>Suppose we start at (3, 7) on our turn. Our best move is to remove 2 coins from pile $b$, putting our opponent in the unwinnable state (3, 5). The opponent may choose to remove one coin from pile $b$, giving us the state (3, 4). We will remove 2 coins from both piles, giving our opponent the unwinnable (1, 2) state, from which we've shown we will eventually win. </p>
 <p><img class="img-fluid mx-auto d-block" src="../images/20200124-riddler.png"></p>
 <p>As the diagram shows, this process quickly becomes complicated for larger numbers of coins. At this point I turned to the computer. In python I created a class called <code>GameState</code> that tracks the number of coins in each pile and allows us to simulate potential moves and calculate expected values using the steps listed above. For example, we can verify the expected values we calculated by hand earlier, and test states with much higher values.</p>
 <div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">GameState</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">expected_value</span><span class="p">()</span>
@@ -370,7 +370,7 @@ If we both play optimally, what starting numbers of pennies (again, between 20 a
     <p>
       Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
       <br>
-      &copy; 2020 Jason Ash. All rights reserved.
+      &copy; 2021 Jason Ash. All rights reserved.
     </p>
   </div>
 </footer>	

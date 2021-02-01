@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<title>Jason Ash | Thought Archive</title>
+	<meta name="description" content="Writing about probability & Bayesian inference, data visualization, puzzles & games, finance, and books">	
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="theme/css/main.css">
+
+	<!-- favicon -->
+	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAHwAAABcAAAAjAAAANAAAABQAAAAJAAAAAAAAAAAAAACxAAAA7QAAAJwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAKwAAADdAAAA7wAAAPcAAADuAAAAxwAAAJcAAAA7AAAA/wAAAP4AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAEgAAADPAAAA/gAAAP8AAAD/AAAA/gAAAP8AAAD/AAAA/AAAAP8AAAD/AAAAwgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMwAAAPkAAAD9AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD/AAAA4AAAAEYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQAAAAFgAAACMAAAA+AAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAMgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAGQAAAMUAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAJsAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMAAAAswAAAHsAAAD/AAAA/wAAAP8AAAD+AAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeAAAAAAAAAAAAAAAgwAAAP8AAAD+AAAA/gAAAN8AAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAADAAAAA/wAAAP8AAAD/AAAAVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAALMAAAD/AAAA/wAAAKIAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAATgAAAI4AAABOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAA/48AAICPAACADwAAwB8AAPgPAAD8BwAA/IcAAP+DAAD/wwAA/+EAAP/7AAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+	
+	<!-- Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122705782-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-122705782-1');
+	</script>
+
+  </head>
+  <body>
+    
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  
+  <div class="container">
+  <a class="navbar-brand" href="/index">Jason Ash</a>
+  
+  <button class="navbar-toggler mt-1" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <i class="fa fa-bars"></i>
+    </button>
+  
+
+  
+
+  <div class="collapse navbar-collapse" id="navbarNav"> 
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item mr-4">
+        <a class="nav-link" href="/index">Writing</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="/resume" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Resume
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/resume">View</a>
+          <a class="dropdown-item" href="/resume.pdf" target="_blank">Download</a>
+        </div>
+      </li>
+    </ul>
+  </div>  
+  </div>
+  
+</nav>    
+    <div class="container" style="min-height:88vh">
+<div class="row justify-content-center">
+  <div class="col-md-8">
+  
+    <div class="row mt-5">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-baseline mb-4">
+          <h1>Riddler Lingo</h1>
+          <label class="text-muted">Jan 29, 2021</label>
+        </div>
+        <div class="mb-5">
+          <p><h5>Introduction</h5>
+<p>It's the 256th edition of the <a href="https://fivethirtyeight.com/features/can-you-guess-the-mystery-word/">Riddler</a>, and though I've taken many weekends off to spend time with my newborn, I became obsessed with this week's puzzle! We're asked to play the word guessing game from Lingo, a game show. It reminds me of another <a href="https://www.jtash.com/riddler-countdown">one of my favorite Riddlers</a> where we identify the best strategy for playing the math game from Countdown, another game show. The puzzle is extremely challenging, and I couldn't find an exact solution. Instead, I used Python to implement the game engine, and used some heuristics to choose words that resulted in a high score. </p>
+<blockquote>
+You are a contestant on the game show Lingo, where your objective is to determine a five-letter mystery word. You are told this word’s first letter, after which you have five attempts to guess the word. You can guess any five-letter word, even one that has a different first letter. After each of your guesses, you are told which letters of your guess are also in the mystery word and whether any of the letters are in the correct position.
+<br><br>
+As a contestant, your plan is to make a mockery of the game show by adopting a bold strategy: No matter what, before you are even told what the first letter of the mystery word is, you have decided what your first four guesses will be. Then, with your fifth guess, you will use the results of your first four guesses (and your encyclopedic knowledge of five-letter words!) to determine all remaining possibilities for the mystery word. If multiple mystery words are still possible, you will pick one of these at random.
+<br><br>
+Which four five-letter words would you choose to maximize your chances of victory? Assume that the mystery word is selected randomly from this word list, which is also the list your guesses must be chosen from.
+<br><br>
+<em>Extra credit:</em> For the four five-letter words you chose, what are your chances of victory?
+</blockquote>
+
+<p>Note: the word pool for this puzzle contains 8636 words. A brute force solution to this puzzle would need to test all combinations of four words. This would mean testing $8636\times8635\times8634\times8633=5,558,386,740,958,920$ combinations. That's 5 quadrillion! If each combination took 1 second to test, we'd need to wait around for 176 million years. So... we'll have to try something different!</p>
+<h5>Solution</h5>
+<p>I couldn't find a perfect solution this week, so instead I developed some heuristics for choosing words until I was able to get a score that seemed good. Ultimately, I landed on these four words <strong>therm, calfs, gunky, bipod.</strong> With these four words, I was able to achieve a <strong>94% win rate.</strong></p>
+<p>This strategy is perfect for 7697 of the 8636 total words, meaning that the secret word can be guessed exactly. When we can't guess the secret word exactly, we have to guess randomly from the possible secret words we've narrowed it down to.</p>
+<p>You might notice something interesting about these four words: out of the 20 letters total, there are no repeats. This is one of the key components for the strategy. Here are some of the things I considered to arrive at these four words.</p>
+<ol>
+<li>Choose as many unique letters as possible in your four guesses. Unique letters tell you the most about what is included in the secret word. If you can identify all 5 letters in the secret word, even out of order, it can reduce the possibilities significantly.</li>
+<li>Guess letters that appear the most in the word pool. My guesses skipped over <code>j</code>, <code>q</code>, <code>v</code>, <code>w</code>, <code>x</code>, <code>z</code> because they are rarer than other letters.</li>
+<li>Try to guess letters where they most often appear. For example, if a word has the letter <code>a</code>, if most often appears in the second position, like in the word <code>tacit</code>.</li>
+</ol>
+<p>None of these rules may seem suprising. There are a few more things that I considered, but it's hard to tell exactly how these should factor into your guesses.</p>
+<ol>
+<li>We are given the first letter of the secret word. I interpret this to mean that rule 3 above becomes less important for the first letter. For example, many words start with <code>s</code>, but many words also end with <code>s</code>. Each guess should try to get us as much <strong>new</strong> information as possible. If the word started with the letter <code>s</code>, we would know from the beginning, so it's more valuable to try to learn whether the word ends with <code>s</code> instead.</li>
+<li>Try not to guess combinations of letters that logically follow from other things you know. For example, consider guessing the word <code>thing</code>. We are guessing that the secret word ends in the letter <code>g</code>. But if the secret word ends in the letter <code>g</code>, then it's very likely the second-to-last letter will be an <code>n</code>, and also likely the third-to-last letter will be <code>i</code>. (In fact, there are 88 words that end with the letter <code>g</code>, and 63 of those words also end in <code>ng</code>. 34 of them end in <code>ing</code>!) By guessing <code>ing</code> at the end of the word, we're duplicating what we could learn about the secret word. Instead, to learn as much as possible I think it makes more sense to guess irregular letter combinations, like <code>bourg</code>, which gets us the <code>g</code> ending but also adds a valuable <code>r</code> in the mix.</li>
+<li>Try LOTS of combinations of words :)</li>
+</ol>
+<h5>Methodology</h5>
+<p>I relied heavily on the computer to determine my four guesses. As I wrote above, a brute force solution is infeasible, so we'll have to rely on a hybrid approach, with code and intelligent guessing (fitting, for a puzzle about guessing words!)</p>
+<p>First, I wrote a game engine in Python that plays the game. Given a secret word and a guess, the engine identifies the correct letters, the misplaced letters, letters than must be included in the secret word, and letters that must be excluded in the secret word. Later, the program returns a set of words that match all the criteria. Ultimately, if this list is narrowed down to a single word, then we know we can guess the secret word exactly.</p>
+<p>For example, you write the following to show the facts you learn after guessing a single word.</p>
+<div class="highlight"><pre><span></span><span class="c1"># example from the puzzle description</span>
+<span class="n">correct_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;misos&quot;</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="s2">&quot;mosso&quot;</span><span class="p">)</span>
+<span class="c1"># (&#39;m&#39;, &#39;&#39;, &#39;s&#39;, &#39;&#39;, &#39;&#39;)</span>
+<span class="c1"># first and third letters of our guess are correct</span>
+
+<span class="n">misplaced_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;misos&quot;</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="s2">&quot;mosso&quot;</span><span class="p">)</span>
+<span class="c1"># (&#39;&#39;, &#39;o&#39;, &#39;&#39;, &#39;s&#39;, &#39;&#39;)</span>
+<span class="c1"># second and fourth letters are in the secret word, but not in those positions</span>
+
+<span class="n">included_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;misos&quot;</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="s2">&quot;mosso&quot;</span><span class="p">)</span>
+<span class="c1"># (&#39;m&#39;, &#39;o&#39;, &#39;ss&#39;)</span>
+<span class="c1"># this means the target word must have one `m`, one `o` and two `s`</span>
+
+<span class="n">excluded_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;misos&quot;</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="s2">&quot;mosso&quot;</span><span class="p">)</span>
+<span class="c1"># (&#39;oo&#39;, )</span>
+<span class="c1"># this means the target word cannot contain two &#39;o&#39;</span>
+</pre></div>
+
+
+<p>Then the game is played using a function called <code>solutions</code>. This function returns all the words that your guesses still permit. If there is only one word returned, then you know the secret word with certainty.</p>
+<div class="highlight"><pre><span></span><span class="n">words</span> <span class="o">=</span> <span class="n">get_words</span><span class="p">()</span>  <span class="c1"># get the list of 8636 5-letter words</span>
+
+<span class="c1"># arguments are target word, any number of guesses, then a word list.</span>
+<span class="n">solutions</span><span class="p">(</span><span class="s2">&quot;misos&quot;</span><span class="p">,</span> <span class="s2">&quot;mosso&quot;</span><span class="p">,</span> <span class="n">words</span><span class="o">=</span><span class="n">words</span><span class="p">)</span>
+<span class="c1"># {&#39;misos&#39;}</span>
+<span class="c1"># in this case, just guessing &quot;mosso&quot; was enough to solve the puzzle!</span>
+
+<span class="n">solutions</span><span class="p">(</span><span class="s2">&quot;tacos&quot;</span><span class="p">,</span> <span class="s2">&quot;teach&quot;</span><span class="p">,</span> <span class="n">words</span><span class="o">=</span><span class="n">words</span><span class="p">)</span>
+<span class="c1"># {&#39;tacit&#39;, &#39;tacks&#39;, &#39;tacky&#39;, &#39;tacos&#39;, &#39;tacts&#39;, &#39;taroc&#39;, &#39;tical&#39;, &#39;triac&#39;}</span>
+<span class="c1"># in this case, guessing &quot;teach&quot; narrows down the search to 8 potential words</span>
+</pre></div>
+
+
+<p>You can also write code to check how your four guesses perform on the entire word list. This is how I calculated the 94% accuracy and 7697 guaranteed correct guesses. Unfortunately, running through the entire word list takes ~15 seconds. (Work for the future!)</p>
+<div class="highlight"><pre><span></span><span class="n">words</span> <span class="o">=</span> <span class="n">get_words</span><span class="p">()</span>  <span class="c1"># get the list of 8636 5-letter words</span>
+
+<span class="c1"># return a dictionary of all secret words and the list we narrow down to</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">word</span><span class="p">:</span> <span class="n">solutions</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="s2">&quot;therm&quot;</span><span class="p">,</span> <span class="s2">&quot;calfs&quot;</span><span class="p">,</span> <span class="s2">&quot;gunky&quot;</span><span class="p">,</span> <span class="s2">&quot;bipod&quot;</span> <span class="n">words</span><span class="o">=</span><span class="n">words</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span>
+<span class="p">}</span>
+
+<span class="c1"># how many can we guess correctly?</span>
+<span class="n">correct</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="c1"># 7697</span>
+
+<span class="c1"># what is our accuracy? If there are multiple candidates, we guess randomly</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+<span class="c1"># 0.9397869</span>
+
+<span class="c1"># what word was the hardest to guess?</span>
+<span class="n">stumper</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">x</span><span class="p">]))</span>
+<span class="n">results</span><span class="p">[</span><span class="n">stumper</span><span class="p">]</span>
+<span class="c1"># {&#39;rajes&#39;, &#39;rares&#39;, &#39;rases&#39;, &#39;raves&#39;, &#39;raxes&#39;, &#39;razes&#39;}</span>
+<span class="c1"># any of these secret words can only be narrowed down to six alternatives</span>
+</pre></div>
+
+
+<p>As for coming up with my words, I did a fair bit of data analysis:
+1. Check for the most common letters overall
+2. Check for the most common letters per position (first, second, ... fifth)
+3. Use gibberish words to try to get a possible upper limit for the answer
+4. Try to form valid words from the letters I want to use
+5. Iterate...</p>
+<p>Step 3 was interesting. I knew I wanted to use the 20 most common letters, and I was curious how good my score would be if I could guess any letter in any position. Here was the best solution I came up with:</p>
+<div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">word</span><span class="p">:</span> <span class="n">solutions</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="s2">&quot;tares&quot;</span><span class="p">,</span> <span class="s2">&quot;vbopd&quot;</span><span class="p">,</span> <span class="s2">&quot;ynikl&quot;</span><span class="p">,</span> <span class="s2">&quot;gmuch&quot;</span><span class="p">,</span> <span class="n">words</span><span class="o">=</span><span class="n">words</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span>
+<span class="p">}</span>
+<span class="c1"># accuracy: 0.94789</span>
+<span class="c1"># n_correct: 7803</span>
+</pre></div>
+
+
+<p>Without any real sense of the maximum possible score, I felt like this was a good benchmark to try to hit. After all, coming up with real words that contained exactly one of those letters, and to try to get the right letters in the right spots, was not easy!</p>
+<p>That's why I am happy with my final four words, which seemed to be just shy of the best I could achieve with the gibberish appraoch.</p>
+<p>This puzzle captivated me over the weekend! Writing the code and coming up with the guess words were both incredibly fun - and totally different - challenges. Great hallmarks of a wonderful puzzle. Now the question is whether my skills might translate to playing on the show itself!</p>
+<h5>Full Code</h5>
+<p>I'm sure there are some efficiencies to be gained here. It currently takes ~15 seconds to check a set of guesses against every secret word in the dictionary, so iterating on new guessing ideas is very time consuming. Fortunately, playing the game for fun with single words works great! You can run a single secret word with guesses in a few milliseconds, so you can use this code to play with your friends!</p>
+<p>Future work I might like to tackle someday:
+1. create better data structures for some of the repeated tasks (e.g. matching words by the first letter, sorting letters in a word, etc.)
+2. Try to map the underlying words more intelligently, identifying some of the correlated information embedded in the words, like pairs of letters that always go together. Try to fine tune the guess words not to waste time searching highly correlated spaces.</p>
+<div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module solves the Riddler Classic from January 29, 2020</span>
+<span class="sd">https://fivethirtyeight.com/features/can-you-guess-the-mystery-word/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<span class="c1"># container for tuple of letters with the same length as the target word</span>
+<span class="n">Letters</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">get_words</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Return a set of n-letter words from a large word list hosted online.&quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s2">&quot;https://norvig.com/ngrams/enable1.txt&quot;</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="n">length</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">correct_letters</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">guess</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Letters</span><span class="p">:</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a tuple identifying which letters in the target were correctly guessed.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; correct_letters(&quot;tacos&quot;)</span>
+<span class="sd">    (&#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; correct_letters(&quot;tacos&quot;, &quot;tails&quot;)</span>
+<span class="sd">    (&#39;t&#39;, &#39;a&#39;, &#39;&#39;, &#39;&#39;, &#39;s&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; correct_letters(&quot;misos&quot;, &quot;mosso&quot;)</span>
+<span class="sd">    (&#39;m&#39;, &#39;&#39;, &#39;s&#39;, &#39;&#39;, &#39;&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; correct_letters(&quot;misos&quot;, &quot;sassy&quot;)</span>
+<span class="sd">    (&#39;&#39;, &#39;&#39;, &#39;s&#39;, &#39;&#39;, &#39;&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">guess</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">target</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span> <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">g</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">misplaced_letters</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">guess</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Letters</span><span class="p">:</span> 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a tuple identifying which letters are present, but misplaced, in the target.</span>
+
+<span class="sd">    When identifying misplaced letters, we only consider the first instance of a letter</span>
+<span class="sd">    in the target. For example, with target &#39;misos&#39; and guess &#39;mosso&#39;, the first &#39;o&#39; in</span>
+<span class="sd">    the guess is identified as a misplaced letter, but the second &#39;o&#39; is ignored.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; misplaced_letters(&quot;tacos&quot;)</span>
+<span class="sd">    (&#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; misplaced_letters(&quot;tacos&quot;, &quot;teach&quot;)</span>
+<span class="sd">    (&#39;&#39;, &#39;&#39;, &#39;a&#39;, &#39;c&#39;, &#39;&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; misplaced_letters(&quot;misos&quot;, &quot;sumps&quot;)</span>
+<span class="sd">    (&#39;s&#39;, &#39;&#39;, &#39;m&#39;, &#39;&#39;, &#39;&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; misplaced_letters(&quot;misos&quot;, &quot;mosso&quot;)</span>
+<span class="sd">    (&#39;&#39;, &#39;o&#39;, &#39;&#39;, &#39;s&#39;, &#39;&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; misplaced_letters(&quot;misos&quot;, &quot;sassy&quot;)</span>
+<span class="sd">    (&#39;s&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">guess</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">target</span><span class="p">)</span>
+
+    <span class="c1"># before identifying misplaced letters, we need to account for correct letters</span>
+    <span class="c1"># we only want to consider letters in the target that aren&#39;t in the correct spot.</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="n">correct_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
+    <span class="n">available</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">correct</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+    <span class="n">misplaced</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">!=</span> <span class="n">g</span> <span class="ow">and</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">available</span><span class="p">:</span>
+            <span class="c1"># find misplaced letters in the target we haven&#39;t already counted</span>
+            <span class="n">misplaced</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+            <span class="n">available</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">misplaced</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">misplaced</span><span class="p">)</span>     
+
+
+<span class="k">def</span> <span class="nf">included_letters</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">guess</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a string of the letters that must be in the target, sorted alphabetically.</span>
+
+<span class="sd">    If multiple of the same letter are included in the target, then we represent those</span>
+<span class="sd">    letters together, e.g. &#39;ss&#39; to mean the target includes at least two known &#39;s&#39;.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; included_letters(&quot;tacos&quot;)</span>
+<span class="sd">    (&#39;t&#39;,)</span>
+<span class="sd">    &gt;&gt;&gt; included_letters(&quot;tacos&quot;, &quot;teach&quot;)</span>
+<span class="sd">    (&#39;a&#39;, &#39;c&#39;, &#39;t&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; included_letters(&quot;misos&quot;, &quot;sumps&quot;)</span>
+<span class="sd">    (&#39;m&#39;, &#39;ss&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; included_letters(&quot;misos&quot;, &quot;mosso&quot;)</span>
+<span class="sd">    (&#39;m&#39;, &#39;o&#39;, &#39;ss&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; included_letters(&quot;misos&quot;, &quot;sassy&quot;)</span>
+<span class="sd">    (&#39;m&#39;, &#39;ss&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">guess</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># correct letters and misplaced letters are mutually exclusive groups that must be</span>
+    <span class="c1"># present in the final word, so we include the union of both sets</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="n">correct_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
+    <span class="n">misplaced</span> <span class="o">=</span> <span class="n">misplaced_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
+    <span class="n">letters</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">letter</span> <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">correct</span> <span class="o">+</span> <span class="n">misplaced</span> <span class="k">if</span> <span class="n">letter</span><span class="p">)</span>
+    <span class="n">included</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">letters</span><span class="p">)]</span>
+
+    <span class="c1"># finally, before returning, ensure we include the starting letter of the target if</span>
+    <span class="c1"># it&#39;s not already there, because it&#39;s known to the player from the start.</span>
+    <span class="k">if</span> <span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">included</span><span class="p">:</span>
+        <span class="n">included</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">included</span> <span class="o">+</span> <span class="p">[</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">included</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">excluded_letters</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">guess</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a string of the letters that are not in the target, sorted alphabetically.</span>
+
+<span class="sd">    Typically, letters that are not &#39;correct&#39; or &#39;misplaced&#39; will be excluded, as in</span>
+<span class="sd">    letters &#39;e&#39; and &#39;h&#39; from target &#39;tacos&#39; and guess &#39;teach&#39;. However, we may also be</span>
+<span class="sd">    able to exclude second or third occurrences of letters, like with target &#39;misos&#39;</span>
+<span class="sd">    and guess &#39;mosso&#39;: we know that the target word must contain exactly one &#39;o&#39;. We</span>
+<span class="sd">    express this by excluding &#39;oo&#39;, which must not occur in the sorted target word.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; excluded_letters(&quot;tacos&quot;)</span>
+<span class="sd">    ()</span>
+<span class="sd">    &gt;&gt;&gt; excluded_letters(&quot;tacos&quot;, &quot;teach&quot;)</span>
+<span class="sd">    (&#39;e&#39;, &#39;h&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; excluded_letters(&quot;misos&quot;, &quot;sumps&quot;)</span>
+<span class="sd">    (&#39;p&#39;, &#39;u&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; excluded_letters(&quot;misos&quot;, &quot;mosso&quot;)</span>
+<span class="sd">    (&#39;oo&#39;,)</span>
+<span class="sd">    &gt;&gt;&gt; excluded_letters(&quot;misos&quot;, &quot;sassy&quot;)</span>
+<span class="sd">    (&#39;a&#39;, &#39;sss&#39;, &#39;y&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">guess</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">()</span>
+
+    <span class="n">guessed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">guess</span><span class="p">)))</span>
+    <span class="n">included</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">included_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">guessed</span> <span class="o">-</span> <span class="n">included</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">solutions</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">guesses</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a set of the possible solutions, given any number of guesses and a target.</span>
+
+<span class="sd">    Internally, this function will check each guess for the following:</span>
+<span class="sd">        1. correct letters - letters in the right place</span>
+<span class="sd">        2. misplaced letters - letters present in the target but in the wrong place</span>
+<span class="sd">        3. included letters - letters we know must be in the target word</span>
+<span class="sd">        4. excluded letters - letters we know must not be in the target word</span>
+
+<span class="sd">    Then we take what we know from steps 1-4 and apply it to the word list, returning</span>
+<span class="sd">    the set of words that meet all the criteria we identified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># proceed recursively, one guess at a time, through each of the criteria, shrinking</span>
+    <span class="c1"># the word list each time until we narrow down the surviving candidate words.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">guesses</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">guesses</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">guess</span> <span class="ow">in</span> <span class="n">guesses</span><span class="p">:</span>
+        <span class="n">correct</span> <span class="o">=</span> <span class="n">correct_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
+        <span class="n">misplaced</span> <span class="o">=</span> <span class="n">misplaced_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
+        <span class="n">included</span> <span class="o">=</span> <span class="n">included_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
+        <span class="n">excluded</span> <span class="o">=</span> <span class="n">excluded_letters</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">guess</span><span class="o">=</span><span class="n">guess</span><span class="p">)</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span>
+            <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">included</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">excluded</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="nb">all</span><span class="p">((</span><span class="n">x</span> <span class="ow">or</span> <span class="n">z</span><span class="p">)</span> <span class="o">==</span> <span class="n">z</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">!=</span> <span class="n">z</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">correct</span><span class="p">,</span> <span class="n">misplaced</span><span class="p">,</span> <span class="n">w</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="n">words</span>
+</pre></div></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+    </div>     
+    
+<footer class="footer text-muted">
+  <div class="container">    
+    <p>
+      Built with <a href="https://blog.getpelican.com/" target="_blank">Pelican</a> and <a href="https://getbootstrap.com/docs/4.0/getting-started/introduction/" target="_blank">Bootstrap</a>.
+      <br>
+      &copy; 2021 Jason Ash. All rights reserved.
+    </p>
+  </div>
+</footer>	
+	<!-- mathjax -->
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+    <!-- optional scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+  
+  </body>
+</html>
